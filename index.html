@@ -1,0 +1,1574 @@
+<!doctype html>
+<html lang="sl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<title>Tipkaj! — moje vaje</title>
+<style>
+:root{
+  --bg:#0b1220; --panel:#121b2f; --panel-2:#18233d; --line:#25314f;
+  --text:#f6f8ff; --muted:#9cadcf; --accent:#78a8ff; --accent-2:#6ce0c8;
+  --good:#18c77a; --good-bg:#073523; --bad:#ff6b78; --bad-bg:#481019;
+  --current:#ffd166; --current-bg:#5a4310; --chip:#1f2c4a;
+  --paper:#f7f9ff; --sidebar:#10192b; --orange:#ffae3d;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0; font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif; color:var(--text); background:radial-gradient(circle at top,#152344 0%,#0b1220 55%,#08101d 100%);}
+.wrap{max-width:1400px; margin:0 auto; padding:22px 20px 40px;}
+header{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px;}
+.brand{font-weight:900; font-size:32px; letter-spacing:-1px;}
+.brand span{color:var(--orange)}
+.tag{background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.08); color:var(--muted); padding:9px 14px; border-radius:999px; font-size:13px;}
+.layout{display:grid; grid-template-columns:minmax(0,1.7fr) 340px; gap:20px; align-items:start;}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015)); border:1px solid rgba(255,255,255,.08); border-radius:24px; box-shadow:0 18px 60px rgba(0,0,0,.28);}
+.mainCard{padding:24px 24px 20px;}
+.sideCard{padding:18px; position:sticky; top:14px; background:linear-gradient(180deg,#10192b,#0f1727);}
+.intro h1{margin:0 0 8px; font-size:clamp(28px,4vw,42px); letter-spacing:-1px;}
+.intro p{margin:0; color:var(--muted); line-height:1.45}
+.selects{display:grid; gap:12px; margin-top:18px;}
+label.field{display:grid; gap:6px; font-size:13px; font-weight:800; color:#dfe8ff; letter-spacing:.2px}
+select, textarea{width:100%; border-radius:16px; border:1px solid var(--line); background:#0f1728; color:var(--text); padding:12px 14px; font:inherit;}
+select:focus, textarea:focus{outline:none; border-color:#598fff; box-shadow:0 0 0 4px rgba(89,143,255,.18)}
+.toolbar{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:12px;}
+.switchline{display:flex; align-items:center; gap:10px; cursor:pointer; font-size:14px; font-weight:700; color:#dbe4ff;}
+.switchline input{appearance:none; width:46px; height:26px; border-radius:999px; background:#445170; position:relative; transition:.2s; cursor:pointer;}
+.switchline input:after{content:""; position:absolute; width:20px; height:20px; border-radius:50%; top:3px; left:3px; background:white; transition:.2s;}
+.switchline input:checked{background:#5a8cff}
+.switchline input:checked:after{left:23px}
+.btn{border:0; border-radius:14px; padding:11px 14px; cursor:pointer; font:inherit; font-weight:800;}
+.btn.primary{background:linear-gradient(90deg,#578dff,#5dcbff); color:white;}
+.btn.secondary{background:#192746; color:#dfe8ff; border:1px solid rgba(255,255,255,.07);}
+.roadBlock{margin-top:18px; padding:16px; background:rgba(255,255,255,.03); border-radius:18px; border:1px solid rgba(255,255,255,.06);}
+.roadTop{display:flex; justify-content:space-between; gap:10px; font-size:13px; color:var(--muted); font-weight:800; margin-bottom:9px;}
+.road{position:relative; height:54px; border-radius:999px; background:linear-gradient(180deg,#202b42,#121a2e); border:1px solid rgba(255,255,255,.08); overflow:hidden;}
+.road::before{content:""; position:absolute; inset:50% 14px auto 14px; height:4px; transform:translateY(-50%); background:repeating-linear-gradient(90deg,#ffe48a 0 24px,transparent 24px 44px); opacity:.85; border-radius:999px;}
+.roadFill{position:absolute; inset:0 auto 0 0; width:0%; background:linear-gradient(90deg,rgba(120,168,255,.18),rgba(108,224,200,.18)); transition:width .18s;}
+.car{position:absolute; top:7px; left:6px; font-size:34px; transform:translateX(0); transition:transform .18s; filter:drop-shadow(0 4px 8px rgba(0,0,0,.3));}
+.finish{position:absolute; right:10px; top:9px; font-size:28px;}
+.statsCol{display:grid; gap:12px; margin-top:18px;}
+.stat{padding:14px 16px; border-radius:18px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06);}
+.stat .label{font-size:12px; font-weight:800; color:var(--muted); letter-spacing:.3px; text-transform:uppercase;}
+.stat .value{margin-top:4px; font-size:30px; font-weight:900; letter-spacing:-.5px; color:#ffffff; font-variant-numeric:tabular-nums;}
+.stat.small .value{font-size:22px;}
+.promptWrap{margin-top:24px; background:linear-gradient(180deg,#0e1527,#0a1120); border:1px solid rgba(255,255,255,.08); border-radius:22px; padding:20px 20px 18px;}
+.lessonLine{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px; color:var(--muted); font-weight:800; font-size:14px;}
+.promptViewport{min-height:230px; padding:6px 2px 2px;}
+.line{display:block; margin:0 0 26px; min-height:84px; white-space:nowrap; overflow:hidden;}
+.word{display:inline-flex; flex-direction:column; align-items:center; vertical-align:top; margin-right:0; position:relative;}
+.wordSpeed{height:20px; margin-bottom:8px; font-size:11px; line-height:20px; padding:0 6px; border-radius:999px; background:rgba(255,255,255,.06); color:#b8c8eb; font-weight:800; min-width:36px; text-align:center;}
+.wordSpeed.empty{opacity:0}
+.letters{display:inline-flex; gap:1px;}
+.char{display:inline-flex; align-items:flex-end; justify-content:center; min-width:19px; height:44px; padding:0 1px 3px; font-size:34px; line-height:1; border-radius:10px; color:#f7fbff; background:transparent; font-weight:780;}
+.char.pending{color:#eef4ff;}
+.char.correct{color:var(--good); background:rgba(24,199,122,.12);}
+.char.wrong{color:var(--bad); background:rgba(255,107,120,.12); text-decoration:underline; text-decoration-thickness:3px; text-underline-offset:4px;}
+.char.current{color:#fff6d8; background:rgba(255,209,102,.24); box-shadow:inset 0 -4px 0 rgba(255,209,102,.85);}
+.spaceChar{display:inline-flex; width:16px; height:44px; align-items:center; justify-content:center; color:#7083a7; font-size:24px;}
+.spaceChar::before{content:"·"; opacity:.45}
+.spaceChar.correct{color:var(--good); background:rgba(24,199,122,.12); border-radius:10px;}
+.spaceChar.wrong{color:var(--bad); background:rgba(255,107,120,.12); border-radius:10px;}
+.spaceChar.current{color:#fff6d8; background:rgba(255,209,102,.24); border-radius:10px;}
+.inputBlock{margin-top:8px;}
+.inputBlock label{display:block; font-size:13px; color:var(--muted); font-weight:800; margin:0 0 8px;}
+textarea{min-height:92px; resize:none; background:#f8fbff; color:#091224; border:2px solid #d8e3ff;}
+.help{margin:10px 0 0; font-size:12px; color:var(--muted); line-height:1.45}
+.done{display:none; margin-top:14px; padding:16px; border-radius:16px; background:#0d3325; border:1px solid #1f6f4d; color:#dff9eb; font-weight:800;}
+.done.visible{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+.handsCard{margin-top:18px; padding:18px; background:linear-gradient(180deg,#f9fbff,#eef4ff); color:#091224;}
+.handsTop{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:8px;}
+.handsTop h2{margin:0; font-size:22px;}
+.fingerLabel{font-weight:800; color:#324f9d;}
+.handSvg{width:100%; height:auto; display:block;}
+.hand-outline{fill:none; stroke:#4e5196; stroke-width:3; stroke-linejoin:round; stroke-linecap:round;}
+.finger-shape{fill:rgba(111,125,180,.07); stroke:#4e5196; stroke-width:2.2; transition:fill .15s, stroke .15s, filter .15s;}
+.finger-shape.active{fill:rgba(255,117,117,.35); stroke:#d04a4a; filter:drop-shadow(0 0 10px rgba(255,117,117,.25));}
+.finger-shape.secondary{fill:rgba(87,140,255,.26); stroke:#3f63d0; filter:drop-shadow(0 0 10px rgba(87,140,255,.20));}
+.legend{display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; font-size:12px; color:#4e5f89; font-weight:700;}
+.legend span{display:inline-flex; align-items:center; gap:6px}
+.dot{width:14px; height:14px; border-radius:50%; display:inline-block}
+.dot.main{background:rgba(255,117,117,.7); border:1px solid #d04a4a}
+.dot.shift{background:rgba(87,140,255,.6); border:1px solid #3f63d0}
+.footerNote{margin-top:10px; color:var(--muted); font-size:12px;}
+@media (max-width: 1080px){
+  .layout{grid-template-columns:1fr;}
+  .sideCard{position:static; order:-1;}
+}
+@media (max-width: 700px){
+  .wrap{padding:14px;}
+  .mainCard{padding:18px;}
+  .promptWrap{padding:14px;}
+  .char{min-width:14px; height:34px; font-size:25px;}
+  .line{margin-bottom:16px; min-height:70px;}
+  .wordSpeed{font-size:10px; height:18px; line-height:18px;}
+  header{flex-direction:column; align-items:flex-start;}
+}
+
+/* Nežen, svetel videz po prejšnji različici. */
+:root{--bg:#f4f6fc;--panel:#fff;--panel-2:#f8faff;--line:#e2e8f5;--text:#202b46;--muted:#7381a0;--accent:#4668d1;--good:#078348;--bad:#d22e47;--current:#345bd6;--paper:#fff;--orange:#f5a83d}
+body{background:linear-gradient(135deg,#f2f5ff,#f9faff);color:var(--text)}
+.card{background:#fff;border:1px solid #e2e8f5;box-shadow:0 10px 34px rgba(42,69,125,.055)}
+.brand{color:#3754af}.tag{background:#fff;color:#7b87a0;border-color:#e4e9f6}
+.intro p,.footerNote,.help,.stat .label,.roadTop,.lessonLine{color:#7381a0}
+.mainCard{padding:24px}.sideCard{background:#fff}
+label.field{color:#39496b}select{background:#f9faff;border:1px solid #dce4f5;color:#263653}
+.switchline{color:#314263}.switchline input{background:#cbd4e8}.switchline input:checked{background:#6680eb}
+.btn.primary{background:#4669df;color:white}.btn.secondary{background:#eef2ff;border:1px solid #e3e9fa;color:#3d5cc2}
+.promptWrap{background:#fff;border-color:#e6eaf5}
+.char{color:#56647c}.char.pending{color:#6c7994}.char.correct{color:#087e49;background:#e4f8eb}.char.wrong{color:#c92840;background:#ffe3e7}.char.current{color:#243a80;background:#dce6ff;box-shadow:inset 0 -3px 0 #5477e7}
+.spaceChar{color:#9da9c0}.spaceChar.correct{color:#078348;background:#e4f8eb}.spaceChar.wrong{color:#c92840;background:#ffe3e7}.spaceChar.current{color:#345bd6;background:#dce6ff}
+.wordSpeed{background:#eff3fb;color:#62779e}.lessonLine{color:#697998}
+.stat{background:#f8faff;border-color:#e5ebf8}.stat .value{color:#385bc4}
+.roadBlock{background:#f8faff;border-color:#e7ecf7}.road{background:linear-gradient(180deg,#e3eaf5,#f3f6fc);border-color:#dfe6f2}.road::before{background:repeating-linear-gradient(90deg,#b6c2d9 0 24px,transparent 24px 44px)}.roadFill{background:linear-gradient(90deg,rgba(100,127,227,.12),rgba(64,190,160,.18))}
+.handsCard{background:linear-gradient(180deg,#fcfdff,#f6f9ff)}
+.done{background:#e8f9ed;color:#216b43;border-color:#c1e7cd}
+textarea{background:#fcfdff;color:#26344d;border:2px solid #dce5f4}
+.modeTabs{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px;padding:5px;background:#eff3fb;border:1px solid #e2e8f5;border-radius:16px;width:max-content;max-width:100%}
+.modeTab{border:0;background:transparent;color:#61718f;padding:11px 17px;border-radius:12px;font:inherit;font-size:14px;font-weight:800;cursor:pointer}
+.modeTab[aria-selected="true"]{background:#fff;color:#3658bf;box-shadow:0 2px 8px #304c9918}
+.gameOnly{display:none}.gameOn .gameOnly{display:block}.gameOn .practiceOnly{display:none}
+.gameInfo{margin:16px 0 12px;color:#637491;font-size:14px;line-height:1.5}
+.gameBoard{height:390px;position:relative;overflow:hidden;background:linear-gradient(180deg,#f9fbff 0%,#edf4ff 100%);border-radius:18px;border:1px solid #dce5f5}
+.gameBoard:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(to right,rgba(132,157,203,.13) 1px,transparent 1px);background-size:22% 100%}
+.gameGround{height:12px;position:absolute;bottom:0;left:0;right:0;background:repeating-linear-gradient(90deg,#849de1 0 22px,#a8bceb 22px 44px);border-top:3px solid #5c79c6}
+.fallingWord{position:absolute;top:0;left:0;transform:translateY(0);white-space:nowrap;display:inline-flex;align-items:center;gap:0;box-shadow:0 5px 18px #2e549226;border:1px solid #d6e0f4;background:white;border-radius:13px;padding:10px 14px;font-size:24px;line-height:1.15;font-weight:790;color:#375079;will-change:transform;z-index:2}
+.fallingWord .hit{color:#078348;background:#dff5e7;border-radius:3px}.fallingWord .remaining{color:#506581}
+.gameHint{position:absolute;inset:35% 15px auto;text-align:center;color:#6a7894;line-height:1.55;font-weight:650}
+.gameHUD{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:0 0 12px;font-weight:800;color:#4c5f85}
+.life{font-size:22px;letter-spacing:2px;color:#eb5871}
+.gameActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.gameResult{display:none;padding:14px;border-radius:12px;background:#eef3ff;color:#344c90;font-weight:800;margin-top:13px;line-height:1.5}
+.gameResult.visible{display:block}
+.gameWordsProgress{font-size:13px;color:#637491}
+#gameInput{background:#fcfdff;color:#26344d;border:2px solid #dce5f4;outline:none;width:100%;border-radius:13px;padding:14px;font:inherit;font-size:18px}
+#gameInput:focus{border-color:#6680eb;box-shadow:0 0 0 3px #6789e51b}
+.statGame{display:none}.gameOn .statGame{display:block}
+@media (max-width:700px){.fallingWord{font-size:19px;padding:9px 11px}.gameBoard{height:330px}.modeTab{padding:10px 11px}}
+
+/* Dodelan nežen videz brez ločenega okna za tipkanje. */
+.wrap{max-width:1320px;padding-top:18px}
+.brand{font-size:29px;color:#3456b4}
+.mainCard{padding:18px 22px}
+.modeTabs{margin-top:0;margin-bottom:12px}
+.promptWrap{margin-top:10px;padding:15px 16px 10px;border:0;box-shadow:none}
+.lessonLine{margin-bottom:6px}
+.promptViewport{cursor:text;min-height:190px;padding:12px 10px 0;border-radius:14px;outline:none}
+.promptViewport:focus{box-shadow:inset 0 0 0 2px #e0e8ff}
+.line{margin-bottom:18px;min-height:73px;white-space:normal;overflow:visible}
+.word{margin-bottom:3px}
+.wordSpeed{height:18px;line-height:18px;font-size:10px;margin-bottom:4px}
+.char{min-width:15px;height:38px;font-size:29px;font-weight:650;letter-spacing:0}
+.spaceChar{height:38px;width:14px}
+.roadBlock{margin:6px 4px 16px;padding:6px 4px 4px;background:transparent;border:0}
+.roadTop{font-size:12px;margin-bottom:3px}
+.road{height:37px;background:#eef2fa}
+.road::before{height:2px;background:repeating-linear-gradient(90deg,#c0cbe1 0 28px,transparent 28px 45px)}
+.car{top:1px;font-size:29px;transform:scaleX(-1);transform-origin:center;transition:left .18s}
+.finish{top:4px;font-size:23px}
+.handsCard{margin-top:12px;padding:10px 24px 8px;background:#fff}
+.handSvg{max-height:215px;width:100%;margin:0 auto}
+.sr-input{position:fixed!important;left:-10000px!important;top:0!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+.gameBoard{height:390px;cursor:text;background:linear-gradient(#f8faff,#ecf3ff);position:relative}
+.fallingWord{font-size:27px;box-shadow:0 8px 18px rgba(58,98,160,.12);border:2px solid #8ba8ea}
+.fallingWord .hit{color:#088b51;background:#e0f8ea}
+.fallingWord .remaining{color:#345078}
+.fallingWord.activeTarget{outline:2px solid #5487ea;outline-offset:3px}
+.fallingWord.hitFlash{background:#dff7e9;border-color:#25b575;transform-origin:center}
+.fallingWord.badFlash{background:#ffe2e7;border-color:#d74e64}
+.gameInstruction{font-size:13px;color:#60708e;margin:10px 0}
+.laserTurret{position:absolute;bottom:10px;left:50%;transform:translateX(-50%) rotate(0deg);transform-origin:50% 85%;font-size:31px;z-index:6;pointer-events:none;transition:transform .12s ease-out;filter:drop-shadow(0 2px 4px rgba(0,0,0,.15))}
+.shotLayer{position:absolute;inset:0;pointer-events:none;z-index:5}
+.shot{position:absolute;width:4px;height:28px;border-radius:999px;background:#1ba866;box-shadow:0 0 11px #59e6a7;transform-origin:50% 100%;pointer-events:none;z-index:7}
+.shot.bad{background:#e34f62;box-shadow:0 0 9px #ef7182}
+.burst{position:absolute;z-index:8;color:#24a56d;font-weight:900;font-size:20px;animation:burstFade .6s ease-out forwards;pointer-events:none}
+@keyframes burstFade{0%{opacity:1;transform:scale(.7)}100%{opacity:0;transform:scale(1.5) translateY(-15px)}}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.line{min-height:65px}.promptViewport{min-height:170px}.char{font-size:23px;min-width:12px;height:31px}.spaceChar{width:10px;height:31px}.handSvg{max-height:150px}}
+
+/* Priložena oblika rok je vgrajena nespremenjena. */
+.suppliedHands{position:relative;width:100%;max-width:540px;aspect-ratio:550/370;margin:-48px auto -44px;}
+.suppliedHandImg{width:100%;height:100%;display:block;object-fit:contain;pointer-events:none}
+.finger-marker{position:absolute;width:5.2%;min-width:26px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.92);border:1.6px solid #d8cfaa;color:#42527f;font-size:12px;font-weight:800;line-height:1;transform:translate(-50%,-50%);box-shadow:0 2px 7px rgba(64,73,108,.12);z-index:2;transition:background .15s,box-shadow .15s,color .15s,border-color .15s;}
+.finger-marker.active{background:rgba(255,171,75,.95);border-color:#e2a249;color:#5f3c00;box-shadow:0 0 0 4px rgba(255,166,57,.20),0 0 16px rgba(255,132,40,.38);}
+.finger-marker.secondary{background:rgba(116,162,255,.92);border-color:#5f86e6;color:#fff;box-shadow:0 0 0 4px rgba(80,140,255,.16);}
+.finger-marker.error-hot{background:#d95c49;border-color:#bf4a39;color:#fff;}
+.finger-marker.error-mid{background:#efbb74;border-color:#dfaa60;color:#5b4524;}
+.finger-marker.error-zero{opacity:.92;}
+/* Preslednica je del vrstice z besedilom, brez pike ali dodatne oznake. */
+.spaceChar::before{content:none!important}
+.spaceChar{vertical-align:top; position:relative; min-width:12px; border-radius:5px;}
+.spaceChar.current{background:#dfeaff!important;box-shadow:inset 0 -3px 0 #5483eb;}
+.spaceChar.correct{background:#e1f5e8!important;}
+.spaceChar.wrong{background:#ffe2e7!important;}
+@media(max-width:700px){.suppliedHands{margin:-25px auto -22px}.finger-marker{width:7%;min-width:22px;font-size:11px;}}
+
+/* Natančna poravnava besed, presledkov in pripadajočih hitrosti. */
+.promptViewport{min-height:120px;padding:7px 6px 0}
+.promptViewport .line{display:flex;align-items:flex-end;flex-wrap:nowrap;white-space:nowrap;overflow:hidden;min-height:0;margin:0 0 13px;line-height:1.5}
+.promptViewport .word{display:inline-flex;flex-direction:column;align-items:center;flex:none;margin:0}
+.promptViewport .wordSpeed{height:18px;line-height:18px;margin:0 0 3px;}
+.promptViewport .letters{display:inline-flex;align-items:flex-end}
+.promptViewport .spaceChar{display:inline-flex;flex:none;align-self:flex-end;height:38px;min-height:38px;margin:0;vertical-align:bottom;background:transparent}
+.promptViewport .spaceChar.correct{background:#e1f5e8}
+.promptViewport .spaceChar.current{background:#dfeaff}
+/* Prikaz točke ni del preslednice. */
+.promptViewport .spaceChar::before{display:none!important;content:none!important}
+.gamePace{border:1px solid #e1e7f4;background:#f7f9fe;padding:13px 14px;border-radius:15px;margin-top:16px}
+.gamePace label{display:flex;justify-content:space-between;gap:10px;color:#58698f;font-weight:750;font-size:13px}
+.gamePace input{display:block;width:100%;accent-color:#5478d5;margin:12px 0 3px;cursor:pointer}
+.paceEnds{display:flex;justify-content:space-between;color:#8996ad;font-size:11px}
+.finger-marker{width:5.2%;}
+@media(max-width:700px){.promptViewport .line{margin-bottom:10px}.promptViewport .spaceChar{height:31px;min-height:31px}}
+
+/* Topla, nežno kremna podlaga po uporabničinem vzorcu. */
+body{background:linear-gradient(145deg,#fff9d8,#fffbe9 65%,#fff9dc)}
+.card{border-color:#eee4b9}
+.mainCard,.sideCard{background:#fffdf0}
+.promptWrap{background:#fff8cd}
+.promptViewport{background:#fff8cd}
+.char.pending{color:#4d4b43}
+.char.correct{color:#178449;background:#dceccf}
+.char.wrong{color:#b62c3a;background:#f8bdb4}
+.char.current{color:#263449;background:#e3e9ff;box-shadow:inset 0 -3px 0 #5d79d3}
+.promptViewport .spaceChar.correct{background:#dceccf}
+.promptViewport .spaceChar.wrong{background:#f8bdb4}
+.promptViewport .spaceChar.current{background:#e3e9ff}
+.stat{background:#fffbee;border-color:#eee7ca}
+.road{background:#fff3c7}
+.roadBlock{background:transparent}
+.handsCard{background:#fffdf5}
+.gameBoard{background:linear-gradient(180deg,#fffbdc,#fff0bb)}
+.gamePace{background:#fff9e5;border-color:#eee5ca}
+.modeTabs{background:#f6f0d5;border-color:#ece3c4}
+.fingerErrors{margin-top:15px;padding:15px 13px;border-radius:16px;border:1px solid #e8dcad;background:#fff9de}
+.fingerErrors h3{font-size:15px;margin:0 0 10px;color:#3b4562}
+.fingerErrors .subhead{font-size:12px;color:#78809a;margin:0 0 12px;line-height:1.35}
+.fingerErrors .fingerRows{display:grid;gap:7px}
+.fingerErrors .fingerErrorRow{display:grid;grid-template-columns:minmax(0,1fr) 85px 27px;align-items:center;gap:8px;font-size:12px;color:#46516a}
+.fingerErrors .fingerErrorRow strong{text-align:right;font-size:13px;color:#394c80;font-variant-numeric:tabular-nums}
+.fingerErrors .fingerErrorTrack{height:7px;border-radius:10px;background:#e9e7d6;overflow:hidden}
+.fingerErrors .fingerErrorFill{height:100%;width:0;background:#e19b62;border-radius:10px;transition:width .16s}
+.fingerErrors .fingerErrorRow.worst{font-weight:850;color:#a3482d}
+.fingerErrors .fingerErrorRow.worst .fingerErrorFill{background:#d95c49}
+.fingerErrors .fingerErrorRow.worst strong{color:#a3482d}
+.fingerErrors .summary{margin:12px 0 0;padding-top:10px;border-top:1px solid #e9ddac;font-size:13px;color:#5b6580}
+
+
+/* Pisava in barvne oznake po poslanem referenčnem prikazu. */
+.promptViewport, .promptViewport .line, .promptViewport .letters, .promptViewport .char, .promptViewport .spaceChar{
+  font-family:"Century Gothic","Avenir Next","Trebuchet MS",Arial,sans-serif;
+}
+.promptViewport .char{
+  font-size:32px;
+  font-weight:400;
+  letter-spacing:.2px;
+  color:#48483e;
+  border-radius:0!important;
+  padding:0 1px 3px;
+  box-shadow:none;
+}
+.promptViewport .char.pending{color:#535248;background:transparent;}
+.promptViewport .char.correct{color:#237b48;background:#deebce;border-radius:0!important;}
+.promptViewport .char.wrong{color:#9b2631;background:#f4b6aa;border-radius:0!important;text-decoration:none;}
+.promptViewport .char.current{
+  color:#363a46;
+  background:transparent;
+  border-radius:0!important;
+  box-shadow:inset 0 -3px 0 #3c6edc!important;
+}
+/* Presledki so pravokotni in ostanejo v isti vrstici kot črke. */
+.promptViewport .spaceChar{
+  border-radius:0!important;
+  box-shadow:none;
+  min-width:12px;
+}
+.promptViewport .spaceChar.correct{background:#deebce!important;}
+.promptViewport .spaceChar.wrong{background:#f4b6aa!important;}
+.promptViewport .spaceChar.current{background:transparent!important;box-shadow:inset 0 -3px 0 #3c6edc!important;}
+.promptViewport .spaceChar::before{content:none!important;display:none!important;}
+@media(max-width:700px){.promptViewport .char{font-size:25px;}}
+
+
+.gameBoard .gameFace {top:9px;right:9px;z-index:9}\n/* Izrazitejše, razločnejše črke in kazalnik zadnjih 10 pritiskov. */
+.promptViewport .char, .promptViewport .spaceChar,
+.promptViewport .line, .promptViewport .letters {
+  font-family:"Trebuchet MS", Verdana, "DejaVu Sans", sans-serif !important;
+}
+.promptViewport .char {
+  font-weight:600 !important;
+  letter-spacing:0.35px !important;
+  padding-bottom:5px !important;
+}
+.promptWrap {position:relative}
+.recent-accuracy-face {
+  position:absolute;top:44px;right:17px;
+  width:58px;height:58px;
+  display:none;align-items:center;justify-content:center;
+  z-index:4;pointer-events:none;
+}
+.recent-accuracy-face.visible {display:flex}
+.recent-accuracy-face img {width:100%;height:100%;object-fit:contain;display:block}
+.recent-accuracy-face[data-status="bad"] {animation:facePop .25s ease-out}
+@keyframes facePop {from{transform:scale(.85)}to{transform:scale(1)}}
+@media(max-width:700px){
+  .recent-accuracy-face {width:43px;height:43px;top:36px;right:8px;}
+}
+
+
+/* Konica prsta prikazuje naslednjo tipko, številka pa napake pri osnovnem členku. */
+.suppliedHands .finger-marker{width:4.0%!important;min-width:0!important;aspect-ratio:1;background:transparent!important;border:0!important;box-shadow:none!important;color:transparent!important;font-size:0!important;z-index:3!important;pointer-events:none}
+.suppliedHands .finger-marker.active{background:#ff9c21!important;border:3px solid #fff2c9!important;box-shadow:0 0 0 5px rgba(252,148,30,.32),0 0 21px 8px rgba(255,153,23,.65)!important;}
+.suppliedHands .finger-marker.secondary{background:#5c92ff!important;border:3px solid #eaf0ff!important;box-shadow:0 0 0 4px rgba(76,130,245,.3)!important;}
+.suppliedHands .finger-count{position:absolute;transform:translate(-50%,-50%);width:25px;height:25px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:12px;font-weight:850;color:#4b5680;background:#fffdf1;border:1.5px solid #d3caa9;box-shadow:0 1px 4px #24305522;z-index:2;pointer-events:none;font-variant-numeric:tabular-nums}
+.suppliedHands .finger-count.error-hot{background:#cf5745;border-color:#b44536;color:white}
+.suppliedHands .finger-count.error-mid{background:#f1bc7e;border-color:#dd9d55;color:#583814}
+.suppliedHands .finger-count.error-zero{background:#fffdf1;color:#6d7390}
+@media(max-width:700px){.suppliedHands .finger-count{width:20px;height:20px;font-size:10px}.suppliedHands .finger-marker{width:4.2%!important}}
+
+/* Enotna, pokončna pisava Arial za vse črke v vajah in igri. */
+.promptViewport, .promptViewport .line, .promptViewport .letters,
+.promptViewport .char, .promptViewport .spaceChar,
+.promptViewport .char.distinct-j, .promptViewport .char.distinct-f,
+.gameBoard .fallingWord, .gameBoard .fallingWord span {
+  font-family:Arial, Helvetica, sans-serif !important;
+  font-style:normal !important;
+  letter-spacing:0 !important;
+}
+.promptViewport .char, .promptViewport .char.distinct-j, .promptViewport .char.distinct-f {
+  font-weight:400 !important;
+  padding-bottom:4px !important;
+}
+
+/* Zaobljena geometrična pisava, podobna poslanemu vzorcu. */
+.promptViewport, .promptViewport .line, .promptViewport .letters,
+.promptViewport .char, .promptViewport .spaceChar,
+.promptViewport .char.distinct-j, .promptViewport .char.distinct-f,
+.gameBoard .fallingWord, .gameBoard .fallingWord span {
+  font-family:"OpenDyslexic","Trebuchet MS",Arial,sans-serif !important;
+  font-style:normal !important;
+  letter-spacing:0.1px !important;
+}
+.promptViewport .char, .promptViewport .char.distinct-j, .promptViewport .char.distinct-f {
+  font-weight:400 !important;
+  font-size:32px;
+  padding-bottom:5px !important;
+}
+@media(max-width:700px){.promptViewport .char{font-size:25px}}
+
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("https://cdn.jsdelivr.net/gh/madjeek-web/open-dyslexic@main/OpenDyslexic-2025/opendyslexic-regular-webfont.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Končni slog: tanka geometrijska pisava po posnetku, z enonadstropnim a. */
+.promptViewport, .promptViewport .line, .promptViewport .letters,
+.promptViewport .char, .promptViewport .spaceChar,
+.promptViewport .char.distinct-j, .promptViewport .char.distinct-f,
+.gameBoard .fallingWord, .gameBoard .fallingWord span {
+  font-family:"Century Gothic","Tw Cen MT","Gillius ADF","Comfortaa","Trebuchet MS",sans-serif !important;
+  font-style:normal !important;
+  font-weight:400 !important;
+  letter-spacing:0.2px !important;
+}
+.promptViewport .char, .promptViewport .char.distinct-j, .promptViewport .char.distinct-f {
+  font-size:32px !important;
+  font-weight:400 !important;
+  padding-bottom:5px !important;
+}
+.lessonRight {display:flex;align-items:center;gap:12px;flex-wrap:nowrap}
+.recent-accuracy-face, .recent-accuracy-face.visible, .gameBoard .gameFace {
+  position:static !important;
+  top:auto !important;right:auto !important;
+  width:48px;height:48px;
+  z-index:auto;
+  flex:none;
+  transform:none;
+  pointer-events:none;
+}
+.recent-accuracy-face:not(.visible){display:none!important}
+.recent-accuracy-face.visible{display:flex!important}
+.gameHUD{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.gameHUD .gameFace{margin-right:auto}
+@media(max-width:700px) {
+  .promptViewport .char{font-size:25px !important}
+  .recent-accuracy-face,.recent-accuracy-face.visible{width:38px;height:38px}
+  .lessonRight{gap:6px}
+}
+
+
+/* Oblika male črke j je po referenčni sliki: dolga navpičnica in izrazita kljukica v levo. */
+.promptViewport .char.distinct-j:has(.long-j) {
+  position:relative;
+  overflow:visible;
+  min-width:20px;
+  width:20px;
+  flex:0 0 20px;
+}
+.promptViewport .long-j {
+  position:absolute;
+  width:25px;
+  height:57px;
+  top:-3px;
+  left:50%;
+  transform:translateX(-50%);
+  overflow:visible;
+  pointer-events:none;
+}
+@media (max-width:700px) {
+  .promptViewport .char.distinct-j:has(.long-j){min-width:17px;width:17px;flex-basis:17px}
+  .promptViewport .long-j{width:21px;height:48px;top:-3px}
+}
+
+/* Popravek: navpično odrezovanje dolge kljukice j. */
+.promptViewport .line {
+  padding-bottom:20px !important;
+  margin-bottom:2px !important;
+}
+.promptViewport .long-j {
+  top:-3px !important;
+}
+
+
+/* Pisava vaj: enotna višina in enaka debelina potez za vse znake.
+   SVG a je enonadstropen, SVG j ohranja dolgo kljukico. */
+.promptViewport .char,
+.promptViewport .char.distinct-j,
+.promptViewport .char.distinct-f,
+.promptViewport .char.distinct-a {
+ font-family:"Century Gothic","Tw Cen MT","Comfortaa","Trebuchet MS",sans-serif!important;
+ font-size:32px!important;
+ font-style:normal!important;
+ font-weight:400!important;
+ line-height:1!important;
+ min-width:20px;
+ height:44px;
+ padding:0 1px 5px!important;
+ position:relative;
+ box-sizing:border-box;
+}
+.promptViewport .char.distinct-a {min-width:21px;width:21px;flex:0 0 21px;overflow:visible}
+.promptViewport .char.distinct-j {min-width:20px;width:20px;flex:0 0 20px;overflow:visible}
+.promptViewport .char .single-a {position:absolute;left:50%;top:-5px;width:26px;height:49px;transform:translateX(-50%);overflow:visible;pointer-events:none}
+.promptViewport .char .long-j {top:-3px!important}
+.customGameText{margin-top:15px;border:1px solid #eae0bc;background:#fff9de;padding:13px;border-radius:15px}
+.customGameText label.field{font-size:12px;display:grid;gap:8px}
+.customGameText #gameCustomWrap{margin-top:12px}
+.customGameText #gameCustomWrap[hidden]{display:none!important}
+.customGameText textarea{margin-top:7px;background:#fffef8;border:1px solid #dccfa2;border-radius:9px;min-height:105px;font:14px/1.5 Arial,sans-serif;resize:vertical;color:#29344c;width:100%;padding:10px}
+@media(max-width:700px){
+ .promptViewport .char,.promptViewport .char.distinct-a,.promptViewport .char.distinct-j{font-size:25px!important;height:34px;min-width:16px}
+ .promptViewport .char.distinct-a{width:17px;flex-basis:17px}
+ .promptViewport .char.distinct-j{width:17px;flex-basis:17px}
+ .promptViewport .char .single-a{width:21px;height:40px;top:-5px}
+ .promptViewport .char .long-j{width:21px;height:48px}
+}
+
+
+/* Enotna Helvetica Neue Light za vse črke, brez različno velikih SVG simbolov. */
+.promptViewport .char,
+.promptViewport .char.distinct-j,
+.promptViewport .char.distinct-a,
+.promptViewport .char.distinct-f,
+.promptViewport .spaceChar,
+.promptViewport .letters,
+.promptViewport .line,
+.gameBoard .fallingWord,
+.gameBoard .fallingWord span {
+  font-family:"Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-weight:300 !important;
+  font-style:normal !important;
+  letter-spacing:0 !important;
+}
+.promptViewport .char,
+.promptViewport .char.distinct-j,
+.promptViewport .char.distinct-a,
+.promptViewport .char.distinct-f {
+  position:relative;
+  display:inline-flex;
+  flex:0 0 auto;
+  width:auto !important;
+  min-width:0 !important;
+  height:46px !important;
+  padding:0 1px 5px !important;
+  font-size:34px !important;
+  line-height:1.3 !important;
+  align-items:flex-end;
+  overflow:visible !important;
+}
+@media(max-width:700px) {
+  .promptViewport .char,
+  .promptViewport .char.distinct-j,
+  .promptViewport .char.distinct-a,
+  .promptViewport .char.distinct-f {
+    height:37px !important;
+    font-size:26px !important;
+  }
+}
+
+/* Fiksna geometrija črk: oznaka WPM ne spreminja širine besede in ne premika črk. */
+.promptViewport .word{
+  display:inline-flex!important;
+  position:relative!important;
+  flex-direction:row!important;
+  align-items:flex-end!important;
+  justify-content:flex-start!important;
+  width:max-content!important;
+  flex:0 0 auto!important;
+  padding-top:24px!important;
+}
+.promptViewport .word .letters{
+  display:inline-flex!important;
+  flex:0 0 auto!important;
+  width:max-content!important;
+  align-items:flex-end!important;
+}
+.promptViewport .wordSpeed{
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  margin:0!important;
+  width:auto!important;
+  max-width:none!important;
+  min-width:0!important;
+  white-space:nowrap!important;
+  pointer-events:none!important;
+  z-index:1;
+}
+.promptViewport .char.correct,.promptViewport .char.wrong,.promptViewport .char.current,.promptViewport .char.pending{
+  box-sizing:border-box!important;
+  border:0!important;
+  border-radius:0!important;
+  transition:background-color .12s,color .12s!important;
+}
+
+
+/* Združena, pregledna desna nadzorna plošča. */
+.sideCard{display:flex;flex-direction:column;gap:13px}
+.settingsGroup,.gameSettings,.resultsGroup{padding:14px;background:#fff9e5;border:1px solid #ece4c3;border-radius:16px}
+.settingsTitle{font-size:14px;font-weight:800;color:#354b80;margin-bottom:11px}
+.settingsGroup .selects{margin:0;gap:9px}
+.settingsGroup .toolbar{margin-top:12px;gap:8px}
+.gameSettings .customGameText,.gameSettings .gamePace{margin-top:0;padding:0;background:transparent;border:0}
+.gameSettings .gamePace{padding-top:12px;margin-top:12px;border-top:1px solid #e7dcaf}
+.sideCard .statsCol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0}
+.sideCard .stat{min-width:0;padding:13px 11px}
+.sideCard .stat .value{font-size:24px}
+.sideCard .stat.small .value{font-size:20px}
+.sideCard .stat .label{font-size:10px}
+.sideCard .footerNote{margin-top:0}
+@media(max-width:430px){.sideCard .statsCol{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Zanesljivo barvanje po dejansko pritisnjeni tipki in položaju znaka.
+   Pravila veljajo enako za črke in presledke ter ne spreminjajo velikosti. */
+.promptViewport .char.correct, .promptViewport .spaceChar.correct {
+  background-color:#deebce !important;
+  color:#237b48 !important;
+  border-radius:0 !important;
+}
+.promptViewport .char.wrong, .promptViewport .spaceChar.wrong {
+  background-color:#f4b6aa !important;
+  color:#9b2631 !important;
+  border-radius:0 !important;
+}
+.promptViewport .char.pending {color:#555652 !important;background-color:transparent !important;}
+.promptViewport .char.current, .promptViewport .spaceChar.current {
+  color:#555652 !important;
+  background-color:transparent !important;
+  box-shadow:inset 0 -4px 0 #4678f5 !important;
+  border-radius:0 !important;
+}
+.promptViewport .spaceChar::before {display:none !important;content:none !important;}
+
+/* Pri vključenem popravljanju napačna črka ostane rdeča na tekočem mestu. */
+.promptViewport .char.wrong,.promptViewport .spaceChar.wrong{background:#f4b6aa!important;color:#9b2631!important}
+
+/* Končno preverjeno: stalna širina vsakega znaka, neodvisna od stanja. */
+.promptViewport .char,
+.promptViewport .char.correct,
+.promptViewport .char.wrong,
+.promptViewport .char.current,
+.promptViewport .char.pending {
+  display:inline-flex !important;
+  flex:0 0 var(--tipkaj-char-width) !important;
+  width:var(--tipkaj-char-width) !important;
+  min-width:var(--tipkaj-char-width) !important;
+  max-width:var(--tipkaj-char-width) !important;
+  padding:0 0 5px !important;
+  margin:0 !important;
+  justify-content:center !important;
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif !important;
+  font-style:normal !important;
+  font-weight:300 !important;
+  box-sizing:border-box !important;
+  border-radius:0 !important;
+  letter-spacing:0 !important;
+}
+.promptViewport {--tipkaj-char-width:clamp(15px,1.35vw,20px)}
+.promptViewport .spaceChar,
+.promptViewport .spaceChar.correct,
+.promptViewport .spaceChar.wrong,
+.promptViewport .spaceChar.current,
+.promptViewport .spaceChar.pending {
+  flex:0 0 var(--tipkaj-char-width) !important;
+  width:var(--tipkaj-char-width) !important;
+  min-width:var(--tipkaj-char-width) !important;
+  max-width:var(--tipkaj-char-width) !important;
+  padding:0 !important;
+  margin:0 !important;
+  border-radius:0 !important;
+}
+.promptViewport .char.correct,.promptViewport .spaceChar.correct {background:#deebce!important;color:#237b48!important}
+.promptViewport .char.wrong,.promptViewport .spaceChar.wrong {background:#f4b6aa!important;color:#9b2631!important}
+.promptViewport .char.current,.promptViewport .spaceChar.current {background:transparent!important;color:#555652!important;box-shadow:inset 0 -4px 0 #4678f5!important}
+.promptViewport .spaceChar::before{content:none!important;display:none!important}
+@media(max-width:750px){.promptViewport{--tipkaj-char-width:clamp(10px,2.25vw,16px)}}
+
+/* Prikaz rok je neinteraktiven in ne sme prekrivati gumbov igre. */
+.handsCard,.suppliedHands,.suppliedHands *{pointer-events:none!important}
+.gameActions{position:relative;z-index:21}
+
+/* Barva je vedno posledica pravilnosti primerjave, nikoli videza pisave. */
+.promptViewport .char.correct {color:#177e43!important;background-color:#d9edce!important}
+.promptViewport .char.wrong {color:#ad2536!important;background-color:#fac0bc!important}
+.promptViewport .spaceChar.correct {background-color:#d9edce!important}
+.promptViewport .spaceChar.wrong {background-color:#fac0bc!important}
+
+.keyDiagnostic{font-family:Arial,sans-serif;font-size:13px;color:#53637a;background:#fff6d5;border:1px solid #e9dda8;border-radius:8px;padding:7px 10px;margin-bottom:12px;min-height:34px}
+.keyDiagnostic.ok{color:#14643f;background:#e7f7e9;border-color:#b1ddbb}
+.keyDiagnostic.bad{color:#a3272d;background:#ffe7e2;border-color:#ebaea8}
+body.gameOn #keyDiagnostic{display:none}
+
+/* Fokus je sedaj na vidnem polju z vsako črko, ne na skriti textarea. */
+#promptViewport{outline:none;cursor:text}
+#promptViewport:focus-visible{box-shadow:inset 0 0 0 2px #9aafe5}
+
+/* Samostojen razdelek meritev; obstoječega prikaza tipkanja ne spreminja. */
+.metricsPanel{margin-top:16px;border-top:1px solid #dedbd1;padding-top:15px}
+.metricsPanel .settingsTitle{margin-bottom:10px}
+.metricGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.metricBox{padding:9px 10px;border:1px solid #e5e0d4;border-radius:10px;background:rgba(255,255,255,.55);min-width:0}
+.metricBox small{display:block;font-size:11px;color:#606b70;line-height:1.3}
+.metricBox strong{display:block;margin-top:4px;font-size:17px;font-weight:500;font-variant-numeric:tabular-nums}
+.metricFoot{font-size:11px;color:#637077;line-height:1.45;margin:10px 0}
+.metricButtons{display:flex;gap:7px;flex-wrap:wrap;margin:9px 0}
+.metricButtons button{border:1px solid #bac9d2;background:#f6fbfd;border-radius:8px;padding:8px 10px;color:#204b62;cursor:pointer;font:inherit;font-size:12px}
+.metricTableWrap{max-height:185px;overflow:auto;border-radius:8px;border:1px solid #e0ddd4}
+.metricTable{border-collapse:collapse;width:100%;font-size:11px;font-variant-numeric:tabular-nums}
+.metricTable th,.metricTable td{padding:6px 5px;text-align:right;border-bottom:1px solid #e8e5de}
+.metricTable th:first-child,.metricTable td:first-child{text-align:left}
+.metricTable th{position:sticky;top:0;background:#f6f4ee;font-weight:600}
+.metricTable tr:last-child td{border-bottom:0}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <div class="brand">Tipkaj<span>!</span></div>
+
+  </header>
+  <div class="layout">
+    <section class="card mainCard">
+      <div class="modeTabs" role="tablist" aria-label="Način vadbe">
+        <button id="practiceMode" class="modeTab" type="button" role="tab" aria-selected="true">✍️ Vadba</button>
+        <button id="gameMode" class="modeTab" type="button" role="tab" aria-selected="false">🎮 Igrifikacija</button>
+      </div>
+      <div class="practiceOnly">
+      <div class="promptWrap">
+        <div class="lessonLine">
+          <div id="lessonTitle">1. nivo · AFJČ · vaja 1.1</div>
+          <div class="lessonRight"><div id="recentFace" class="recent-accuracy-face" aria-live="off"><img id="recentFaceImage" alt=""></div><span id="progressText" hidden>0 % do cilja</span></div>
+        </div>
+        
+        <div id="promptViewport" class="promptViewport" tabindex="0" role="textbox" aria-label="Tipkaj neposredno po prikazanem besedilu"></div>
+      <div class="roadBlock">
+        <div class="roadTop"><span>Napredek</span><span id="progressNumber">0 % opravljeno</span></div>
+        <div class="road"><div id="roadFill" class="roadFill"></div><div id="car" class="car">🚙</div><div class="finish">🏁</div></div>
+      </div>
+
+        <textarea id="typing" class="sr-input" aria-label="Tipkanje v vaji" autocomplete="off" spellcheck="false" autocapitalize="off"></textarea>
+        <div id="done" class="done">🎉 Vaja je končana! <div style="display:flex; gap:10px; flex-wrap:wrap"><button class="btn secondary" id="restart2" type="button">Začni znova</button><button class="btn primary" id="next" type="button">Naslednja vaja →</button></div></div>
+      </div>
+
+      </div>
+      <div class="gameOnly">
+        <div class="gameHUD"><div id="gameRecentFace" class="recent-accuracy-face gameFace"><img id="gameRecentFaceImage" alt=""></div><span id="gameLives" class="life">♥ ♥ ♥</span><span id="gameScore">0 točk</span><span class="gameWordsProgress" id="gameWordsProgress">0 / 0 besed</span></div>
+        <div id="gameBoard" class="gameBoard"><div id="gameHint" class="gameHint" hidden></div><div class="gameGround"></div><div class="laserTurret" id="laserTurret">🚀</div><div id="shotLayer" class="shotLayer"></div></div>
+        <input id="gameInput" class="sr-input" aria-label="Tipkanje padajočih besed" autocomplete="off" spellcheck="false" autocapitalize="off" />
+        <div class="gameActions"><button class="btn primary" id="gameStart" type="button">▶ Začni igro</button><button class="btn secondary" id="gamePause" type="button" disabled>⏸ Premor</button><button class="btn secondary" id="gameRestart" type="button">↻ Nova igra</button></div>
+        <div class="gameResult" id="gameResult" aria-live="polite"></div>
+      </div>
+      <section class="card handsCard">
+        <span id="nextFinger" hidden></span>
+        <div class="suppliedHands" role="img" aria-label="Prikaz tvojih dveh dlani z označenim prstom">
+          <img class="suppliedHandImg" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhLS0gQ3JlYXRlZCB3aXRoIElua3NjYXBlIChodHRwOi8vd3d3Lmlua3NjYXBlLm9yZy8pIC0tPgoKPHN2ZwogICB3aWR0aD0iNTUwbW0iCiAgIGhlaWdodD0iMzcwbW0iCiAgIHZpZXdCb3g9IjAgMCA1NTAgMzcwIgogICB2ZXJzaW9uPSIxLjEiCiAgIGlkPSJzdmczNzMxIgogICBpbmtzY2FwZTp2ZXJzaW9uPSIxLjIuMiAoNzMyYTAxZGE2MywgMjAyMi0xMi0wOSkiCiAgIHNvZGlwb2RpOmRvY25hbWU9InJva2Uuc3ZnIgogICB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIKICAgeG1sbnM6c29kaXBvZGk9Imh0dHA6Ly9zb2RpcG9kaS5zb3VyY2Vmb3JnZS5uZXQvRFREL3NvZGlwb2RpLTAuZHRkIgogICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIKICAgeG1sbnM6Y2M9Imh0dHA6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL25zIyIKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIj4KICA8ZGVmcwogICAgIGlkPSJkZWZzMzcyNSI+CiAgICA8aW5rc2NhcGU6cGVyc3BlY3RpdmUKICAgICAgIHNvZGlwb2RpOnR5cGU9Imlua3NjYXBlOnBlcnNwM2QiCiAgICAgICBpbmtzY2FwZTp2cF94PSIwIDogOTkuOTk5OTk5IDogMSIKICAgICAgIGlua3NjYXBlOnZwX3k9IjAgOiA5OTkuOTk5OTkgOiAwIgogICAgICAgaW5rc2NhcGU6dnBfej0iNDE5Ljk5OTk5IDogOTkuOTk5OTk5IDogMSIKICAgICAgIGlua3NjYXBlOnBlcnNwM2Qtb3JpZ2luPSIyMDkuOTk5OTkgOiA2Ni42NjY2NjYgOiAxIgogICAgICAgaWQ9InBlcnNwZWN0aXZlNTMyMyIgLz4KICA8L2RlZnM+CiAgPHNvZGlwb2RpOm5hbWVkdmlldwogICAgIGlkPSJiYXNlIgogICAgIHBhZ2Vjb2xvcj0iI2ZmZmZmZiIKICAgICBib3JkZXJjb2xvcj0iIzY2NjY2NiIKICAgICBib3JkZXJvcGFjaXR5PSIxLjAiCiAgICAgaW5rc2NhcGU6cGFnZW9wYWNpdHk9IjAuMCIKICAgICBpbmtzY2FwZTpwYWdlc2hhZG93PSIyIgogICAgIGlua3NjYXBlOnpvb209IjAuNDk0OTc0NzUiCiAgICAgaW5rc2NhcGU6Y3g9IjcwNi4wOTY2MiIKICAgICBpbmtzY2FwZTpjeT0iNjI1LjI4NDQyIgogICAgIGlua3NjYXBlOmRvY3VtZW50LXVuaXRzPSJtbSIKICAgICBpbmtzY2FwZTpjdXJyZW50LWxheWVyPSJsYXllcjEiCiAgICAgc2hvd2dyaWQ9ImZhbHNlIgogICAgIGlua3NjYXBlOnNuYXAtcGFnZT0idHJ1ZSIKICAgICBpbmtzY2FwZTp3aW5kb3ctd2lkdGg9IjE5MjAiCiAgICAgaW5rc2NhcGU6d2luZG93LWhlaWdodD0iMTAwOSIKICAgICBpbmtzY2FwZTp3aW5kb3cteD0iMjU1MiIKICAgICBpbmtzY2FwZTp3aW5kb3cteT0iMzQ5IgogICAgIGlua3NjYXBlOndpbmRvdy1tYXhpbWl6ZWQ9IjEiCiAgICAgdW5pdHM9Im1tIgogICAgIGhlaWdodD0iNDAwbW0iCiAgICAgaW5rc2NhcGU6c2hvd3BhZ2VzaGFkb3c9IjIiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMCIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiNkMWQxZDEiPgogICAgPGlua3NjYXBlOmdyaWQKICAgICAgIHR5cGU9Inh5Z3JpZCIKICAgICAgIGlkPSJncmlkMzc1NCIgLz4KICA8L3NvZGlwb2RpOm5hbWVkdmlldz4KICA8bWV0YWRhdGEKICAgICBpZD0ibWV0YWRhdGEzNzI4Ij4KICAgIDxyZGY6UkRGPgogICAgICA8Y2M6V29yawogICAgICAgICByZGY6YWJvdXQ9IiI+CiAgICAgICAgPGRjOmZvcm1hdD5pbWFnZS9zdmcreG1sPC9kYzpmb3JtYXQ+CiAgICAgICAgPGRjOnR5cGUKICAgICAgICAgICByZGY6cmVzb3VyY2U9Imh0dHA6Ly9wdXJsLm9yZy9kYy9kY21pdHlwZS9TdGlsbEltYWdlIiAvPgogICAgICA8L2NjOldvcms+CiAgICA8L3JkZjpSREY+CiAgPC9tZXRhZGF0YT4KICA8ZwogICAgIGlua3NjYXBlOmxhYmVsPSJMYXllciAxIgogICAgIGlua3NjYXBlOmdyb3VwbW9kZT0ibGF5ZXIiCiAgICAgaWQ9ImxheWVyMSIKICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDczKSI+CiAgICA8Zmxvd1Jvb3QKICAgICAgIHhtbDpzcGFjZT0icHJlc2VydmUiCiAgICAgICBpZD0iZmxvd1Jvb3Q0MjE4IgogICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXNpemU6NDBweDtsaW5lLWhlaWdodDoxMjUlO2ZvbnQtZmFtaWx5OnNhbnMtc2VyaWY7bGV0dGVyLXNwYWNpbmc6MHB4O3dvcmQtc3BhY2luZzowcHg7ZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDoxcHg7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIHRyYW5zZm9ybT0ibWF0cml4KDAuMjY0NTgzMzMsMCwwLDAuMjY0NTgzMzMsMCwtNTQ0KSI+PGZsb3dSZWdpb24KICAgICAgICAgaWQ9ImZsb3dSZWdpb240MjIwIj48cmVjdAogICAgICAgICAgIGlkPSJyZWN0NDIyMiIKICAgICAgICAgICB3aWR0aD0iNjAiCiAgICAgICAgICAgaGVpZ2h0PSI2MCIKICAgICAgICAgICB4PSIxODAiCiAgICAgICAgICAgeT0iMjY3OC41ODI4IiAvPjwvZmxvd1JlZ2lvbj48Zmxvd1BhcmEKICAgICAgICAgaWQ9ImZsb3dQYXJhNDIyNCIgLz48L2Zsb3dSb290PgogICAgPGZsb3dSb290CiAgICAgICB4bWw6c3BhY2U9InByZXNlcnZlIgogICAgICAgaWQ9ImZsb3dSb290NTMwNyIKICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXdlaWdodDpub3JtYWw7Zm9udC1zaXplOjQ4cHg7bGluZS1oZWlnaHQ6MTI1JTtmb250LWZhbWlseTpzYW5zLXNlcmlmO2xldHRlci1zcGFjaW5nOjBweDt3b3JkLXNwYWNpbmc6MHB4O2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MXB4O3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICB0cmFuc2Zvcm09Im1hdHJpeCgwLjI2NDU4MzMzLDAsMCwwLjI2NDU4MzMzLDAsOTcpIj48Zmxvd1JlZ2lvbgogICAgICAgICBpZD0iZmxvd1JlZ2lvbjUzMDkiCiAgICAgICAgIHN0eWxlPSJmb250LXNpemU6NDhweCI+PHJlY3QKICAgICAgICAgICBpZD0icmVjdDUzMTEiCiAgICAgICAgICAgd2lkdGg9IjUwIgogICAgICAgICAgIGhlaWdodD0iNTAiCiAgICAgICAgICAgeD0iNTUwIgogICAgICAgICAgIHk9IjMxNS45MDU1MiIKICAgICAgICAgICBzdHlsZT0iZm9udC1zaXplOjQ4cHgiIC8+PC9mbG93UmVnaW9uPjxmbG93UGFyYQogICAgICAgICBpZD0iZmxvd1BhcmE1MzEzIgogICAgICAgICBzdHlsZT0iZm9udC1zaXplOjQ4cHgiPkY8L2Zsb3dQYXJhPjwvZmxvd1Jvb3Q+CiAgICA8Zmxvd1Jvb3QKICAgICAgIHhtbDpzcGFjZT0icHJlc2VydmUiCiAgICAgICBpZD0iZmxvd1Jvb3Q1MzE1IgogICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtd2VpZ2h0Om5vcm1hbDtmb250LXNpemU6NDhweDtsaW5lLWhlaWdodDoxMjUlO2ZvbnQtZmFtaWx5OnNhbnMtc2VyaWY7bGV0dGVyLXNwYWNpbmc6MHB4O3dvcmQtc3BhY2luZzowcHg7ZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDoxcHg7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIHRyYW5zZm9ybT0ibWF0cml4KDAuMjY0NTgzMzMsMCwwLDAuMjY0NTgzMzMsMCw5NykiPjxmbG93UmVnaW9uCiAgICAgICAgIGlkPSJmbG93UmVnaW9uNTMxNyIKICAgICAgICAgc3R5bGU9ImZvbnQtc2l6ZTo0OHB4Ij48cmVjdAogICAgICAgICAgIGlkPSJyZWN0NTMxOSIKICAgICAgICAgICB3aWR0aD0iMTUwIgogICAgICAgICAgIGhlaWdodD0iMTgwIgogICAgICAgICAgIHg9IjU0MCIKICAgICAgICAgICB5PSIzMTUuOTA1NTIiCiAgICAgICAgICAgc3R5bGU9ImZvbnQtc2l6ZTo0OHB4IiAvPjwvZmxvd1JlZ2lvbj48Zmxvd1BhcmEKICAgICAgICAgaWQ9ImZsb3dQYXJhNTMyMSIgLz48L2Zsb3dSb290PgogICAgPHRleHQKICAgICAgIHhtbDpzcGFjZT0icHJlc2VydmUiCiAgICAgICBzdHlsZT0iZm9udC1zdHlsZTppdGFsaWM7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpib2xkO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1zaXplOjEwLjU4MzNweDtsaW5lLWhlaWdodDoxMjUlO2ZvbnQtZmFtaWx5OnNhbnMtc2VyaWY7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjonc2Fucy1zZXJpZiBCb2xkIEl0YWxpYyc7bGV0dGVyLXNwYWNpbmc6MHB4O3dvcmQtc3BhY2luZzowcHg7ZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDowLjI2NDU4M3B4O3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICB4PSIyMS4xNjY2NjYiCiAgICAgICB5PSIzMDcuNTgzMzQiCiAgICAgICBpZD0idGV4dDU2NDkiIC8+CiAgICA8dGV4dAogICAgICAgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKICAgICAgIHN0eWxlPSJmb250LXN0eWxlOml0YWxpYztmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LXNpemU6MTAuNTgzM3B4O2xpbmUtaGVpZ2h0OjEyNSU7Zm9udC1mYW1pbHk6c2Fucy1zZXJpZjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidzYW5zLXNlcmlmIEJvbGQgSXRhbGljJztsZXR0ZXItc3BhY2luZzowcHg7d29yZC1zcGFjaW5nOjBweDtmaWxsOiMyODE3MGI7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjAuMjY0NTgzcHg7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIHg9IjQ1LjEzOTY0OCIKICAgICAgIHk9IjMzOC44MzAzMiIKICAgICAgIGlkPSJ0ZXh0NTY1NyI+PHRzcGFuCiAgICAgICAgIHNvZGlwb2RpOnJvbGU9ImxpbmUiCiAgICAgICAgIGlkPSJ0c3BhbjU2NTUiCiAgICAgICAgIHg9IjQ1LjEzOTY0OCIKICAgICAgICAgeT0iMzM4LjgzMDMyIgogICAgICAgICBzdHlsZT0iZmlsbDojMjgxNzBiO3N0cm9rZS13aWR0aDowLjI2NDU4M3B4Ij4tLTwvdHNwYW4+PC90ZXh0PgogICAgPHRleHQKICAgICAgIHhtbDpzcGFjZT0icHJlc2VydmUiCiAgICAgICBzdHlsZT0iZm9udC1zdHlsZTppdGFsaWM7Zm9udC12YXJpYW50Om5vcm1hbDtmb250LXdlaWdodDpib2xkO2ZvbnQtc3RyZXRjaDpub3JtYWw7Zm9udC1zaXplOjEwLjU4MzNweDtsaW5lLWhlaWdodDoxMjUlO2ZvbnQtZmFtaWx5OnNhbnMtc2VyaWY7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjonc2Fucy1zZXJpZiBCb2xkIEl0YWxpYyc7bGV0dGVyLXNwYWNpbmc6MHB4O3dvcmQtc3BhY2luZzowcHg7ZmlsbDojMDAwMDAwO2ZpbGwtb3BhY2l0eToxO3N0cm9rZTpub25lO3N0cm9rZS13aWR0aDowLjI2NDU4M3B4O3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICB4PSI3OC45OTcwMjUiCiAgICAgICB5PSIxOTguMzQ4MjEiCiAgICAgICBpZD0idGV4dDYwNjIiIC8+CiAgICA8dGV4dAogICAgICAgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKICAgICAgIHN0eWxlPSJmb250LXN0eWxlOml0YWxpYztmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LXNpemU6MTAuNTgzM3B4O2xpbmUtaGVpZ2h0OjEyNSU7Zm9udC1mYW1pbHk6c2Fucy1zZXJpZjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidzYW5zLXNlcmlmIEJvbGQgSXRhbGljJztsZXR0ZXItc3BhY2luZzowcHg7d29yZC1zcGFjaW5nOjBweDtmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjAuMjY0NTgzcHg7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIHg9IjAiCiAgICAgICB5PSIyMC42OTk0MDkiCiAgICAgICBpZD0idGV4dDYwNjYiIC8+CiAgICA8Zmxvd1Jvb3QKICAgICAgIHhtbDpzcGFjZT0icHJlc2VydmUiCiAgICAgICBpZD0iZmxvd1Jvb3Q2MDY4IgogICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtc2l6ZTo2NHB4O2xpbmUtaGVpZ2h0OjEyNSU7Zm9udC1mYW1pbHk6c2Fucy1zZXJpZjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidzYW5zLXNlcmlmIEJvbGQnO2xldHRlci1zcGFjaW5nOjBweDt3b3JkLXNwYWNpbmc6MHB4O2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MXB4O3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICB0cmFuc2Zvcm09Im1hdHJpeCgwLjI2NDU4MzMzLDAsMCwwLjI2NDU4MzMzLDAsLTEwMykiPjxmbG93UmVnaW9uCiAgICAgICAgIGlkPSJmbG93UmVnaW9uNjA3MCIKICAgICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6bm9ybWFsO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtc2l6ZTo2NHB4O2ZvbnQtZmFtaWx5OnNhbnMtc2VyaWY7LWlua3NjYXBlLWZvbnQtc3BlY2lmaWNhdGlvbjonc2Fucy1zZXJpZiBCb2xkJyI+PHJlY3QKICAgICAgICAgICBpZD0icmVjdDYwNzIiCiAgICAgICAgICAgd2lkdGg9Ijc3NC4yODU3MSIKICAgICAgICAgICBoZWlnaHQ9IjEyMi44NTcxNCIKICAgICAgICAgICB4PSIyNzguNTcxNDQiCiAgICAgICAgICAgeT0iMTY0LjY2ODE4IgogICAgICAgICAgIHN0eWxlPSJmb250LXN0eWxlOm5vcm1hbDtmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LXNpemU6NjRweDtmb250LWZhbWlseTpzYW5zLXNlcmlmOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246J3NhbnMtc2VyaWYgQm9sZCciIC8+PC9mbG93UmVnaW9uPjxmbG93UGFyYQogICAgICAgICBpZD0iZmxvd1BhcmE2MDc0IiAvPjwvZmxvd1Jvb3Q+CiAgICA8dGV4dAogICAgICAgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKICAgICAgIHN0eWxlPSJmb250LXN0eWxlOml0YWxpYztmb250LXZhcmlhbnQ6bm9ybWFsO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zdHJldGNoOm5vcm1hbDtmb250LXNpemU6MTAuNTgzM3B4O2xpbmUtaGVpZ2h0OjEyNSU7Zm9udC1mYW1pbHk6c2Fucy1zZXJpZjstaW5rc2NhcGUtZm9udC1zcGVjaWZpY2F0aW9uOidzYW5zLXNlcmlmIEJvbGQgSXRhbGljJztsZXR0ZXItc3BhY2luZzowcHg7d29yZC1zcGFjaW5nOjBweDtmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjAuMjY0NTgzcHg7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgIHg9IjIzMi44MzMzMyIKICAgICAgIHk9IjIzMy44Nzc5OCIKICAgICAgIGlkPSJ0ZXh0NjA3OCIgLz4KICAgIDx0ZXh0CiAgICAgICB4bWw6c3BhY2U9InByZXNlcnZlIgogICAgICAgc3R5bGU9ImZvbnQtc3R5bGU6aXRhbGljO2ZvbnQtdmFyaWFudDpub3JtYWw7Zm9udC13ZWlnaHQ6Ym9sZDtmb250LXN0cmV0Y2g6bm9ybWFsO2ZvbnQtc2l6ZToxMC41ODMzcHg7bGluZS1oZWlnaHQ6MTI1JTtmb250LWZhbWlseTpzYW5zLXNlcmlmOy1pbmtzY2FwZS1mb250LXNwZWNpZmljYXRpb246J3NhbnMtc2VyaWYgQm9sZCBJdGFsaWMnO2xldHRlci1zcGFjaW5nOjBweDt3b3JkLXNwYWNpbmc6MHB4O2ZpbGw6IzAwMDAwMDtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6MC4yNjQ1ODNweDtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIgogICAgICAgeD0iMTUwLjIwNTQ3IgogICAgICAgeT0iLTEyNS44MjA0IgogICAgICAgaWQ9InRleHQ2MTMyIiAvPgogICAgPHBhdGgKICAgICAgIHN0eWxlPSJvcGFjaXR5OjE7ZmlsbDojZmZmZmZmO2ZpbGwtb3BhY2l0eToxO2ZpbGwtcnVsZTpldmVub2RkO3N0cm9rZTojMDAwMDVlO3N0cm9rZS13aWR0aDoxLjI1NTYxO3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lO3N0cm9rZS1vcGFjaXR5OjEiCiAgICAgICBkPSJtIDQxMC4yNDM4OCwyMTQuODk5NTEgLTIwLjgzNDU0LC0zOS45ODUzNSAtMjQuNjIyNTcsLTEwLjQ5MjYzIC0xNC4wNzAwNywtMTguNzE2NTIgLTkuMTk5NjYsLTcuOTQwMzcgLTE3LjU4NzU0LC0yOS43NzYzIC0wLjI3MDU4LC04LjIyMzk1OCAtOC4zODc5MywtMTguNDMyOTYgMi45NzYzNywtMy45NzAxNyA2Ljc2NDQ1LC0wLjI4MzYgNy4zMDU2MSwzLjY4NjU4IDEzLjUyODg4LDIyLjk3MDM0OCAxNC4zNDA2NSwxMy4wNDQ4NSA2LjIyMzMsLTE0Ljc0NjM2IC0xNC42MTEyMywtNDUuMDg5ODc4IC05LjQ3MDIyLC0yNS44MDYyMiAtMC41NDExNSwtMTAuNDkyNiA0LjU5OTgyLC0zLjQwMjk5IGggNS45NTI2OSBsIDEyLjk4Nzc3LDIwLjk4NTIgNS40MTE1NCw2LjIzODg4IDEyLjE3NjAzLDMxLjQ3Nzg2IDUuOTUyNjgsNC4yNTM3NyAxLjM1MjkzLC0zLjQwMyAtMTIuNDQ2NTgsLTM4LjI4MzkzIC05LjE5OTY2LC0xOS41NjczIDAuODExNzMsLTcuOTQwMzQgNC41OTk4MSwtMS45ODUxMzA1IDYuNzY0NDgsMC44NTA3NiAxNS4xNTIzMywyMi4xMTk1OTA1IDIuOTc2MzYsNC41MzczNCAxMC44MjMxMiwzMy40NjI5NiAzLjI0Njk1LDMuMTE5NDQgMS42MjM0NSwtNC41MzczMiAtNS4xNDA5NywtMjkuNDkyODMgLTguNjU4NSwtMjAuMTM0NDcgMi4xNjQ2OCwtNy42NTY3NyA1Ljk1MjY2LC0xLjEzNDM2IDYuMjIzMjksMi4yNjg3MSAxMi40NDY2MywyMS4yNjg4IDEuMDgyMyw5LjkyNTQ2IDMuNzg4MDksMjYuMzczMzQgaCAyLjcwNTc4IGwgMS42MjM0MiwtMjIuNDAzMTIgLTAuNTQxMTMsLTE4LjcxNjYxIDAuNTQxMTMsLTkuMDc0NjkgMy41MTc1NiwtMi4yNjg2NyA0Ljg3MDM5LDAuODUwNzUgNS42ODIxNCwxMy4zMjg0NCAxLjg5NDA0LDE5Ljg1MDk1IC0xLjM1Mjg5LDEzLjA0NDg3IC0yLjE2NDYzLDE5LjU2NzMzIDAuMjcwNTgsNzEuNDYzMTU4IDI2LjUxNjY2LDQzLjEwNDc4IHoiCiAgICAgICBpZD0icGF0aDUwOTYtMS0zLTkiCiAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIiAvPgogICAgPGcKICAgICAgIGlkPSJnNTI4MSIKICAgICAgIHRyYW5zZm9ybT0ibWF0cml4KDEuMTcyNTg1NiwtMC4wNTU4MDE3NSwwLjAzOTAwNTQ5LDEuMTgzNTE1Niw1NDEuMjA3NTEsLTIxOS4xMDIxNykiCiAgICAgICBzdHlsZT0ib3BhY2l0eToxO3N0cm9rZTojMDAwMDVlO3N0cm9rZS13aWR0aDoxO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lO3N0cm9rZS1vcGFjaXR5OjEiPgogICAgICA8ZwogICAgICAgICBzdHlsZT0ib3BhY2l0eToxO2ZpbGw6bm9uZTtmaWxsLW9wYWNpdHk6MTtzdHJva2U6IzAwMDA1ZTtzdHJva2Utd2lkdGg6MTtzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZTtzdHJva2Utb3BhY2l0eToxIgogICAgICAgICB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMzQ5Ljc2MzczLDgzLjMwNTU3OCkiCiAgICAgICAgIGlkPSJnNTA5MC00Ij4KICAgICAgICA8cGF0aAogICAgICAgICAgIHN0eWxlPSJmaWxsOm5vbmU7ZmlsbC1vcGFjaXR5OjE7ZmlsbC1ydWxlOmV2ZW5vZGQ7c3Ryb2tlOiMwMDAwNWU7c3Ryb2tlLXdpZHRoOjE7c3Ryb2tlLWxpbmVjYXA6YnV0dDtzdHJva2UtbGluZWpvaW46bWl0ZXI7c3Ryb2tlLW1pdGVybGltaXQ6NDtzdHJva2UtZGFzaGFycmF5Om5vbmU7c3Ryb2tlLW9wYWNpdHk6MSIKICAgICAgICAgICBkPSJtIC00LjE3NDQ0MjMsMjU1LjkyNDM2IDE4LjMxODUxNDMsLTM4LjUwNDAyIDAuNjI2MjcyLC02MC43NTA3NiAtMy4xMzEzNjgsLTE5LjE2NjQzIDAuNDY5NzEsLTI0Ljk4NDgyIDQuODUzNjIyLC0xMS45NzkwMyAzLjI4NzkzOCwtMi4zOTU4MTMgNC4yMjczNSwyLjM5NTgxMyAtMC4xNTY1Nyw1LjMwNSAtMS40MDkxMTQsMTIuMTUwMTUgMC43ODI4NDMsMTIuNDkyNDEgNC4yMjczNDEsMTguNDgxOTIgMi4zNDg1MzQsLTI5LjYwNTMgNS4zMjMzMjQsLTEzLjUxOTE4IDUuNDc5ODk0LC05LjQxMjEwMyA1LjAxMDE4MSwtMi41NjY5NCA1LjQ3OTkxLDEuNzExMyAxLjA5NTk3LDUuNDc2MTMzIC03LjY3MTg0MywxOC40ODE5MiAtMC42MjYyNzcsMjMuOTU4MDUgMS40MDkxMiwyLjM5NTggNi44ODksLTMwLjExODY4IDE3LjA2NTk3LC0yMC43MDY2MDMgNS40Nzk4OSwtMS4xOTc5MiAyLjE5MTk2LDIuNzM4MDggMC45Mzk0MSw1LjQ3NjEyMyAtOS4wODA5OCwxOS42Nzk4MiAtNC44NTM2MiwyOC41Nzg1MyA5LjA4MDk4LC0xNC4yMDM3IDQuMDcwNzgsLTE0LjAzMjU3IDEwLjQ5MDA4LC0xMy42OTAzMSA2LjEwNjE4LC01Ljk4OTUxIGggMy45MTQyMSBsIDMuMjg3OTMxLDYuNTAyOSAtMi41MDUwOTEsMTAuNzgxMTIgLTYuMTA2MTcsMTMuODYxNDQgLTguNjExMjYsMzMuMDI3ODggMS41NjU2OCwxNi4yNTcyNCAyLjE5MTk1LDIuMDUzNTUgMTEuMjcyOTMsLTExLjI5NDUgMTEuMTE2MzcxLC0xNS4yMzA0OCAxMC4xNzY5NSwtNC40NDkzNSA2LjEwNjE3LDEuNzExMjggMi4wMzUzOSw0Ljk2Mjc1IC0yLjUwNTA5LDUuMzA0OTkgLTguNjExMjgsOS41ODMyMiAtMS4yNTI1Myw1LjQ3NjE0IC0xMi41MjU0OSwxNC4yMDM2OSAtMy4xMzEzNiw4LjcyNzU3IC02Ljg4OTAyMSw1LjMwNSAtMTQuNTYwODYsMTguMzEwNzkgLTE3LjY5MjI0LDcuMTg3NDMgLTE3LjY5MjIzNSw0NS4zNDkxNSIKICAgICAgICAgICBpZD0icGF0aDUwNjktNyIKICAgICAgICAgICBpbmtzY2FwZTpjb25uZWN0b3ItY3VydmF0dXJlPSIwIiAvPgogICAgICA8L2c+CiAgICAgIDxwYXRoCiAgICAgICAgIGlua3NjYXBlOmNvbm5lY3Rvci1jdXJ2YXR1cmU9IjAiCiAgICAgICAgIGlkPSJwYXRoNTI3NiIKICAgICAgICAgZD0ibSAtMzA2LjkxNjY2LDM2My4xNDU4MyAtNDcuNjI1LC0yMy44MTI1IgogICAgICAgICBzdHlsZT0iZmlsbDpub25lO2ZpbGwtcnVsZTpldmVub2RkO3N0cm9rZTojMDAwMDVlO3N0cm9rZS13aWR0aDoxO3N0cm9rZS1saW5lY2FwOmJ1dHQ7c3Ryb2tlLWxpbmVqb2luOm1pdGVyO3N0cm9rZS1taXRlcmxpbWl0OjQ7c3Ryb2tlLWRhc2hhcnJheTpub25lO3N0cm9rZS1vcGFjaXR5OjEiIC8+CiAgICAgIDxwYXRoCiAgICAgICAgIHN0eWxlPSJvcGFjaXR5OjAuOTIyO2ZpbGw6I2ZmZmZmZjtmaWxsLW9wYWNpdHk6MTtzdHJva2U6bm9uZTtzdHJva2Utd2lkdGg6Ny42MzU4O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2UtbWl0ZXJsaW1pdDo0O3N0cm9rZS1kYXNoYXJyYXk6bm9uZTtzdHJva2Utb3BhY2l0eToxO3BhaW50LW9yZGVyOmZpbGwgbWFya2VycyBzdHJva2UiCiAgICAgICAgIGQ9Im0gMzc5LjQzOTc2LDE0MjguNDU3OSAtODYuMzI0NzcsLTQzLjMwMjkgNi43NDkwMSwtMTQuNjY0MiBjIDMuNzExOTUsLTguMDY1MyAxOS4wODg0NCwtNDAuNTc0NiAzNC4xNjk5NywtNzIuMjQyOSBsIDI3LjQyMDk2LC01Ny41Nzg3IDEuMzI1MjUsLTExNi4xNjc1IDEuMzI1MjUsLTExNi4xNjc2IC01Ljk1NDIzLC0zNi4zNjU0NiBjIC01LjY4MTM5LC0zNC42OTkwOSAtNS45MDkwNywtMzguNDgyODMgLTQuOTY4NTYsLTgyLjU3MTYzIGwgMC45ODU2NywtNDYuMjA2MTUgOC42Mjc0NSwtMjEuNDc0MDcgYyA1LjY5ODA5LC0xNC4xODI3OSAxMC40MDQxOCwtMjIuODA0MjcgMTMuODYwMjEsLTI1LjM5MTcxIDQuODg3NzYsLTMuNjU5MzQgNS42NzA1NywtMy43MDg4NCAxMS44NzM1NCwtMC43NTA4NSBsIDYuNjQwNzksMy4xNjY3NyAtMS45OTQ3NywyMS45NjQwNiBjIC0xLjA5NzEzLDEyLjA4MDIzIC0xLjkyMTI2LDM2Ljk2NDgyIC0xLjgzMTQsNTUuMjk5MDkgMC4xNTE3MiwzMC45NTcxMiAwLjY5Njc0LDM1LjY0MDg4IDcuNjQwNDksNjUuNjU5OTEgNC4xMTI0MSwxNy43Nzg2OSA3LjkyNjMsMzMuOTE1ODcgOC40NzUzMSwzNS44NjA0MiAxLjI3NTc2LDQuNTE4NjUgNi43ODY4Miw0LjYzMjg0IDYuNzg2ODIsMC4xNDA2MSAwLC0xLjg2NzIxIDEuOTE3MDUsLTI3LjA5NTc2IDQuMjYwMTEsLTU2LjA2MzQ3IGwgNC4yNjAxLC01Mi42Njg1NCAxMC4wMjc2OSwtMjUuMTQ2OTEgYyA1LjUxNTIyLC0xMy44MzA4IDE0LjYyMjU0LC0zMy4wMjQ1NCAyMC4yMzg0NywtNDIuNjUyNzUgOC4zNDYwMSwtMTQuMzA4NzkgMTEuNzMyMzIsLTE4LjI0Mjk1IDE4LjU0MjE2LC0yMS41NDE5NiA3LjYwNDE0LC0zLjY4MzggOS4xNTI1OSwtMy43OTU3NyAxNy43MzkwOSwtMS4yODI3OCA5LjE3MzU1LDIuNjg0OCA5LjQzOTk3LDIuOTkyMDMgMTAuNzAzNzEsMTIuMzQzNjggMS4xODEyMyw4Ljc0MTEgMC4wMzg4LDEyLjU5NTM2IC0xMi45MDIxNCw0My41MjUyNSBsIC0xNC4xOTgxMywzMy45MzQ4OSAtMS4yMTk5Myw0Ni44NzczMSBjIC0xLjE5OTk2LDQ2LjEwOTc5IC0xLjE0NTk0LDQ2Ljk5MzA4IDMuMjk5NTMsNTMuOTQ4MzcgMi40ODU3LDMuODg5MDkgNC44MDI1Niw2LjE2MTkzIDUuMTQ4NTYsNS4wNTA3NiAwLjM0NiwtMS4xMTExNiA2LjE1NjQxLC0yNi41NjcwMSAxMi45MTIwMiwtNTYuNTY4NTQgNi43NTU1OSwtMzAuMDAxNTMgMTMuMDQ5MzUsLTU2LjQxMjQ2IDEzLjk4NjA4LC01OC42OTA5NSAwLjkzNjc2LC0yLjI3ODQ5IDE1LjUyNDk0LC0yMC45MTU4MSAzMi40MTgyLC00MS40MTYyNiAyOC4yMzc2MiwtMzQuMjY3MTcgMzEuNDIzMzYsLTM3LjQ1Nzc2IDM5LjQ5NzQxLC0zOS41NTc1OSA3Ljk3NzExLC0yLjA3NDYyIDkuMTUyMzUsLTEuODg5MzcgMTIuODE2ODgsMi4wMjAzMSAyLjM0MTAzLDIuNDk3NjEgNC41NzAwNyw4LjU0NDQ0IDUuMzEwNDMsMTQuNDA1ODggMS4yMTA2MSw5LjU4NDI4IDAuNDI1MjMsMTEuOTExOSAtMTUuMzM4LDQ1LjQ1Njg3IGwgLTE2LjYxMzkzLDM1LjM1NTMzIC05LjYwMTcxLDU1LjU1ODM5IGMgLTUuMjgwOTEsMzAuNTU3MTIgLTkuMjY4NDcsNTUuODk3OTkgLTguODYxMiw1Ni4zMTMwNiAyLjM4NjAzLDIuNDMxNzQgNy43MzQ3MiwtNC4wNTA1NSAyMi41MDU4LC0yNy4yNzU2NyAxNC44NDM0NCwtMjMuMzM4ODkgMTcuMzIyMzYsLTI4LjcwMTM0IDI0LjE2MzQ1LC01Mi4yNzA4OSBsIDcuNjIzMTYsLTI2LjI2Mzk3IDIxLjc3MTI3LC0yOC41Nzg0NCBjIDIzLjA4MDM1LC0zMC4yOTY3OSAzOC4zODA5NSwtNDUuMTYyNyA0Ni40ODMzNCwtNDUuMTYyNyAzLjk5Mzk5LDAgNS45NjEzMiwyLjIxMjE3IDEwLjYwMTg2LDExLjkyMTMzIGwgNS42OTc4OSwxMS45MjEzMiAtNC42MTU5NCwxOC44ODgzMyBjIC0yLjUzODc1LDEwLjM4ODU4IC05LjkxNjA4LDMxLjE2MTY4IC0xNi4zOTQwNyw0Ni4xNjI0NSAtOS4yNzIxMywyMS40NzEwNiAtMTUuMjAzOTgsNDAuNDE2NSAtMjcuODc5NDgsODkuMDQyNzggbCAtMTYuMTAxMzcsNjEuNzY4NjIgMy4wNzM5NCwzMS4xNjU0IGMgMi44NDEzOCwyOC44MDc1IDMuNDc2ODQsMzEuNTg5MyA4LjM5OTM0LDM2Ljc2ODQgbCA1LjMyNTQsNS42MDMxIDIxLjAzMTE5LC0yMC43NTUzIGMgMTIuMDg2NywtMTEuOTI4MiAzMC43MDMxNywtMzMuNzEwOSA0My43NzI4OCwtNTEuMjE3NiBsIDIyLjc0MTcxLC0zMC40NjIzIDE3LjgwNTksLTcuNjQ5MyBjIDE3LjQxNzM5LC03LjQ4MjUgMTguMDM4OTgsLTcuNTkzNSAyOC40ODY2LC01LjA4NzEgOS44ODQ1MywyLjM3MTMgMTAuOTIyOTIsMy4xOTY2IDEzLjkzMDU3LDExLjA3MiAzLjE1NzI3LDguMjY3MiAzLjEwNTU5LDguNzkwOSAtMS44MTM2NSwxOC4zNzY3IC0yLjc4NDk1LDUuNDI2OSAtMTIuMzI4ODEsMTcuOTgyOSAtMjEuMjA4NTksMjcuOTAyNCAtMTMuNDE0MSwxNC45ODQ3IC0xNi4zNjk0MywxOS41MzE1IC0xNy40NzE0NCwyNi44ODA0IC0xLjM1Nzk3LDkuMDU1NSAtNC41Njg3OCwxMy4zNzE0IC0zNy43ODg4OCw1MC43OTQ4IC05LjIxNDY5LDEwLjM4MDcgLTEyLjk0MzQ3LDE2LjY3NTIgLTE3LjMwMDkyLDI5LjIwNTkgLTUuMjE3MDgsMTUuMDAyNiAtNi4zNjA5MSwxNi42MDMzIC0xOC44MjI3MiwyNi4zNDA2IC04Ljg5MjQ1LDYuOTQ4MyAtMjIuMjk1NywyMS43MzY5IC00MC42NDIxNyw0NC44NDI5IGwgLTI3LjM3NDA3LDM0LjQ3NTYgLTI5LjA1ODM1LDExLjc1MzYgYyAtMTUuOTgyMTEsNi40NjQ0IC0zMS4xOTU2NSwxMi44NDMyIC0zMy44MDc4NiwxNC4xNzUgLTMuODQ5NDEsMS45NjI1IC0xMC45MzI2MiwxOC4yNDg4IC0zNy4zNzU2NSw4NS45Mzc1IC0xNy45NDQzOCw0NS45MzM5IC0zMy41MzUyOCw4My43NjQ0IC0zNC42NDY0NSw4NC4wNjc5IC0xLjExMTE3LDAuMzAzNCAtNDAuODY2NDYsLTE4LjkzNDYgLTg4LjM0NTA4LC00Mi43NTEzIHoiCiAgICAgICAgIGlkPSJwYXRoNTY4NiIKICAgICAgICAgaW5rc2NhcGU6Y29ubmVjdG9yLWN1cnZhdHVyZT0iMCIKICAgICAgICAgdHJhbnNmb3JtPSJtYXRyaXgoMC4yNjQ1ODMzMywwLDAsMC4yNjQ1ODMzMywtNDMwLjU4NjksLTI3LjIwNTY3KSIgLz4KICAgIDwvZz4KICAgIDxmbG93Um9vdAogICAgICAgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIKICAgICAgIGlkPSJmbG93Um9vdDg0OTIiCiAgICAgICBzdHlsZT0iZm9udC1zdHlsZTpub3JtYWw7Zm9udC13ZWlnaHQ6bm9ybWFsO2ZvbnQtc2l6ZTo0MHB4O2xpbmUtaGVpZ2h0OjEyNSU7Zm9udC1mYW1pbHk6c2Fucy1zZXJpZjtsZXR0ZXItc3BhY2luZzowcHg7d29yZC1zcGFjaW5nOjBweDtmaWxsOiMwMDAwMDA7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlOm5vbmU7c3Ryb2tlLXdpZHRoOjFweDtzdHJva2UtbGluZWNhcDpidXR0O3N0cm9rZS1saW5lam9pbjptaXRlcjtzdHJva2Utb3BhY2l0eToxIj48Zmxvd1JlZ2lvbgogICAgICAgICBpZD0iZmxvd1JlZ2lvbjg0OTQiPjxyZWN0CiAgICAgICAgICAgaWQ9InJlY3Q4NDk2IgogICAgICAgICAgIHdpZHRoPSI2OC44NDQxMzkiCiAgICAgICAgICAgaGVpZ2h0PSIxNjcuNjg1MzIiCiAgICAgICAgICAgeD0iMjA3OC43NDAyIgogICAgICAgICAgIHk9IjYxMC41MDYyMyIgLz48L2Zsb3dSZWdpb24+PGZsb3dQYXJhCiAgICAgICAgIGlkPSJmbG93UGFyYTg0OTgiIC8+PC9mbG93Um9vdD4KICA8L2c+Cjwvc3ZnPgo=" alt="" draggable="false">
+          <span id="left-pinky" class="finger-shape finger-marker" data-finger="left-pinky" style="left:29.0%;top:29.0%"></span>
+          <span id="count-left-pinky" class="finger-count" style="left:29.0%;top:42.5%" title="Napake: 0" aria-label="Napake: 0">0</span>
+          <span id="left-ring" class="finger-shape finger-marker" data-finger="left-ring" style="left:34.9%;top:27.4%"></span>
+          <span id="count-left-ring" class="finger-count" style="left:34.9%;top:42.0%" title="Napake: 0" aria-label="Napake: 0">0</span>
+          <span id="left-middle" class="finger-shape finger-marker" data-finger="left-middle" style="left:40.0%;top:27.2%"></span>
+          <span id="count-left-middle" class="finger-count" style="left:40.0%;top:42.1%" title="Napake: 0" aria-label="Napake: 0">0</span>
+          <span id="left-index" class="finger-shape finger-marker" data-finger="left-index" style="left:45.4%;top:29.6%"></span>
+          <span id="count-left-index" class="finger-count" style="left:45.4%;top:42.5%" title="Napake: 0" aria-label="Napake: 0">0</span>
+          <span id="left-thumb" class="finger-shape finger-marker" data-finger="left-thumb" style="left:50.5%;top:45.1%"></span>
+          <span id="count-left-thumb" class="finger-count" style="left:53.5%;top:53.4%" title="Napake: 0" aria-label="Napake: 0">0</span>
+          <span id="right-thumb" class="finger-shape finger-marker" data-finger="right-thumb" style="left:59.6%;top:45.1%"></span>
+          <span id="count-right-thumb" class="finger-count" style="left:57.0%;top:53.4%" title="Napake: 0" aria-label="Napake: 0">0</span>
+          <span id="right-index" class="finger-shape finger-marker" data-finger="right-index" style="left:63.8%;top:29.4%"></span>
+          <span id="count-right-index" class="finger-count" style="left:63.8%;top:42.5%" title="Napake: 0" aria-label="Napake: 0">0</span>
+          <span id="right-middle" class="finger-shape finger-marker" data-finger="right-middle" style="left:69.0%;top:27.9%"></span>
+          <span id="count-right-middle" class="finger-count" style="left:69.0%;top:42.1%" title="Napake: 0" aria-label="Napake: 0">0</span>
+          <span id="right-ring" class="finger-shape finger-marker" data-finger="right-ring" style="left:74.6%;top:28.0%"></span>
+          <span id="count-right-ring" class="finger-count" style="left:74.6%;top:42.0%" title="Napake: 0" aria-label="Napake: 0">0</span>
+          <span id="right-pinky" class="finger-shape finger-marker" data-finger="right-pinky" style="left:80.6%;top:30.0%"></span>
+          <span id="count-right-pinky" class="finger-count" style="left:80.6%;top:42.5%" title="Napake: 0" aria-label="Napake: 0">0</span>
+        </div>
+
+      </section>
+    </section>
+
+    <aside class="card sideCard">
+      <section class="settingsGroup" aria-label="Izbira vaje in nastavitve">
+        <div class="settingsTitle">Vaja in nastavitve</div>
+        <div class="selects">
+          <label class="field">NIVO<select id="level"></select></label>
+          <label class="field">VAJA<select id="lesson"></select></label>
+        </div>
+        <div class="toolbar">
+        <label class="switchline"><input id="correction" type="checkbox" checked> Dovoli popravljanje napak</label>
+        <button class="btn secondary" id="restart" type="button">↻ Začni znova</button>
+        </div>
+      </section>
+      <section class="gameSettings statGame" aria-label="Nastavitve igrifikacije">
+      <div class="settingsTitle">Nastavitve igre</div>
+      <div class="customGameText" aria-label="Besedilo igrifikacije">
+        <label class="field" for="gameTextSource">BESEDILO ZA IGRO
+          <select id="gameTextSource"><option value="exercise">Izbrana vaja</option><option value="custom">Lastno besedilo</option></select>
+        </label>
+        <div id="gameCustomWrap" hidden>
+          <label class="field" for="gameCustomText">VPIŠI ALI PRILEPI SVOJE BESEDILO</label>
+          <textarea id="gameCustomText" rows="5" placeholder="Tukaj lahko pišeš ali prilepiš besedilo za igro …" spellcheck="false" aria-label="Lastno besedilo: pisanje ali lepljenje"></textarea>
+        </div>
+      </div>
+      <div class="gamePace" aria-label="Hitrost padanja besed">
+        <label for="fallSpeed">Tempo padanja <strong id="fallSpeedValue">Običajno</strong></label>
+        <input type="range" id="fallSpeed" min="20" max="130" step="5" value="50" aria-label="Hitrost padanja besed">
+        <div class="paceEnds"><span>Počasi</span><span>Hitro</span></div>
+      </div>
+      </section>
+      <section class="resultsGroup" aria-label="Rezultati">
+        <div class="settingsTitle">Rezultati</div>
+        <div class="statsCol">
+        <div class="stat"><div class="label">Hitrost</div><div class="value" id="wpm">0</div><div class="label">WPM</div></div>
+        <div class="stat"><div class="label">Natančnost</div><div class="value" id="accuracy">100 %</div></div>
+        <div class="stat small"><div class="label">Aktivni čas</div><div class="value" id="time">0,0 s</div></div>
+        <div class="stat small"><div class="label">Vsi pritiski tipk</div><div class="value" id="keystrokes">0</div></div>
+        <span id="wordSpeed" hidden>—</span>
+        <span id="sidebarGameScore" hidden>0</span>
+        <span id="fingerStat" hidden></span>
+        </div>
+      </section>
+
+      <section class="metricsPanel" aria-label="Časovna analiza tipkanja">
+        <div class="settingsTitle">Analiza tipkanja</div>
+        <div class="metricGrid">
+          <div class="metricBox"><small>Povprečni razmik med pritiski</small><strong id="mInterval">—</strong></div>
+          <div class="metricBox"><small>Povprečno držanje tipke</small><strong id="mHold">—</strong></div>
+          <div class="metricBox"><small>Vsi pritiski / min</small><strong id="mKpm">0</strong></div>
+          <div class="metricBox"><small>Pravilni znaki / min</small><strong id="mCpm">0</strong></div>
+          <div class="metricBox"><small>Rolloverji (prehitevanja)</small><strong id="mRollover">0</strong></div>
+          <div class="metricBox"><small>Delež rolloverjev</small><strong id="mRollPct">0 %</strong></div>
+        </div>
+        <p class="metricFoot">Razmik: od začetka enega pritiska do začetka naslednjega (premori nad 3 s niso vključeni). Držanje: pritisk–spust. Rollover: naslednja tipka je pritisnjena pred spustom prejšnje. Prikaz je po trenutni vaji oziroma igri.</p>
+        <div class="metricButtons"><button type="button" id="exportMetricsCsv">Izvozi CSV</button><button type="button" id="exportMetricsJson">Izvozi JSON</button></div>
+        <div class="metricTableWrap"><table class="metricTable"><thead><tr><th>Črka</th><th>Pritiski</th><th>Razmik Ø ms</th><th>Držanje Ø ms</th><th>Rollover</th></tr></thead><tbody id="metricRows"><tr><td colspan="5">Začni tipkati …</td></tr></tbody></table></div>
+      </section>
+      <div class="footerNote" id="timeNote">Če več kot 3 sekunde ne tipkaš, se merjenje časa ustavi in se nadaljuje ob naslednji tipki.</div>
+    </aside>
+  </div>
+</main>
+
+<script>
+const levels = [{"number": 1, "title": "AFJČ", "originalTitle": "1.Nivo AFJČ - vse prve vrstice pridejo na koncu", "exercises": [{"name": "1.1", "text": "fjfj ačča jjff ččaa fččf ajja jaj jaj faja faja čafa čafa fača fača čaj čaj jafa jafa fajfa čaja jajčf ajaj fajča jača jajč fajfa jafa jačaj čaja afaja fajfa jača fajač čaja ajafa fjač ajafa fajčaj čajaf jafača afaja čajafa affa čjjč faaf jččj ffaa jjčč"}, {"name": "1.2", "text": "jjjf čaač fjfj ačča čffč jaaj aja aja jača jača ačaj ačaj faja faja jač jač čafa čafa jačaj jafa fjača afaj fjača čaja fjač jačaj jafa fajfa čaja fajač fajfa čaja afaja jača fajač fjča fajač ačajaj jafaj jajafa čajaj čafaja jččj ffaa jčjč faaf jjčč affa"}, {"name": "1.3", "text": "jjff jfff fjfj čaač jaaj čffč čaj čaj faja faja jaja jaja čafa čafa aja aja jača jača fajfa jafa afaja čajf fajač čaja jača jačaj fajč fajfa jafa afaja jafaj jača fajfa čaja fajač ačaj čajaf čajfaj fajač ajafaj čajaj fajčaj faaf jččj fafa jčjč affa jjčč"}, {"name": "1.4", "text": "aaa ččč ačač ačač aaa ččč ača ača čaja čaja faja faja jafa jafa fač fač čač čač fajač čaja fajfa jajč čajaf fjča jafa jajča čajf jafač ajfaj čajaj fajfa jača fajač faja ajafa jafa fajčaj ajafaj jafaj jajafa fajfa fajačaj fff jjj fjfj fjfj jjj fff"}]}, {"number": 2, "title": "DK", "originalTitle": "2. Nivo AFJČ(DK)", "exercises": [{"name": "2.1", "text": "dfd dfd dfd djd djd djd kjk kjk kjk kfk kfk kfk dča dča dča čda čda čda ada ada kaja kaja daj daj kad kad daja daja kaj kaj daka ajda kača čaka fača kdaj ajda ajčka kdaj čakaj kada fada fajka čaka jačaj fada kajak ajka kakaj čačkaj fajka jajčka fajfa kajaka fajfa čaka jaka kdaj ajda čaka jaka kdaj fajfa čaka"}, {"name": "2.2", "text": "adf čkj adf čkj adf čkj fda jkč fda fda jkč fda dča dča dča čda čda čda kaj kaj čaka čaka jad jad kad kad dafa dafa ada ada ajda čaka kdaj dafa ajka kada kača čakaj kaja fajka kafa kdaj fajka kdaj ajčka čaka fajfa kača dajka jajčka kakaj čadkaj kajak čajčkaj kdaj ajda čaka čaj fajfa čaka jaka ajda čakaj jaka"}, {"name": "2.3", "text": "adf adf adf čkj čkj čkj fda fda fda jkč jkč jkč dča dča dča čda čda čda čad čad ajda ajda kad kad daj daj ajka ajka jak jak kdaj čaja kača čada kaja dada daja jadaj čaka fajfa daka ajka kajfa kdaj ajčka jada dajaj ajda čakaj jajčkaj kajak fajkaj čajka dajkaj ajda čakaj kajak kača čaka jaka fajfa čaka jaka"}, {"name": "2.4", "text": "fad fad fad jčk jčk jčk kdf kdf kdf dkj dkj dkj dča dča dča čda čda čda čak čak dada dada ajd ajd kad kad jaka jaka kaj kaj dada kača adad čada kada daja kaja ajda daja jačaj jada kaka kajak faja fajfa čaja ajčka jaja ajka kajaka dajka jajčka dajaj fajkaj da kajak čaka fajfa jaka ajčka dajaj jajčka ajda"}]}, {"number": 3, "title": "SL", "originalTitle": "3. NIVO ADFJKČ(SL)", "exercises": [{"name": "3.1", "text": "fdss jkll fdss jkll fdss jkll dsds dsds klkl klkl dsds dsds saj saj slad slad čas čas lak lak klas klas las las slad dala fajfa časa sklad kasa jasa sklad dala klada fasa skala fasada dlaka safalada ladja skala ladja čakala skakljaj fasada skakala sladkal safalada ada dala sladak ladja čakala čas čaj jaka čakal sladak čaj"}, {"name": "3.2", "text": "ssa ssa ssa llč llč llč slls slls slls llls llls slsl fač fač klas klas las las sad sad slad slad laj laj fala čaka sklad fasa dlaka laska lasa kajla časa skala kača klasa sklada čakaj sladak fajfa slaka čaja skakljaj asljaj fasada sladkala čakala skladaj jaka jajčka čakal laska ada čakala čas"}, {"name": "3.3", "text": "asd asd člk člk asd asd sdsd sdsd lklk lklk sdsd sdsd lak lak skala skala kas kas dal dal slad slad čas čas klal slaka fajfa dala klada laka sklad lakaj jasa čakal fasa skala safalada dlaka sklada laska čakaj fajla čakala fasada čajčkala skakljala sladkaj safalada čakala ada jajčka jaka dal sladak čaj"}, {"name": "3.4", "text": "sdsd klkl sdsd klkl sdsd klkl adad čkčk adad čkčk adad čkčk sl sl klas klas čas čas kal kal dala dala laj laj kača časa klasa fajl kajla slad laks fajfa lasa dlaka faks fajsa fasal kasač skladaj čakal faksa laska sladkal čakala jajčka sladkala fajfala laskaj ajda skladala jajčka jaka čaka faks"}]}, {"number": 4, "title": "GH", "originalTitle": "4. NIVO ASDFJKLČ(GH)", "exercises": [{"name": "4.1", "text": "jh fg jh fg jh fg fgfg jhjh fgfg jhjh fgfg jhjh ag ag ag čh čh čh fgfg jhjh fgfg jhjh fgfg jhjh ha ha gaj gaj dag dag kg kg lah lah hl hl saga čaga gada jaha kača hlad glas skala hlad hajka alga lahka jahač saga lagal slak čakal safalada gladka sladka jahača laskal hahljala lagala saj lah gada čaka gaj da hlad"}, {"name": "4.2", "text": "jhj fgf jhj fgf jhj fgf fgfg jhjh fgfg jhjh fgfg jhjh aga aga aga čhč čhč čhč fg jh fg jh fg jh hl hl sad sad gaj gaj dag dag lah lah haj haj gada čaka slak čaga hlad alga glas jahač fagl lagal glad sklad halja gača lahka slak sklad sladkaj hajkač lagala hahlja gladka hajkala safalada lahka halja jaka čaka gladka skala ga čaka"}, {"name": "4.3", "text": "hjhj hjhj gfgf gfgf jhjh jhjh fg fg jh jhjh fg fg ga ga ga hč hč hč hjhj gfgf hjhj gfgf hjhj gfgf gas gas saj saj dah dah dag dag lah lah aga aga lajf glas hlač saga čaja alah čaga sklad gala hlača fala lagal jahač hlad gadja fals halja lagala čakala jahala safalada hajkal gladka skakljala hajkala gada ajda jaka hlad čaka"}, {"name": "4.4", "text": "ghh ghh ghh hgg hgg hgg gf gf gf jk jk jk dgg dgg dgg khh khh khh čhč čgč čhč aga aha aga ga ga gal gal aga aga hl hl has has gas gas jaga glad kdaj saga alga hada laha hajka fajl sklad alah fajfa lagal hlad gadja glas halja jahača fasada faflja gladka jahaj čakaj hajkala jaka čaka gladka klada gaj da glad"}]}, {"number": 5, "title": "RU", "originalTitle": "5. NIVO ASDFGHJKLČ(RU)", "exercises": [{"name": "5.1", "text": "frfr juju frfr juju frfr juju grgr grgr huhu huhu grgr huhu gu gu raj raj ufa ufa čar čar fuga fuga gruda gruda draga srka kafra kruh farsa črka ragu sraga juha sadra čula ključ guraj rafal slučaj rahla gluha jahač luksus dragulj ljudska sadjarju hujska jaguar ključ daj sadjarju gladka fasada gruča čaka halja ugaja kuharju"}, {"name": "5.2", "text": "rfrf ujuj rfrf ujuj rfrf ujuj rgrg uhuh rgrg uhuh rgrg uhuh čar čar jr jr čuk čuk srf srf ragu ragu farsa farsa gruča sluh ključ gaja srfaj ruda suha druga gura lučka juha čukaj furaj kafra halja čudak luska rjuha kljuka urarju kurjaču skuhaj rudarja kragulj suha klada garaču daj dragulj kuharju ugaja drug sladak sad"}, {"name": "5.3", "text": "drsr drsr drsr kulu kulu kulu arsr arsr arsr čulu čulu čulu lah lah krf krf fuj fuj čuj čuj kras kras srfar srfar sraga gluh slučaj gaju lučka čaru ruda draga fura čudak suha luska čukaj kuhar skuha garač furaj halja gusarju jadraj kuskus skuhaj garača kuharju urarju dar ugaja gaja čaka gusarja kurjaču skuhaj čaj suha klada"}, {"name": "5.4", "text": "rdrs rdrs rdrs ukul ukul ukul rars rars rars učul učul učul fu fu rad rad suh suh rus rus fura fura sadra sadra sraka drug halja urad urad fuga luka gluha gura gruča juha farsa rafal frača lučka laska furaj gusar kuskus slučaj kragulj hujska kurjaču gusarju kurjač ga rad srka lahka halja sluga čaka kurjača druga črka"}]}, {"number": 6, "title": "EI", "originalTitle": "6. NIVO ASDFGHJKLRU(EI)", "exercises": [{"name": "6.1", "text": "dede kiki dede kiki dede kiki keke didi keke didi keke didi fhi fhe fhi fhe fhi fhe uči uči gre gre sir sir jed jed frči frči račke račke sled ahil gleda igre kafra čuje figa griči jedi hrček fila likaj dihur kurir hladi figura hrčku hlače huduje kulisa skuhaj regulira lirika dirkaču sardela se rada skrije julija rada gleda serije figur"}, {"name": "6.2", "text": "fefe jiji fefe jiji fefe jiji dede kiki dede kiki dede kiki sese lili čiči lili sese aeae del del čir čir les les fis fis srči srči sreča sreča kjer duri sreda frik kihaj reka flek hladi leča dihal sila lahki udari jurja drugi hajduk ahila fugira drugače uhajala regulira huduje galeja grahki serija slik ji je ugajala dijak je rad gledal figure"}, {"name": "6.3", "text": "sese lili sese lili sese lili dede kiki dede kiki dede kiki hehe gigi he he gi gi his his fer fer čir čir kes kes krči krči resje resje kres diha sadje igle leska leča frak sredi učil frači figa kefir jurij grudi gruča furija duhaj grahek regulira kulisa refleks sirček ugajala ljudje dečku je ugajala serija figur rada je čečkala slike"}, {"name": "6.4", "text": "rere uiui rere uiui rere uiui dede kiki dede kiki dede kiki fefe jiji fefe gege hihi hihi sel sel dir dir led led lik lik grič grič hrček hrček gres resa griča frik kreda lika luki greda ilka flika reka dihaj frači drugi hlače figura hladi galerija sekira uhajala serija čelada huduje ugajale ugajala ji je sladka figura dijak se res rad uči"}]}, {"number": 7, "title": "VM", "originalTitle": "7. NIVO ASDFGHJKLČRUEI(VM)", "exercises": [{"name": "7.1", "text": "ffvv jjmm fvf jmj fvvf jmmj frfv frfv jujm jujm frv jum vrč vrč dam dam med med mah mah mlad mlad valj valj meča vrag guma maha sama dvig gada rujev mega vleče hram ličar kivi kmalu viva vreča mečka mijav halva jamar mejač gramski veruj arhivu kuharjev samska grajski smučaj veriga graver v vsakem mraku je marsikaj mladi dami vrača suha drva"}, {"name": "7.2", "text": "rfv rfv ujm ujm vgvg mjmj vgvg mjmj gvgv jmjm fvfv jmjm ime ime luč luč sev sev več več lava lava miha miha vama hlev vafel film maga vlah gram valja vsak mladi favl klima gavda mlada gamsi farmski kihaj grmada flik vikaj javka maha kavka daruj kuhajva smučar rjaveč grimasa klavir hlevski vsaka mlada dama rada srka rum v mraku deček čaka vlak"}, {"name": "7.3", "text": "fvfv jmjm fvf jmj fvfv jmjm frfv frfv jujm jujm frv jum vsi vsi mak mak več več seč seč lava lava mega mega dvig grem drag mlad guma ruva mumu meka dečva vlaga migaj lička vaga milka hvar lahka muha vihar sveča hmelj kamra grafik mahaj havajski klavirski ugajam veriga medved vreča freska v mraku sva čakala vihar dedka ima rada vsaka dečva"}, {"name": "7.4", "text": "dvdv kmkm dvdv kmkm dvdv kmkm fvfv jmjm fvf jmj fvv jmm ima ima rum rum vse vse več več mula leva mula čača flam favl muhi halva hmelj film vmes gliva gama večer vlah kučma jagam melje veruj gramski jager mahajva ujel mehak varva mrva vrvi greva kihajva grmeča krhelj magari damska graverski dama je v viharju srkala rum vsak deček ima rad smehljaj dame"}]}, {"number": 8, "title": "C,", "originalTitle": "8. NIVO - ASDFGHJKLČRUEIVM(C,)", "exercises": [{"name": "8.1", "text": "dcdc k,k, dcdc k,k, dcdc k,k, fcfc j,j, fcfc j,j, fcfc j,j, ceh, ceh, klif, klif, cif, cif, hec hec seči seči mica mica huda, ulica, grah, duhec, čaga, ujec, uhaja klic sulec mehu ugaja cedi vače, frača, gluh, marica, meči, igralec, vama gredica regulira vislice sladica veriga gredica feliks fascikl veverica reakcija mačica deček ima rad večje darilce feliksu ugaja vesela rekreacija druga velika markacija"}, {"name": "8.2", "text": "cdcd k,k cdcd k,k cdcd k,k fcf fcf j,j j,j cdc k,k dec, dec, cev, cev, muc, muc, cis cis gada gada frca frca ujec, ficek, greh, suhec, huda,cifra, kriči graf mucek juha hecaj čuda hlad, drugi, muha, mleček, meha, markacija, vislice cekarček resavec gradič celega jadralec igralec, cvilim, skačeva, mesarica, grlica, suličar vesel deklič se smeje mihcu v cirkusu je skakal deklič velika evakuacija skakalcev"}, {"name": "8.3", "text": "ccd ccd ccd kk, kk, kk, gcgc h,h, gcgc h,h, gcgc h,h, dec, dec, ček, ček, hec, hec, cug cug flek flek cufa cufa slad, mleček, meci, cvili, muca, merci, arhiv kača vleci jajce sulec čeri sara, mucka, lice, sahara, čuva, sulica, feliks vilice gradec delavec fajfica kuharica reakcija dragica cedilce kljukec haljica sladica dijak ima rad vesele diskusije deklič kriči a mamica ima rada mir gledalcem ugaja velika fikcija"}, {"name": "8.4", "text": "scsc scsc scsc l,l, l,l, l,l, cs, cs, cs, kj, kj, kj, cif, cif, meh, meh, car, car, vic vic cule cule cehu cehu klic, mucek, čehi, ječar, cilj, frajer, cekar faca cifra čemu micka guma čigav, vleci, frca, ciljaj, ačih, cigara, glivica klavec hladilec grahec lucija krvavica glamur vafelj carigrad skakalci mekeče čukec deklica rada gleda skakalce jadralec feliks rad jadra med drevesi velika sladica je res sladka dedek rad kadi cigare"}]}, {"number": 9, "title": "OP", "originalTitle": "9. NIVO: ASDFGHJKLČRUEIVMC,(OP)", "exercises": [{"name": "9.1", "text": "lolo lolo čpčp čpčp lolo čpčp juju čpčp kiki lolo juju čpčp pel pel pik pik rep rep log log repa repa dolg dolg hecaj, folk, fer, sefu, cesar, faca, hlod dolga kipa opera lepa hopla putr kopje, duma, sklep, fila, mulec, hehe, dolg lopar kapa polila sipa odplačilo hmelj, cepivo, folklora, cukr, formula, figa, heroj čepim hura cerkvica fuga hlapec sprehod, cepimo, vprega, oporoka, hmeljev, policaj, cukrček profesor pokrivalo podpis psiholog čohljaj voda je poplavila mojo vas okvaro so kmalu odpravili prejeli smo sporočilo, da so prispeli muca ima rada velik cekar ajda si rada ogleda vse reklame"}, {"name": "9.2", "text": "olol pčpč olol pčpč olol pčpč ujuj ikik lolo lolo čpčp čpčp opa opa lep lep jao jao pod pod hupa hupa pav pav lumpi, lepa, cokla, fifa, pojem, pesa, prsi uspeh opis lapor čaka fosil firma, čudo, pesem, hodi, čohaj, frka, faks kopec hlev lepilo koča jaguar črevo, hihi, paprika, muca, odojek, cika, cilj frača ujec cirkus megi hodulje flika papirus kopija grafika poroka gospod figovec priloga mamica sufler cepivo pogorje oče je v sredo spekel čevapčiče prodajalec čaka, da deček plača deklica rada kupi mega kapo dedek je imel dolg pogovor miha je sosedi prodal veliko soli"}]}, {"number": 10, "title": "BN", "originalTitle": "10. NIVO: ASDFGHJKLČRUEIVMC,OP(BN)", "exercises": [{"name": "10.1", "text": "fvfb fvfb jmjn jmjn fvfb jmjn frfb frfb frfb jujn jujn jujn fbf fbf fbf jnj jnj jnj sab sab bus bus pin pin cin cin bič bič anja anja dobra hupa, dober sneg, lenoba lena, nora borba, fina banka, črna fajfa, čudna faca čuvaj brod huda grba drag bencin nova flika njen fikus mehka goba, dolga nega, prava hiba, nova godba moja hloda hodi bacek naporno cviljenje barvna predloga visoka harmonika obnova bolnice počasna menjava slovenj gradec bolna mamica je včeraj poslala lepo naročilo profesor nam je dal res dober predlog hudo dobri računalniki so lahko res dragi danes so si obiskovalci ogledali nov brod bolnik je danes pojedel veliko dobre juhe"}, {"name": "10.2", "text": "fvfg fvfg jnjh jnjh fvfg jnjh fbf fbf fbf jnj jnj jnj gbgb hnhn gbfb hnhn gbgb hnhn nag nag bik bik nos nos bol bol anja anja giba giba slaba noga, mirna biba, mihov vnuk, nora babica, leni bober, bova krofa, majhen člen dober način njen grob nova ukana njun bager fini nakup močne prsi, super klub, cenim ceno, ubog bebček lena mamba dolg bicikel velika bikoborba, super coprnica, mojčina bucika,dober bikoborec, poslano naročilo, dobro napreduje, bor je bil danes pomočnik profesorice jasno kakor beli dan je, da me nima rad učenka je podala sklepne besede bič je močno počil in bik je poskočil na blagajni plačamo visok račun"}]}, {"number": 11, "title": "TZ", "originalTitle": "11. NIVO: ASDFGHJKLČRUEIVMOPBN(TZ)", "exercises": [{"name": "11.1", "text": "frfr ftft frft juju jzjz jujz ftft jzjz ftft jzjz frft jujz tri tri pot pot zet zet jez jez most most ciza ciza oblast faza izhod vlak strel last pazi bazen bref groza takt copat hrust post načrt post nafta tlak čist zobje trud delegat jeza mahniti fejst fazi zadruga grah fazani figa mica zajec uhat razpis halo tipkovnica zasluga zahodni pozabim pozvat mozart glista bibavica drozgu bagerist kamnit meduzast vozelček potlačen holcar začarajva brzovlak mozgati čezcelinski izrazito trd konec hokejske tekme zmagali so najbolj vztrajni tečajniki pojdita občudovat tisti sončni zahod v parketnih tleh je opaziti zarezo začetno zaporedje je zelo monotono"}, {"name": "11.2", "text": "frft frft jujz jujz ftju ftju jzz ftt jzz ftt ftfr jzju hrz hrz teh teh zob zob rit rit ciza ciza tofu tofu vatka freza nazaj zrno tlesk poti poza blizu znak berta ptič oprta brezno vtič trači zmaj tjale vzor fotr gazda gumb bejzbol teci gazdina stroka vrzi zgibati vtri zgrabi zdaj hrti zlato zeha softver krut razvid četrtletje zjutraj gazim proizvod buhtelj razglas razdalja strojnica izmeriti frutabela zbadljivec stopicati zlomim tsunami hrtek tkalec poznanstvo firbcati kanu se na brzicah tudi zlomi zadnjikrat sem zate zgazil pot pozabil sem na zaprto pot dirkač je izmeril hitrost hitro zgrabi buhtelj in steci k mizi"}]}, {"number": 12, "title": "Š.", "originalTitle": "12. NIVO:ASDFGHJKLČRUEIVMOPBNTZ(Š.)", "exercises": [{"name": "12.1", "text": "jčjš jčjš jčjš jšjp jšjp jšjp još jojš jpjš jpjš jpjš jpjš piš, piš, uši, uši, miš, miš. niš, niš, pliš, pliš, kopa, kopa. soški šola šujica ščit škoda šota. šara šubic črke flaška fliš vaški. briše sašo šofer tešč gošča daša. šoht lošinj šoba šolski šica plesišče. šolni plac pešec šefa šolanje ploh. hiša štiri brizg goščava šuhi pošiljam. arašid bojišče številka skupščina šolanje graščinski. odmašen pošiljka grešnik gledališče maščevanje zavetišče. šoferski izpit šahovski šolarčki čistimo gumnišče. hišni ljubljenček je šel na špancir. v košaro je skočila hitra miška. šolanje v mestni šoli ni nič boljše. namrščila se je in našobila usta. v četrtek obiščem zobozdravnika."}, {"name": "12.2", "text": "jšjč jšjč jšjč jpš jpš jpš jojš jojš jpjš jpjš jčš jčš šla šla šlo šlo šik šik. krč krč mišo mišo poti poti. staša, šica, gejša, šiht, miška, šiba. zofa gošča hiša flaša maša šolar. jašek ščit baška šala cokla fina. šiba duška groš študij hudo zašito. hujša špas kašica fuša vozišče miša. naša mešan niša pršec špon reševalec. drsališče dvorišče pošiljka počivališče zatočišče skupščina. šahist mokrišče prgišče poškodba pogorišče zaščita. vojaška šola šoferski izpit ribiška oprema. daša je naredila šoferski izpit. mucek je prišepal na dvorišče. v pošiljki je fina ribiška oprema. v četrtek je drsališče odprto. pobral sem prgišče pšenice."}]}, {"number": 13, "title": "Ž in velike začetnice", "originalTitle": "13. Ž_VSE_ČRKE in velika začetnica", "exercises": [{"name": "13.1", "text": "fafa jčjž fafa jčjž fafa jčjž fjfč fjfž fjfč fjfž fjfč fjfč laž laž gož gož nož nož mož mož žulj žulj žica žica plaža drož špica koža kača roža mrož čudež joža čista polž pešaj pušča žica šipek žepa fižol paša veža preča anže kožuhar mreži broška žanjec goba spužva hiša briše maša fuša pleša liže gašper žima broška težišče druženje flaširanje mreženje poležuh životarjenje šabesa jezikač janež pižama župnija zažgan izvijač seženj fižol draženje križanje zajček Družina je v življenju najpomembnejša. Žužkocvetke so rastline, ki jih oprašujejo žuželke, npr. čebele. Filip je prinesel živahnega zajčka. Gašper je učencem opisal svoje življenje. Z družino rad preživim veliko časa."}, {"name": "13.2", "text": "fjfž jkjž fjfž jkjž fjfž jkjž jčjž jčjž jljž jljž jčjž jčjž žur žur laž laž pica pica čop čop boža boža loža loža preža žima flaša župa vaška čaša polž šopek žaga želod luža dečva žitno žaba žajfa noža šipek šapa sapa kožuh maža taščica žima žvižg zažig hiša boštjan goža fotič drož kača pozeba šipa bližina veža požeruh orožje žverca ježevec tramvaj hopla flaša žanjice fižolovka reševanje bežanje županja faširan žigosanje bizgec mreženje žerjavica šahist žoganje Oče, mama in otroci so popolna družina. Pektin se uporablja v prehrambeni industriji kot sredstvo za želiranje in zgoščevanje. Železniški promet ni tako razvejen kot avtobusni. Osnovna za prihodnost človeštva je družina."}, {"name": "13.3", "text": "Na levi in desni strani tipkovnice je tipka shift. Pritiskaš jo z mezincema vsake roke. Z njo si pomagaš pri pisanju velikih začetnic. Pazi, če je črka pritisnjena z desno roko, moraš shift stisniti z levo roko in obratno. Npr. za veliko tiskano črko A najprej stisneš shift levim mezincem, ga držiš in medtem pritisneš A."}, {"name": "13.4", "text": "Sedaj znaš z desetimi prsti slepo tipkati preslednico, vse črke slovenske abecede, vejico, piko in tipko shift."}, {"name": "13.5", "text": "Ta aplikacija je bila pripravljena za namene doktorske študije z naslovom Proceduralno učenje začetnega desetprstnega slepega tipkanja pri učencih z disleksijo in njihovih vrstnikih brez disleksije. Doktorska kandidatka, mag. Janja Košir Mentorica, doc. dr. Milena Košak Baduder, Pedagoška fakulteta Univerze v Ljubljani Somentorica, izr. prof. dr. Anja Podlesek Oddelek za psihologijo Filozofska fakulteta Univerze v Ljubljani V sodelovanju s prof. dr. Andrej Košir Laboratorij za uporabniku prilagojene komunikacije in ambientno inteligenco Fakultete za elektrotehniko Univerze v Ljubljani Računalniško programiranje, Pavle Gartner"}]}];
+const el = id => document.getElementById(id);
+const levelSelect = el('level');
+const lessonSelect = el('lesson');
+const typing = el('typing');
+const fingerNames = {
+  'left-pinky':'levi mezinec','left-ring':'levi prstanec','left-middle':'levi sredinec','left-index':'levi kazalec','left-thumb':'levi palec',
+  'right-pinky':'desni mezinec','right-ring':'desni prstanec','right-middle':'desni sredinec','right-index':'desni kazalec','right-thumb':'desni palec'
+};
+const rawFingerChars = {
+  'left-pinky':'q1a',
+  'left-ring':'w2sx',
+  'left-middle':'e3dc',
+  'left-index':'r4ft5gvb',
+  'right-index':'z6uh7jnm',
+  'right-middle':'i8k,',
+  'right-ring':'o9l.',
+  'right-pinky':'p0šščžy-+=;:!?',
+  'left-thumb':' ',
+  'right-thumb':' '
+};
+
+// Ločeni števci za vajo in igro. Šteje se prst, ki bi moral pritisniti pričakovano tipko.
+const fingerOrder=['left-pinky','left-ring','left-middle','left-index','left-thumb','right-thumb','right-index','right-middle','right-ring','right-pinky'];
+const fingerErrors={practice:Object.fromEntries(fingerOrder.map(x=>[x,0])),game:Object.fromEntries(fingerOrder.map(x=>[x,0]))};
+function resetFingerErrors(which){ for(const f of fingerOrder)fingerErrors[which][f]=0; renderFingerErrors(); }
+function addFingerError(expectedChar,which){
+  if(!expectedChar)return;
+  const f=charFinger(expectedChar)[0];
+  fingerErrors[which][f]=(fingerErrors[which][f]||0)+1;
+  renderFingerErrors();
+}
+function renderFingerErrors(){
+  // Število napak je prikazano samo neposredno na členkih prstov.
+  const counts=fingerErrors[mode]||fingerErrors.practice;
+  const maximum=Math.max(0,...Object.values(counts));
+  for(const f of fingerOrder){
+    const n=counts[f]||0;
+    const marker=el(f);
+    if(!marker)continue;
+    marker.textContent=String(n);
+    marker.classList.remove('error-hot','error-mid','error-zero');
+    if(!n)marker.classList.add('error-zero');
+    else if(n===maximum)marker.classList.add('error-hot');
+    else marker.classList.add('error-mid');
+    marker.title=`${fingerNames[f]}: ${n} napak`;
+    marker.setAttribute('aria-label',marker.title);
+  }
+}
+const fingerMap = {};
+for (const [f, chars] of Object.entries(rawFingerChars)) for (const ch of chars) fingerMap[ch] = f;
+function charFinger(ch) {
+  const c = ch.toLowerCase();
+  if (c === ' ') return ['left-thumb','right-thumb'];
+  if (fingerMap[c]) return [fingerMap[c]];
+  if ('čšž'.includes(c)) return ['right-pinky'];
+  if ('.,'.includes(c)) return [c===',' ? 'right-middle':'right-ring'];
+  return ['right-pinky'];
+}
+function fingerRecommendation(ch) {
+  const main = charFinger(ch);
+  const extra = [];
+  const isUpper = ch && ch.toLowerCase() !== ch && ch.toUpperCase() === ch;
+  if (isUpper && main.length) {
+    const primary = main[0];
+    extra.push(primary.startsWith('left') ? 'right-pinky' : 'left-pinky');
+  }
+  return {main, extra};
+}
+levelSelect.innerHTML = levels.map((l, i) => `<option value="${i}">${l.number}. nivo · ${l.title}</option>`).join('');
+function fillLessons() {
+  const lvl = levels[Number(levelSelect.value) || 0];
+  lessonSelect.innerHTML = lvl.exercises.map((ex, i) => `<option value="${i}">Vaja ${ex.name}</option>`).join('');
+}
+function selectedLevel() { return levels[Number(levelSelect.value) || 0]; }
+function selectedExercise() { return selectedLevel().exercises[Number(lessonSelect.value) || 0]; }
+
+let expected = '';
+let incorrectAt = -1; // Nazadnje napačno vpisana črka, dokler ni popravljena
+let entries = []; // {ch, ok, pos, t}
+let index = 0, keys = 0, typedChars = 0, correctKeys = 0, activeMs = 0, lastKeyAt = null, finished = false;
+let layout = null;
+let statsTimer = null;
+
+function now() { return performance.now(); }
+function recordActivity() {
+  const t = now();
+  if (lastKeyAt !== null) {
+    const gap = t - lastKeyAt;
+    if (gap <= 3000) activeMs += gap;
+  }
+  lastKeyAt = t;
+}
+function activeTime() {
+  if (lastKeyAt === null) return activeMs;
+  const gap = now() - lastKeyAt;
+  return activeMs + (gap <= 3000 ? gap : 0);
+}
+function buildLayout(text, maxLen=40) {
+  const words = text.split(' ');
+  const lines = [];
+  const charLine = Array(text.length).fill(0);
+  const charWord = Array(text.length).fill(-1);
+  let wordCounter = 0;
+  let pos = 0;
+  let lineStart = 0;
+  let lineText = '';
+  let lineWords = [];
+  for (let i=0; i<words.length; i++) {
+    const rawWord = words[i];
+    const token = rawWord + (i < words.length - 1 ? ' ' : '');
+    if (lineText && lineText.length + token.length > maxLen) {
+      lines.push({start: lineStart, end: pos, text: lineText, words: lineWords});
+      lineStart = pos;
+      lineText = '';
+      lineWords = [];
+    }
+    const start = pos;
+    const end = pos + rawWord.length;
+    const spaceAfter = token.length - rawWord.length;
+    lineWords.push({text: rawWord, start, end, spaceAfter, wordIndex: wordCounter++});
+    for (let p=start; p<end; p++) charWord[p] = lineWords[lineWords.length-1].wordIndex;
+    lineText += token;
+    pos += token.length;
+  }
+  lines.push({start: lineStart, end: pos, text: lineText, words: lineWords});
+  lines.forEach((line, idx) => { for (let p=line.start; p<line.end; p++) charLine[p] = idx; });
+  const wordsFlat = lines.flatMap(line => line.words);
+  return {lines, charLine, charWord, wordsFlat};
+}
+function escapeHtml(s) { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function getWordEntries(word) { return entries.filter(e => e.pos >= word.start && e.pos < word.end); }
+function calcWordWpm(word) {
+  // Prikaz samo ob zaključeni besedi. Za preprečitev pretiranih skokov
+  // uporabimo drseče okno do zadnjih 25 natipkanih znakov.
+  if (index < word.end || !word.text.length) return null;
+  const last=entries[word.end-1];
+  if (!last || !last.ok || entries.slice(word.start,word.end).some(e=>!e || !e.ok)) return null;
+  const end=word.end, start=Math.max(0,end-25);
+  if (end-start<10) return null; // še premalo podatkov za stabilno oceno
+  const startT = start ? entries[start-1].t : 0;
+  const durationMs=last.t-startT;
+  if (durationMs<1500) return null; // začetne meritve so lahko zelo nestabilne
+  const correct=entries.slice(start,end).filter(e=>e.ok).length;
+  return Math.round((correct/5)/(durationMs/60000));
+}
+function charClassForPos(pos) {
+  // Edini vir resnice so pritiski, shranjeni po položajih.
+  // Pri vključenem popravljanju je trenutno napačno mesto rdeče,
+  // dokler ni vnesen pravi znak; nato se spremeni v zeleno.
+  if (pos===incorrectAt) return 'wrong';
+  if (pos < entries.length) {
+    const item=entries[pos];
+    return item && item.ok === true ? 'correct' : 'wrong';
+  }
+  return pos===index ? 'current' : 'pending';
+}
+function charDisplay(ch) { return ch === ' ' ? '&nbsp;' : escapeHtml(ch); }
+function renderPrompt() {
+  const pv = el('promptViewport');
+  const currentLineIndex = index >= expected.length ? layout.lines.length - 1 : layout.charLine[Math.min(index, expected.length-1)] || 0;
+  const visible = [layout.lines[currentLineIndex], layout.lines[currentLineIndex+1]].filter(Boolean);
+  if (!visible.length) visible.push(layout.lines[0]);
+  pv.innerHTML = visible.map(line => renderLine(line)).join('') + (visible.length === 1 ? '<div class="line"></div>' : '');
+}
+function renderLine(line) {
+  let html = `<div class="line">`;
+  for (const word of line.words) {
+    const speed = calcWordWpm(word);
+    const speedLabel = speed ? `${speed} WPM` : '&nbsp;';
+    html += `<span class="word"><span class="wordSpeed ${speed ? '' : 'empty'}">${speedLabel}</span><span class="letters">`;
+    for (let p=word.start; p<word.end; p++) {
+      const cls = charClassForPos(p);
+      // Prikaz vseh znakov z isto pisavo; brez posebnih SVG črk.
+      html += `<span class="char ${cls}" data-pos="${p}">${charDisplay(expected[p])}</span>`;
+    }
+    html += `</span></span>`;
+    for (let s=0; s<word.spaceAfter; s++) {
+      const p = word.end + s;
+      const cls = charClassForPos(p);
+      html += `<span class="spaceChar ${cls}" data-pos="${p}"></span>`;
+    }
+  }
+  html += `</div>`;
+  return html;
+}
+function formatPercent(v) { return `${Math.round(v)} %`; }
+function statsValues() {
+  const secs = activeTime() / 1000;
+  const wpm = secs > 0 ? Math.round((typedChars/5) / (secs/60)) : 0;
+  const accuracy = keys ? Math.round((correctKeys / keys) * 100) : 100;
+  let currentWordSpeed = '—';
+  if (index < expected.length) {
+    const wi = layout.charWord[Math.min(index, expected.length-1)];
+    if (wi >= 0) {
+      const sp = calcWordWpm(layout.wordsFlat[wi]);
+      if (sp) currentWordSpeed = `${sp} WPM`;
+    }
+  }
+  return {secs, wpm, accuracy, currentWordSpeed};
+}
+function updateRoad(percent) {
+  el('roadFill').style.width = percent + '%';
+  const road = el('car').parentElement;
+  const car = el('car');
+  const maxX = road.clientWidth - 58;
+  car.style.left = `${6 + Math.max(0, (percent/100) * maxX)}px`;
+}
+function renderHands() {
+  document.querySelectorAll('.finger-shape').forEach(n => n.classList.remove('active','secondary'));
+  const ch = mode==='game' ? (game.activeWord ? game.activeWord.text[game.pos] || '' : '') : (expected[index] || '');
+  if (!ch) {
+    el('nextFinger').textContent = mode==='game' ? 'Začni igro' : 'Vaja je zaključena!';
+    el('fingerStat').textContent = '—';
+    return;
+  }
+  const rec = fingerRecommendation(ch);
+  rec.main.forEach(f => { const node = el(f); if (node) node.classList.add('active'); });
+  rec.extra.forEach(f => { const node = el(f); if (node) node.classList.add('secondary'); });
+  const names = [...rec.main.map(f => fingerNames[f]), ...rec.extra.map(f => fingerNames[f] + ' (Shift)')];
+  const label = names.join(' + ');
+  const charLabel = ch === ' ' ? 'preslednica' : ch;
+  el('nextFinger').textContent = label.charAt(0).toUpperCase() + label.slice(1) + ' · ' + charLabel;
+  el('fingerStat').textContent = label.charAt(0).toUpperCase() + label.slice(1);
+}
+function render() {
+  const percent = expected.length ? Math.round((index / expected.length) * 100) : 0;
+  renderPrompt();
+  renderHands();
+  const sv = statsValues();
+  el('wpm').textContent = sv.wpm;
+  el('accuracy').textContent = sv.accuracy + ' %';
+  el('time').textContent = sv.secs.toFixed(1).replace('.',',') + ' s';
+  el('keystrokes').textContent = keys;
+  el('wordSpeed').textContent = sv.currentWordSpeed;
+  el('progressNumber').textContent = percent + ' % opravljeno';
+  el('progressText').textContent = percent < 100 ? (100 - percent) + ' % do cilja' : '100 % opravljeno';
+  updateRoad(percent);
+}
+function reset() {
+  resetMetrics();
+  resetRecentKeys('practice');
+  resetFingerErrors('practice');
+  stopGame();
+  expected = selectedExercise().text;
+  layout = buildLayout(expected, 40);
+  entries = [];
+  incorrectAt = -1;
+  index = 0; keys = 0; typedChars = 0; correctKeys = 0; activeMs = 0; lastKeyAt = null; finished = false;
+  typing.value = '';
+  typing.disabled = false;
+  el('done').classList.remove('visible');
+  el('lessonTitle').textContent = `${selectedLevel().number}. nivo · ${selectedLevel().title} · vaja ${selectedExercise().name}`;
+  render();
+  el('promptViewport').focus();
+}
+function showKeyDiagnostic() {}
+function takeChar(ch) {
+  if (mode!=='practice' || finished || index>=expected.length) return;
+  const received=String(ch).normalize('NFC');
+  if ([...received].length!==1) return;
+  const wanted=String(expected[index]).normalize('NFC');
+  const ok=received===wanted;
+  showKeyDiagnostic(received,wanted,ok);
+  recordActivity();
+  keys++;
+  recordRecentKey('practice',ok);
+  if (!ok) addFingerError(wanted,'practice');
+
+  // Vklopljeno popravljanje: napačen pritisk le obarva črko rdeče.
+  // Naslednji pravilen pritisk popravi ISTO mesto, zato ni zamika.
+  if (!ok && el('correction').checked) {
+    incorrectAt=index;
+    render();
+    return;
+  }
+  incorrectAt=-1;
+  entries[index]={ch:received,ok,pos:index,t:activeMs};
+  index++;
+  if (ok) {correctKeys++;typedChars++;}
+  typing.value=entries.map(entry=>entry.ch).join('');
+  if (index>=expected.length) {
+    finished=true;
+    activeMs=activeTime();
+    lastKeyAt=null;
+    typing.disabled=true;
+    el('done').classList.add('visible');
+  }
+  render();
+}
+function backspace() {
+  if (mode!=='practice'||finished||!el('correction').checked) return;
+  if (incorrectAt>=0) {
+    incorrectAt=-1;
+    render();
+    return;
+  }
+  if (index===0) return;
+  recordActivity();
+  keys++;
+  const removed=entries.pop();
+  if (removed && removed.ok) {
+    correctKeys=Math.max(0,correctKeys-1);
+    typedChars=Math.max(0,typedChars-1);
+  }
+  index--;
+  incorrectAt=-1;
+  typing.value=entries.map(entry=>entry.ch).join('');
+  render();
+}
+// En sam poslušalec tipk; ne podvajamo vnosa iz input/keydown/beforeinput.
+
+// Časovne meritve so neodvisne od pravilnosti, risanja in obstoječega polja za tipkanje.
+let metricSession=0;
+let metricEvents=[];
+let metricHeld=new Map();
+let metricPrevious=null;
+let metricStartEpoch=Date.now();
+function resetMetrics(){
+  metricSession++;
+  metricEvents=[];
+  metricHeld.clear();
+  metricPrevious=null;
+  metricStartEpoch=Date.now();
+  renderMetrics();
+}
+function trackKeyDown(e){
+  if(e.repeat)return;
+  const t=performance.now();
+  const physical=e.code || ('key:'+e.key);
+  if(metricHeld.has(physical))return;
+  const wanted=mode==='practice' ? expected[index] : (game.activeWord ? game.activeWord.text[game.pos] : '');
+  const old=metricPrevious;
+  const dt=old ? t-old.pressedAt : null;
+  const heldOthers=[...metricHeld.values()];
+  const roll=heldOthers.length>0;
+  const record={
+    seq:metricEvents.length+1,mode,level:levelSelect.value,exercise:lessonSelect.value,
+    key:e.key,expected:wanted??'',correct:e.key===wanted,
+    position:mode==='practice'?index:game.pos,
+    pressedMs:Math.round(t*100)/100,
+    elapsedMs:metricEvents.length?Math.round((t-metricEvents[0].pressedMs)*100)/100:0,
+    intervalMs:dt!==null&&dt<=3000?Math.round(dt*100)/100:null,
+    pausedBefore:dt!==null&&dt>3000,
+    holdMs:null,rollover:roll,overlapCodes:heldOthers.map(x=>x.code)
+  };
+  metricEvents.push(record);
+  metricHeld.set(physical,{code:physical,record,session:metricSession});
+  metricPrevious={pressedAt:t};
+  renderMetrics();
+}
+function trackKeyUp(e){
+  const physical=e.code||('key:'+e.key);
+  const item=metricHeld.get(physical);
+  if(!item)return;
+  metricHeld.delete(physical);
+  if(item.session===metricSession){item.record.holdMs=Math.round((performance.now()-item.record.pressedMs)*100)/100;renderMetrics();}
+}
+function metricAverage(xs){return xs.length?xs.reduce((a,b)=>a+b,0)/xs.length:null;}
+function metricMs(x){return x===null?'—':Math.round(x)+' ms';}
+function metricSnapshot(){
+  const grouped=new Map();
+  for(const r of metricEvents){
+    if(!grouped.has(r.key))grouped.set(r.key,[]);
+    grouped.get(r.key).push(r);
+  }
+  const chars=[...grouped].map(([character,rows])=>({
+    character,count:rows.length,correct:rows.filter(r=>r.correct).length,
+    averageIntervalMs:metricAverage(rows.filter(r=>r.intervalMs!==null).map(r=>r.intervalMs)),
+    averageHoldMs:metricAverage(rows.filter(r=>r.holdMs!==null).map(r=>r.holdMs)),
+    rolloverCount:rows.filter(r=>r.rollover).length
+  })).sort((a,b)=>a.character.localeCompare(b.character,'sl'));
+  const durationMs=activeTime();
+  const minutes=durationMs/60000;
+  return {
+    generatedAt:new Date().toISOString(),sessionStartedAt:new Date(metricStartEpoch).toISOString(),
+    mode,level:selectedLevel().title,exercise:selectedExercise().name,
+    unit:'milliseconds',intervalDefinition:'keydown to next keydown, gaps >3000 ms excluded',
+    holdDefinition:'keydown to keyup',rolloverDefinition:'at least one other key still held at keydown',
+    activeTimeMs:Math.round(durationMs),keyCount:metricEvents.length,
+    correctKeyCount:metricEvents.filter(r=>r.correct).length,
+    keysPerMinute:minutes>0?metricEvents.length/minutes:0,
+    correctCharsPerMinute:minutes>0?metricEvents.filter(r=>r.correct).length/minutes:0,
+    averageIntervalMs:metricAverage(metricEvents.filter(r=>r.intervalMs!==null).map(r=>r.intervalMs)),
+    averageHoldMs:metricAverage(metricEvents.filter(r=>r.holdMs!==null).map(r=>r.holdMs)),
+    rolloverCount:metricEvents.filter(r=>r.rollover).length,
+    rolloverPercent:metricEvents.length?100*metricEvents.filter(r=>r.rollover).length/metricEvents.length:0,
+    characters:chars,events:metricEvents
+  };
+}
+function renderMetrics(){
+  const snap=metricSnapshot();
+  el('mInterval').textContent=metricMs(snap.averageIntervalMs);
+  el('mHold').textContent=metricMs(snap.averageHoldMs);
+  el('mKpm').textContent=Math.round(snap.keysPerMinute);
+  el('mCpm').textContent=Math.round(snap.correctCharsPerMinute);
+  el('mRollover').textContent=snap.rolloverCount;
+  el('mRollPct').textContent=snap.rolloverPercent.toFixed(1).replace('.',',')+' %';
+  const tbody=el('metricRows');
+  tbody.replaceChildren();
+  if(!snap.characters.length){const tr=tbody.insertRow();const td=tr.insertCell();td.colSpan=5;td.textContent='Začni tipkati …';return;}
+  for(const c of snap.characters){
+    const tr=tbody.insertRow();
+    for(const val of [c.character===' '?'presledek':c.character,c.count,metricMs(c.averageIntervalMs),metricMs(c.averageHoldMs),c.rolloverCount])tr.insertCell().textContent=val;
+  }
+}
+function csvCell(v){const s=v===null||v===undefined?'':String(v);return /[",\n\r;]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+function metricDownload(filename,content,mime){
+  const link=document.createElement('a');
+  const url=URL.createObjectURL(new Blob([content],{type:mime}));
+  link.href=url;link.download=filename;
+  document.body.appendChild(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+function exportMetrics(format){
+  const snapshot=metricSnapshot();
+  const file='Tipkaj_meritve_'+new Date().toISOString().replace(/[:.]/g,'-');
+  if(format==='json'){
+    metricDownload(file+'.json',JSON.stringify(snapshot,null,2),'application/json;charset=utf-8');
+  }else{
+    // CSV vsebuje vse pritiske; agregati po črkah so ločeno v JSON.
+    const columns=['seq','mode','level','exercise','key','expected','correct','position','pressedMs','elapsedMs','intervalMs','pausedBefore','holdMs','rollover','overlapCodes'];
+    const lines=[columns.join(';')];
+    for(const row of snapshot.events){lines.push(columns.map(k=>csvCell(Array.isArray(row[k])?row[k].join('|'):row[k])).join(';'));}
+    metricDownload(file+'.csv','\uFEFF'+lines.join('\r\n'),'text/csv;charset=utf-8');
+  }
+}
+// Samo keyup poslušalec; keydown ostane obstoječi, zato ni dvojnih vnosov.
+document.addEventListener('keyup',trackKeyUp,true);
+window.addEventListener('blur',()=>metricHeld.clear());
+el('exportMetricsCsv').addEventListener('click',()=>exportMetrics('csv'));
+el('exportMetricsJson').addEventListener('click',()=>exportMetrics('json'));
+
+function keyboardInput(event) {
+  if(event.defaultPrevented || event.ctrlKey || event.altKey || event.metaKey || event.isComposing) return;
+  const target=event.target;
+  if(target instanceof Element && target.closest('select,textarea:not(#typing):not(#gameInput),input:not(#typing):not(#gameInput),[contenteditable=\"true\"]')) return;
+  if(event.key==='Tab') return;
+  if(target instanceof Element && target.closest('button') && (event.key===' ' || event.key==='Enter')) return;
+  if(mode==='practice') {
+    if(finished) return;
+    if(event.key==='Backspace') {event.preventDefault();backspace();return;}
+    if(event.key==='Enter') {event.preventDefault();return;}
+    if(event.key.length===1) {event.preventDefault();if(!event.repeat){trackKeyDown(event);takeChar(event.key);}}
+  } else if(mode==='game' && game.running && !game.paused) {
+    if(event.key==='Backspace' || event.key==='Enter'){event.preventDefault();return;}
+    if(event.key.length===1){event.preventDefault();if(!event.repeat){trackKeyDown(event);acceptGameChar(event.key);}}
+  }
+}
+document.addEventListener('keydown',keyboardInput,true);
+el('correction').addEventListener('change',()=>{
+  if(!el('correction').checked && incorrectAt>=0){ incorrectAt=-1;render(); }
+  el('promptViewport').focus();
+});
+el('promptViewport').addEventListener('pointerdown',()=>el('promptViewport').focus());
+el('gameBoard').addEventListener('click',()=>el('gameInput').focus());
+typing.addEventListener('beforeinput',e=>e.preventDefault());
+typing.addEventListener('paste', e => e.preventDefault());
+document.addEventListener('click', (e) => { if (e.target.closest('select, button, input, textarea, label, [contenteditable]')) return; (mode==='game'?el('gameInput'):el('promptViewport')).focus(); });
+levelSelect.addEventListener('change', () => { fillLessons(); lessonSelect.value = '0'; reset(); resetGameState(); });
+lessonSelect.addEventListener('change', () => {reset(); resetGameState();});
+el('restart').addEventListener('click', reset);
+el('restart2').addEventListener('click', reset);
+el('next').addEventListener('click', () => {
+  if (Number(lessonSelect.value) + 1 < selectedLevel().exercises.length) {
+    lessonSelect.value = String(Number(lessonSelect.value) + 1);
+  } else if (Number(levelSelect.value) + 1 < levels.length) {
+    levelSelect.value = String(Number(levelSelect.value) + 1);
+    fillLessons();
+    lessonSelect.value = '0';
+  }
+  reset();
+});
+window.addEventListener('resize', () => render());
+
+
+// Pravilnost zadnjih 10 vnesenih črk (ne Backspace).
+const recentFaces = {
+  happy: 'data:image/png;base64,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',
+  surprised: 'data:image/png;base64,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'
+};
+const recentKeyResults = {practice:[],game:[]};
+function recordRecentKey(which,correct){
+  const a=recentKeyResults[which];
+  a.push(Boolean(correct));
+  if(a.length>10)a.shift();
+  updateRecentFace(which);
+}
+function resetRecentKeys(which){
+  recentKeyResults[which].length=0;
+  updateRecentFace(which);
+}
+function updateRecentFace(which){
+  const a=recentKeyResults[which];
+  const face=el(which==='game'?'gameRecentFace':'recentFace');
+  const img=el(which==='game'?'gameRecentFaceImage':'recentFaceImage');
+  if(!face || !img)return;
+  // Rezultat pokažemo po desetih pritiskih, da gre res za zadnjih 10 črk.
+  if(a.length<10){
+    face.classList.remove('visible');
+    face.removeAttribute('data-status');
+    return;
+  }
+  const correct=a.filter(Boolean).length;
+  const good=correct>=9; // 9/10 = 90 %, velja kot uspešno
+  img.src=good?recentFaces.happy:recentFaces.surprised;
+  img.alt=good?'Natančnost zadnjih 10 pritiskov vsaj 90 %':'Natančnost zadnjih 10 pritiskov pod 90 %';
+  face.dataset.status=good?'good':'bad';
+  face.classList.add('visible');
+}
+
+// IGRIFIKACIJA: en padajoči cilj naenkrat, črke iz iste izbrane vaje.
+let mode = 'practice';
+let game = { running:false,paused:false,activeWord:null,pos:0,wordIndex:0,words:[],score:0,lives:3,
+  correct:0,wrong:0,keys:0,passed:0,combo:0,lastFrame:0,raf:0,speed:0,fallMs:0,lastMistake:false };
+function gameWords() {
+  const text=el('gameTextSource').value==='custom' ? el('gameCustomText').value : selectedExercise().text;
+  return text.trim().split(/\s+/).filter(Boolean);
+}
+function resetGameState() {
+  resetMetrics();
+  resetRecentKeys('game');
+  resetFingerErrors('game');
+  stopGame();
+  activeMs=0;lastKeyAt=null;typedChars=0;
+  game = {running:false,paused:false,activeWord:null,pos:0,wordIndex:0,words:gameWords(),score:0,lives:3,
+    correct:0,wrong:0,keys:0,passed:0,combo:0,lastFrame:0,raf:0,speed:0,fallMs:0,lastMistake:false};
+  const existing=el('falling'); if(existing)existing.remove();
+  el('shotLayer').replaceChildren();
+  el('gameHint').hidden=true;
+  el('gameHint').textContent='';
+  el('gameResult').classList.remove('visible');
+  el('gameStart').disabled=false;
+  el('gamePause').disabled=true;
+  el('gamePause').textContent='⏸ Premor';
+  renderGameHud();
+  if(mode==='game') renderHands();
+}
+function stopGame() {
+  if(game && game.raf) cancelAnimationFrame(game.raf);
+  if(game) {game.raf=0;game.running=false;game.paused=false;game.activeWord=null;}
+}
+function renderGameHud() {
+  el('gameLives').textContent='♥ '.repeat(game.lives)+'♡ '.repeat(3-game.lives);
+  el('gameScore').textContent=game.score+' točk';
+  el('sidebarGameScore').textContent=game.score;
+  el('gameWordsProgress').textContent=game.passed+' / '+game.words.length+' besed';
+  const acc = game.keys?Math.round(100*game.correct/game.keys):100;
+  if(mode==='game') {
+    el('accuracy').textContent=acc+' %';
+    el('keystrokes').textContent=game.keys;
+    el('wordSpeed').textContent='—';
+  }
+}
+function changeMode(next) {
+  if(mode===next)return;
+  stopGame();
+  mode=next;
+  renderFingerErrors();
+  document.body.classList.toggle('gameOn',mode==='game');
+  el('practiceMode').setAttribute('aria-selected',String(mode==='practice'));
+  el('gameMode').setAttribute('aria-selected',String(mode==='game'));
+  el('timeNote').textContent=mode==='game'?'':'Premori daljši od 3 sekund se izločijo iz aktivnega časa.';
+  if(mode==='practice') {
+    reset();
+  }else {
+    resetGameState();
+    typing.disabled=false;
+    typing.value='';
+    el('gameInput').value='';
+    el('wpm').textContent='0';el('time').textContent='0,0 s';
+  }
+  (mode==='game'?el('gameInput'):el('promptViewport')).focus();
+}
+function turretBase(){
+  const board=el('gameBoard');
+  return {x: board.clientWidth/2, y: board.clientHeight-18};
+}
+function turretTargetPoint(){
+  if(!game.activeWord || !game.activeWord.el) return null;
+  const node=game.activeWord.el;
+  const spans=node.querySelectorAll('span');
+  const activeSpan=spans[Math.min(game.pos, Math.max(0, spans.length-1))] || node;
+  const boardRect=el('gameBoard').getBoundingClientRect();
+  const r=activeSpan.getBoundingClientRect();
+  return {x:r.left-boardRect.left+r.width/2, y:r.top-boardRect.top+r.height/2};
+}
+function updateTurretAim(){
+  const turret=el('laserTurret');
+  const base=turretBase();
+  const target=turretTargetPoint();
+  if(!target){ turret.style.transform='translateX(-50%) rotate(0deg)'; return; }
+  const angle=Math.atan2(target.y-base.y,target.x-base.x)*180/Math.PI + 90;
+  turret.style.transform=`translateX(-50%) rotate(${angle.toFixed(1)}deg)`;
+}
+function addFallingWord() {
+  if(game.wordIndex>=game.words.length) {finishGame(true);return;}
+  game.activeWord={text:game.words[game.wordIndex],y:0,x:0,el:null};
+  game.pos=0;
+  const board=el('gameBoard');
+  const node=document.createElement('div');node.id='falling';node.className='fallingWord';
+  node.textContent=game.activeWord.text;
+  node.classList.add('activeTarget');
+  board.appendChild(node);
+  const maxX=Math.max(0,board.clientWidth-node.offsetWidth-12);
+  // deterministično menjavanje položaja – levo, desno, sredina, ...
+  const lane=[.06,.65,.29,.8,.12,.47][game.wordIndex%6];
+  game.activeWord.x=6+Math.max(0,maxX-6)*lane;
+  node.style.left=game.activeWord.x+'px';
+  game.activeWord.el=node;
+  paintWord();
+  game.speed= Number(el('fallSpeed').value); // px/s, nastavljivo med igro
+  game.lastFrame=performance.now();
+  renderHands();
+  updateTurretAim();
+}
+function paintWord() {
+  const item=game.activeWord;
+  if(!item)return;
+  const chars=[...item.text];
+  const node=item.el; node.replaceChildren();
+  chars.forEach((c,i)=>{const span=document.createElement('span');span.className=i<game.pos?'hit':(i===game.pos?'remaining currentTarget':'remaining');span.textContent=c;node.appendChild(span);});
+}
+function gameTick(t) {
+  if(!game.running || game.paused)return;
+  const dt=Math.min((t-game.lastFrame)/1000,.07);
+  game.lastFrame=t;
+  const word=game.activeWord;
+  if(word) {
+    word.y+=game.speed*dt;
+    word.el.style.transform=`translateY(${word.y}px)`;
+    updateTurretAim();
+    if(word.y+word.el.offsetHeight>=el('gameBoard').clientHeight-13) loseLife();
+  }
+  if(game.running && !game.paused)game.raf=requestAnimationFrame(gameTick);
+}
+function startGame() {
+  if(el('gameTextSource').value==='custom' && !el('gameCustomText').value.trim()){
+    el('gameCustomText').focus();return;
+  }
+  resetGameState();
+  game.running=true; game.lastFrame=performance.now();
+  el('gameStart').disabled=true;el('gamePause').disabled=false;
+  el('gameHint').hidden=true;
+  el('wpm').textContent='0';el('time').textContent='0,0 s';
+  typing.value='';typing.disabled=false;el('gameInput').value='';el('gameInput').focus();
+  addFallingWord();
+  updateTurretAim();
+  game.raf=requestAnimationFrame(gameTick);
+}
+function loseLife() {
+  if(game.activeWord) {game.activeWord.el.remove();game.activeWord=null;}
+  updateTurretAim();
+  game.lives--;game.combo=0;game.wordIndex++;
+  renderGameHud();
+  if(game.lives<=0){finishGame(false,'Zmanjkalo ti je življenj.');return;}
+  if(game.wordIndex>=game.words.length){finishGame(true);return;}
+  addFallingWord();
+}
+function shootEffect(success) {
+  const item=game.activeWord;
+  if(!item || !item.el) return;
+  const board=el('gameBoard');
+  const target=turretTargetPoint();
+  if(!target) return;
+  const base=turretBase();
+  const dx=target.x-base.x;
+  const dy=target.y-base.y;
+  const angle=Math.atan2(dy,dx)*180/Math.PI + 90;
+  const projectile=document.createElement('div');
+  projectile.className='shot'+(success?'':' bad');
+  projectile.style.left=(base.x-2)+'px';
+  projectile.style.top=(base.y-28)+'px';
+  projectile.style.transform=`translate(0px,0px) rotate(${angle.toFixed(1)}deg)`;
+  el('shotLayer').append(projectile);
+  projectile.animate([
+    { transform:`translate(0px,0px) rotate(${angle.toFixed(1)}deg)`, opacity:1 },
+    { transform:`translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px) rotate(${angle.toFixed(1)}deg) scaleY(1.2)`, opacity:.15 }
+  ], { duration: 220, easing:'linear', fill:'forwards' });
+  setTimeout(()=>projectile.remove(),240);
+}
+function explodeWord(item) {
+  if(!item||!item.el)return;
+  const rect=item.el.getBoundingClientRect(),board=el('gameBoard').getBoundingClientRect();
+  const pop=document.createElement('span');pop.className='burst';pop.textContent='✦ +100';
+  pop.style.left=(rect.left-board.left)+'px';pop.style.top=(rect.top-board.top)+'px';
+  el('shotLayer').append(pop);setTimeout(()=>pop.remove(),650);
+}
+function acceptGameChar(ch) {
+  if(!game.running || game.paused || !game.activeWord)return;
+  recordActivity();
+  game.keys++; typedChars++;
+  const target=game.activeWord.text[game.pos];
+  recordRecentKey('game',ch===target);
+  if(ch===target) {
+    game.correct++;game.pos++;shootEffect(true);
+    updateTurretAim();
+    if(game.pos>=game.activeWord.text.length) {
+      game.score+=100 + Math.min(60,game.combo*10);
+      game.combo++;
+      explodeWord(game.activeWord);
+      game.activeWord.el.remove();game.activeWord=null;
+      game.passed++;game.wordIndex++;
+      if(game.wordIndex>=game.words.length)finishGame(true);
+      else addFallingWord();
+    }else { paintWord(); updateTurretAim(); }
+  }else {
+    game.wrong++;game.combo=0;addFingerError(target,'game');shootEffect(false);
+    game.score=Math.max(0,game.score-10);
+    updateTurretAim();
+    const node=game.activeWord.el;
+    node.classList.add('badFlash');node.style.borderColor='#e56a79';
+    setTimeout(()=>{if(node.isConnected){node.style.borderColor='';node.classList.remove('badFlash');}},150);
+  }
+  renderGameHud();renderHands();
+  const secs=activeTime()/1000;
+  el('wpm').textContent=secs>0?Math.round((typedChars/5)/(secs/60)):0;
+  el('time').textContent=secs.toFixed(1).replace('.',',')+' s';
+}
+function handleGameKey(e) {
+  if(e.ctrlKey||e.metaKey||e.altKey)return;
+  if(e.key==='Tab')return;
+  if(e.key==='Backspace'){e.preventDefault();return;}
+  if(e.key.length===1){e.preventDefault();acceptGameChar(e.key);el('gameInput').value='';}
+  if(e.key==='Enter')e.preventDefault();
+}
+function finishGame(completed,detail='') {
+  game.running=false;game.paused=false;
+  if(game.raf)cancelAnimationFrame(game.raf);
+  game.raf=0;
+  if(game.activeWord) {game.activeWord.el.remove();game.activeWord=null;}
+  updateTurretAim();
+  const accuracy=game.keys?100*game.correct/game.keys:100;
+  const qualifies=completed && game.lives>0;
+  el('gameStart').disabled=false;el('gamePause').disabled=true;
+  const result=el('gameResult');result.classList.add('visible');
+  result.textContent=qualifies?`🏆 Čestitke! ${game.score} točk, ${accuracy.toFixed(1).replace('.',',')} % natančnost. Vse besede so rešene!`:
+    `💔 Konec igre. Na tla so padle 3 besede. ${game.score} točk, ${accuracy.toFixed(1).replace('.',',')} % natančnost.`;
+  el('gameHint').hidden=true;el('gameHint').textContent='';
+  renderHands();
+}
+function pauseGame() {
+  if(!game.running)return;
+  game.paused=!game.paused;
+  el('gamePause').textContent=game.paused?'▶ Nadaljuj':'⏸ Premor';
+  if(game.paused){if(game.raf)cancelAnimationFrame(game.raf);game.raf=0;}
+  else {game.lastFrame=performance.now();game.raf=requestAnimationFrame(gameTick);el('gameInput').focus();}
+}
+el('practiceMode').addEventListener('click',()=>changeMode('practice'));
+el('gameMode').addEventListener('click',()=>changeMode('game'));
+// Vse tipke prestreza skupni poslušalec zgoraj.
+el('gameInput').addEventListener('beforeinput',e=>e.preventDefault());
+el('gameInput').addEventListener('paste',e=>e.preventDefault());
+el('gameTextSource').addEventListener('change',()=>{
+  el('gameCustomWrap').hidden=el('gameTextSource').value!=='custom';
+  if(mode==='game')resetGameState();
+  if(el('gameTextSource').value==='custom')el('gameCustomText').focus();
+});
+el('gameCustomText').addEventListener('input',()=>{
+  if(mode==='game' && !game.running)resetGameState();
+});
+el('gameStart').addEventListener('click',startGame);
+el('gameRestart').addEventListener('click',startGame);
+el('gamePause').addEventListener('click',pauseGame);
+const speedLabels=v=>v<=35?'Počasi':v<=60?'Običajno':v<=90?'Hitro':'Zelo hitro';
+el('fallSpeed').addEventListener('input',()=>{
+  const speed=Number(el('fallSpeed').value);
+  el('fallSpeedValue').textContent=speedLabels(speed);
+  if(game.activeWord)game.speed=speed;
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden && game.running && !game.paused)pauseGame();});
+
+fillLessons();
+lessonSelect.value = '0';
+reset();
+setInterval(() => { if (!finished && document.hasFocus()) { const st=statsValues(); el('wpm').textContent=st.wpm; el('time').textContent=st.secs.toFixed(1).replace('.',',')+' s'; } }, 200);
+</script>
+</body>
+</html>
