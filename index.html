@@ -946,7 +946,7 @@ body, button, select, input, textarea { font-family:"Montserrat",Arial,sans-seri
       <section class="resultsGroup" aria-label="Rezultati">
         <div class="settingsTitle">Rezultati</div>
         <div class="statsCol">
-        <div class="stat"><div class="label">Hitrost</div><div class="value" id="wpm">0</div><div class="label">WPM</div></div>
+        <div class="stat"><div class="label">Hitrost</div><div class="value" id="wpm">0</div><div class="label">PBM</div></div>
         <div class="stat"><div class="label">Natančnost</div><div class="value" id="accuracy">100 %</div></div>
         <div class="stat small"><div class="label">Aktivni čas</div><div class="value" id="time">0,0 s</div></div>
         <div class="stat small"><div class="label">Vsi pritiski tipk</div><div class="value" id="keystrokes">0</div></div>
@@ -1057,15 +1057,24 @@ let expected = '';
 let incorrectAt = -1; // Nazadnje napačno vpisana črka, dokler ni popravljena
 let entries = []; // {ch, ok, pos, t}
 let index = 0, keys = 0, typedChars = 0, correctKeys = 0, activeMs = 0, lastKeyAt = null, finished = false;
+let measuredIntervals = 0, typingBursts = 0;
 let layout = null;
 let statsTimer = null;
 
 function now() { return performance.now(); }
 function recordActivity() {
   const t = now();
-  if (lastKeyAt !== null) {
+  if (lastKeyAt === null) {
+    typingBursts = 1;
+  } else {
     const gap = t - lastKeyAt;
-    if (gap <= 3000) activeMs += gap;
+    if (gap <= 3000) {
+      activeMs += gap;
+      measuredIntervals++;
+    } else {
+      // Celoten premor nad tremi sekundami ni del aktivnega časa.
+      typingBursts++;
+    }
   }
   lastKeyAt = t;
 }
@@ -1073,6 +1082,13 @@ function activeTime() {
   if (lastKeyAt === null) return activeMs;
   const gap = now() - lastKeyAt;
   return activeMs + (gap <= 3000 ? gap : 0);
+}
+function pbmTime() {
+  // Ob prvem pritisku je minilo 0 izmerjenih sekund, znak pa že šteje.
+  // Za začetni znak vsakega aktivnega niza uporabimo povprečni izmerjeni
+  // interval med pritiski. Tako 1 znak/s od začetka pomeni 12 PBM.
+  if (!measuredIntervals) return 0; // iz enega pritiska hitrosti ni mogoče oceniti
+  return activeTime() + (activeMs / measuredIntervals) * typingBursts;
 }
 function buildLayout(text, maxLen=40) {
   const words = text.split(' ');
@@ -1117,7 +1133,8 @@ function calcWordWpm(word) {
   const end=word.end, start=Math.max(0,end-25);
   if (end-start<10) return null; // še premalo podatkov za stabilno oceno
   const startT = start ? entries[start-1].t : 0;
-  const durationMs=last.t-startT;
+  const durationMs=last.t-startT + (start===0 && measuredIntervals
+    ? (activeMs / measuredIntervals) : 0);
   if (durationMs<1500) return null; // začetne meritve so lahko zelo nestabilne
   const correct=entries.slice(start,end).filter(e=>e.ok).length;
   return Math.round((correct/5)/(durationMs/60000));
@@ -1160,7 +1177,7 @@ function renderPrompt() {
     const node = speedNodes[i];
     if (!node) return;
     const speed = calcWordWpm(word);
-    node.textContent = speed ? `${speed} WPM` : '\u00a0';
+    node.textContent = speed ? `${speed} PBM` : '\u00a0';
     node.classList.toggle('empty', !speed);
   });
   const currentLineIndex = index >= expected.length
@@ -1181,7 +1198,7 @@ function renderLine(line) {
   let html = `<div class="line">`;
   for (const word of line.words) {
     const speed = calcWordWpm(word);
-    const speedLabel = speed ? `${speed} WPM` : '&nbsp;';
+    const speedLabel = speed ? `${speed} PBM` : '&nbsp;';
     html += `<span class="word"><span class="wordSpeed ${speed ? '' : 'empty'}">${speedLabel}</span><span class="letters">`;
     for (let p=word.start; p<word.end; p++) {
       const cls = charClassForPos(p);
@@ -1201,14 +1218,15 @@ function renderLine(line) {
 function formatPercent(v) { return `${Math.round(v)} %`; }
 function statsValues() {
   const secs = activeTime() / 1000;
-  const wpm = secs > 0 ? Math.round((typedChars/5) / (secs/60)) : 0;
+  const pbmSecs = pbmTime() / 1000;
+  const wpm = pbmSecs > 0 ? Math.round((typedChars/5) / (pbmSecs/60)) : 0;
   const accuracy = keys ? Math.round((correctKeys / keys) * 100) : 100;
   let currentWordSpeed = '—';
   if (index < expected.length) {
     const wi = layout.charWord[Math.min(index, expected.length-1)];
     if (wi >= 0) {
       const sp = calcWordWpm(layout.wordsFlat[wi]);
-      if (sp) currentWordSpeed = `${sp} WPM`;
+      if (sp) currentWordSpeed = `${sp} PBM`;
     }
   }
   return {secs, wpm, accuracy, currentWordSpeed};
@@ -1260,7 +1278,7 @@ function reset() {
   layout = buildLayout(expected, Math.max(8, Math.floor((el('promptViewport').clientWidth - 12) / (window.innerWidth <= 750 ? 24 : 30))));
   entries = [];
   incorrectAt = -1;
-  index = 0; keys = 0; typedChars = 0; correctKeys = 0; activeMs = 0; lastKeyAt = null; finished = false;
+  index = 0; keys = 0; typedChars = 0; correctKeys = 0; activeMs = 0; lastKeyAt = null; measuredIntervals = 0; typingBursts = 0; finished = false;
   typing.value = '';
   typing.disabled = false;
   el('done').classList.remove('visible');
@@ -1537,7 +1555,18 @@ function updateRecentFace(which){
 // IGRIFIKACIJA: en padajoči cilj naenkrat, črke iz iste izbrane vaje.
 let mode = 'practice';
 let game = { running:false,paused:false,activeWord:null,pos:0,wordIndex:0,words:[],score:0,lives:3,
-  correct:0,wrong:0,keys:0,passed:0,combo:0,lastFrame:0,raf:0,speed:0,fallMs:0,lastMistake:false };
+  correct:0,wrong:0,keys:0,passed:0,combo:0,lastFrame:0,raf:0,speed:0,fallMs:0,lastMistake:false,elapsedMs:0,resumedAt:null,lastStatsAt:0 };
+// PBM v igrifikaciji temelji na času poteka igre, ne na premorih med pritiski tipk.
+// Čas med dejanskim premorom igre se ne všteva.
+function gameElapsedMs() {
+  return game.elapsedMs + (game.running && !game.paused && game.resumedAt!==null
+    ? Math.max(0,now()-game.resumedAt) : 0);
+}
+function updateGameSpeed() {
+  const secs=gameElapsedMs()/1000;
+  el('wpm').textContent=secs>0?Math.round((game.correct/5)/(secs/60)):0;
+  el('time').textContent=secs.toFixed(1).replace('.',',')+' s';
+}
 function gameWords() {
   const text=el('gameTextSource').value==='custom' ? el('gameCustomText').value : selectedExercise().text;
   return text.trim().split(/\s+/).filter(Boolean);
@@ -1549,7 +1578,7 @@ function resetGameState() {
   stopGame();
   activeMs=0;lastKeyAt=null;typedChars=0;
   game = {running:false,paused:false,activeWord:null,pos:0,wordIndex:0,words:gameWords(),score:0,lives:3,
-    correct:0,wrong:0,keys:0,passed:0,combo:0,lastFrame:0,raf:0,speed:0,fallMs:0,lastMistake:false};
+    correct:0,wrong:0,keys:0,passed:0,combo:0,lastFrame:0,raf:0,speed:0,fallMs:0,lastMistake:false,elapsedMs:0,resumedAt:null,lastStatsAt:0};
   const existing=el('falling'); if(existing)existing.remove();
   el('shotLayer').replaceChildren();
   el('gameHint').hidden=true;
@@ -1559,6 +1588,7 @@ function resetGameState() {
   el('gamePause').disabled=true;
   el('gamePause').textContent='⏸ Premor';
   renderGameHud();
+  if(mode==='game') updateGameSpeed();
   if(mode==='game') renderHands();
 }
 function stopGame() {
@@ -1652,6 +1682,7 @@ function gameTick(t) {
   if(!game.running || game.paused)return;
   const dt=Math.min((t-game.lastFrame)/1000,.07);
   game.lastFrame=t;
+  if(t-game.lastStatsAt>=200){game.lastStatsAt=t;updateGameSpeed();}
   const word=game.activeWord;
   if(word) {
     word.y+=game.speed*dt;
@@ -1666,7 +1697,7 @@ function startGame() {
     el('gameCustomText').focus();return;
   }
   resetGameState();
-  game.running=true; game.lastFrame=performance.now();
+  game.running=true; game.lastFrame=performance.now(); game.resumedAt=game.lastFrame;
   el('gameStart').disabled=true;el('gamePause').disabled=false;
   el('gameHint').hidden=true;
   el('wpm').textContent='0';el('time').textContent='0,0 s';
@@ -1715,11 +1746,11 @@ function explodeWord(item) {
 }
 function acceptGameChar(ch) {
   if(!game.running || game.paused || !game.activeWord)return;
-  recordActivity();
-  game.keys++; typedChars++;
+  game.keys++;
   const target=game.activeWord.text[game.pos];
   recordRecentKey('game',matchesExpectedKey(ch,target));
   if(matchesExpectedKey(ch,target)) {
+    typedChars++;
     game.lastKeyWrong=false;
     game.correct++;game.pos++;game.score+=10;shootEffect(true);
     updateTurretAim();
@@ -1742,9 +1773,7 @@ function acceptGameChar(ch) {
     setTimeout(()=>{if(node.isConnected){node.style.borderColor='';node.classList.remove('badFlash');}},150);
   }
   renderGameHud();renderHands();
-  const secs=activeTime()/1000;
-  el('wpm').textContent=secs>0?Math.round((typedChars/5)/(secs/60)):0;
-  el('time').textContent=secs.toFixed(1).replace('.',',')+' s';
+  updateGameSpeed();
 }
 function handleGameKey(e) {
   if(e.ctrlKey||e.metaKey||e.altKey)return;
@@ -1754,7 +1783,12 @@ function handleGameKey(e) {
   if(e.key==='Enter')e.preventDefault();
 }
 function finishGame(completed,detail='') {
+  if(game.running && !game.paused && game.resumedAt!==null){
+    game.elapsedMs+=Math.max(0,now()-game.resumedAt);
+  }
+  game.resumedAt=null;
   game.running=false;game.paused=false;
+  updateGameSpeed();
   if(game.raf)cancelAnimationFrame(game.raf);
   game.raf=0;
   if(game.activeWord) {game.activeWord.el.remove();game.activeWord=null;}
@@ -1770,7 +1804,13 @@ function finishGame(completed,detail='') {
 }
 function pauseGame() {
   if(!game.running)return;
+  if(!game.paused && game.resumedAt!==null){
+    game.elapsedMs+=Math.max(0,now()-game.resumedAt);
+    game.resumedAt=null;
+  }
   game.paused=!game.paused;
+  if(!game.paused)game.resumedAt=now();
+  updateGameSpeed();
   el('gamePause').textContent=game.paused?'▶ Nadaljuj':'⏸ Premor';
   if(game.paused){if(game.raf)cancelAnimationFrame(game.raf);game.raf=0;}
   else {game.lastFrame=performance.now();game.raf=requestAnimationFrame(gameTick);el('gameInput').focus();}
