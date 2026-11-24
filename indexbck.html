@@ -846,6 +846,153 @@ body, button, select, input, textarea { font-family:"Montserrat",Arial,sans-seri
   display:flex !important;
   visibility:visible !important;
 }
+
+/* Malenkost večja pisava in prikaz najtežje črke nad smeškom. */
+#promptViewport .char,
+#promptViewport .char.correct,
+#promptViewport .char.wrong,
+#promptViewport .char.current,
+#promptViewport .char.pending {
+  font-size:45px !important;
+  height:60px !important;
+  padding:0 2px 6px !important;
+}
+#promptViewport .spaceChar,
+#promptViewport .spaceChar.correct,
+#promptViewport .spaceChar.wrong,
+#promptViewport .spaceChar.current,
+#promptViewport .spaceChar.pending {
+  height:60px !important;
+}
+#gameBoard .fallingWord,
+#gameBoard .fallingWord span {
+  font-size:36.25px !important;
+}
+.faceStack {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  gap:4px;
+  min-width:48px;
+  flex:none;
+}
+.gameFaceStack {
+  margin-right:auto;
+}
+.hardest-letter-indicator {
+  height:20px;
+  min-height:20px;
+  min-width:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:"Montserrat", Arial, sans-serif !important;
+  font-size:18px;
+  line-height:1;
+  font-weight:800;
+  color:#cc2f3f;
+  visibility:hidden;
+  opacity:0;
+  transform:translateY(1px);
+}
+.hardest-letter-indicator.visible {
+  visibility:visible;
+  opacity:1;
+  animation:hardestLetterBlink .95s step-end infinite;
+}
+@keyframes hardestLetterBlink {
+  0%, 48% { opacity:1; }
+  50%, 100% { opacity:.18; }
+}
+@media (max-width:700px) {
+  #promptViewport .char,
+  #promptViewport .char.correct,
+  #promptViewport .char.wrong,
+  #promptViewport .char.current,
+  #promptViewport .char.pending {
+    font-size:33.75px !important;
+    height:49px !important;
+    padding:0 1.5px 5px !important;
+  }
+  #promptViewport .spaceChar,
+  #promptViewport .spaceChar.correct,
+  #promptViewport .spaceChar.wrong,
+  #promptViewport .spaceChar.current,
+  #promptViewport .spaceChar.pending {
+    height:49px !important;
+  }
+  #gameBoard .fallingWord,
+  #gameBoard .fallingWord span {
+    font-size:27.5px !important;
+  }
+  .faceStack { min-width:38px; gap:3px; }
+  .hardest-letter-indicator { font-size:15px; min-width:22px; height:17px; min-height:17px; }
+}
+
+/* Dve večji vrstici imata stalno višino, brez spreminjanja med tipkanjem. */
+#promptViewport {height:240px !important;min-height:240px !important;}
+@media(max-width:700px){#promptViewport{height:226px !important;min-height:226px !important;}}
+
+
+
+/* PBM dokončane besede ob smešku, ne nad naslednjo besedo. */
+.gameFaceRow {
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.gameFaceRow .gameFace { margin-right:0; }
+.gameWordPbm {
+  display:inline-block;
+  min-width:72px;
+  font:800 13px/20px "Montserrat",Arial,sans-serif;
+  color:#526c9a;
+  text-align:left;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+@media(max-width:700px){
+  .gameWordPbm { font-size:11px; min-width:60px; }
+  .gameFaceRow { gap:5px; }
+}
+
+
+/* Tretji, samostojni način: avtomobilska dirka. */
+.raceOnly {display:none}
+body.raceOn .raceOnly {display:block}
+body.raceOn .practiceOnly {display:none}
+.raceTopBar{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:4px 0 14px;color:#38528e}
+.raceTopBar strong{font-size:20px}
+.raceDifficulty{display:flex;gap:9px;align-items:center;color:#536783;font-size:12px;font-weight:700}
+.raceDifficulty input{width:96px;min-width:0;padding:7px 10px;font-size:14px;border-radius:10px;font-weight:700;text-align:center}
+.raceDifficulty .raceSpeedUnit{font-size:13px;font-weight:800}
+.raceTrack{position:relative;background:linear-gradient(180deg,#eef3fa,#dbe6f2);border:2px solid #c5d2e5;border-radius:18px;padding:16px 16px 12px 17px;overflow:hidden}
+.raceLane{position:relative;height:93px;margin-right:0;border-bottom:3px dashed rgba(255,255,255,.9);background:linear-gradient(180deg,#aeb9ca,#919eaf);border-radius:11px 11px 0 0}
+.raceLane.raceEnemy{border-bottom:0;border-radius:0 0 11px 11px;background:linear-gradient(180deg,#8e9cad,#adb9ca)}
+.raceLaneName{position:absolute;top:9px;left:13px;color:#fff;font-size:12px;font-weight:900;text-shadow:0 1px 3px #41546a;z-index:2}
+.raceCar{position:absolute;top:30px;left:0%;font-size:40px;line-height:1;transform:scaleX(-1);z-index:3;transition:left .18s linear;filter:drop-shadow(0 3px 3px #34456366)}
+.raceFinishLine{position:absolute;right:18px;top:16px;bottom:12px;width:34px;border-left:5px dashed white;display:flex;align-items:center;justify-content:center;font-size:29px;background:rgba(255,255,255,.15);z-index:1}
+.raceStatus{display:flex;justify-content:space-between;gap:10px;margin:9px 0;font-size:13px;font-weight:800;color:#476493}
+.raceInstruction{font-size:13px;line-height:1.5;color:#65728c;margin:14px 2px 8px}
+.raceText{background:#fff8cd;border:1px solid #e8dfb3;border-radius:13px;min-height:110px;padding:14px 16px;line-height:1.9;font:500 24px/1.9 "Montserrat",Arial,sans-serif;overflow-wrap:anywhere;outline:none;color:#545552}
+.raceText:focus-visible{outline:2px solid #8fa8e5}
+.raceText .raceTyped{color:#137d49;background:#d9edce}
+.raceText .raceCurrent{color:#233a71;background:#e0e8ff;box-shadow:inset 0 -3px #5478de}
+.raceText .racePending{color:#5e615a}
+.raceText .raceWrong{color:#b3283d;background:#fac0bc}
+.raceActions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}
+@media(max-width:700px){.raceTrack{padding:9px}.raceLane{height:77px}.raceCar{font-size:32px;top:31px}.raceText{font-size:19px;min-height:110px;padding:11px}.raceFinishLine{right:11px;top:9px;bottom:9px}.raceDifficulty{flex-wrap:wrap}}
+
+/* Izbira lastnega besedila je ločena za dirko in za Zadeni besedo. */
+.raceTextSettings{margin:0 0 14px;padding:13px 14px;background:#fff9e5;border:1px solid #ece4c3;border-radius:15px}
+.raceTextSettings label.field{color:#39496b;font-size:12px;gap:8px}
+.raceTextSettings select{background:#fffef8;border:1px solid #dccfa2;border-radius:9px;padding:10px 12px;color:#29344c}
+.raceTextSettings #raceCustomWrap{margin-top:12px}
+.raceTextSettings #raceCustomWrap[hidden]{display:none!important}
+.raceTextSettings textarea{margin-top:7px;background:#fffef8;border:1px solid #dccfa2;border-radius:9px;min-height:105px;font:14px/1.5 "Montserrat",Arial,sans-serif;resize:vertical;color:#29344c;width:100%;padding:10px}
+
+/* Četrta igra — džungelski skoki. Slogi ne posegajo v druge tri igre. */
 </style>
 </head>
 <body>
@@ -858,13 +1005,14 @@ body, button, select, input, textarea { font-family:"Montserrat",Arial,sans-seri
     <section class="card mainCard">
       <div class="modeTabs" role="tablist" aria-label="Način vadbe">
         <button id="practiceMode" class="modeTab" type="button" role="tab" aria-selected="true">✍️ Vadba</button>
-        <button id="gameMode" class="modeTab" type="button" role="tab" aria-selected="false">🎮 Igrifikacija</button>
+        <button id="gameMode" class="modeTab" type="button" role="tab" aria-selected="false">🎯 Zadeni besedo</button>
+        <button id="raceMode" class="modeTab" type="button" role="tab" aria-selected="false">🏁 Dirka</button>
       </div>
       <div class="practiceOnly">
       <div class="promptWrap">
         <div class="lessonLine">
           <div id="lessonTitle">1. nivo · AFJČ · vaja 1.1</div>
-          <div class="lessonRight"><div id="recentFace" class="recent-accuracy-face" aria-live="off"><img id="recentFaceImage" alt=""></div><span id="progressText" hidden>0 % do cilja</span></div>
+          <div class="lessonRight"><div class="faceStack"><div id="recentHardestLetter" class="hardest-letter-indicator" aria-live="polite" aria-atomic="true"></div><div id="recentFace" class="recent-accuracy-face" aria-live="off"><img id="recentFaceImage" alt=""></div></div><span id="progressText" hidden>0 % do cilja</span></div>
         </div>
         
         <div id="promptViewport" class="promptViewport" tabindex="0" role="textbox" aria-label="Tipkaj neposredno po prikazanem besedilu"></div>
@@ -879,11 +1027,44 @@ body, button, select, input, textarea { font-family:"Montserrat",Arial,sans-seri
 
       </div>
       <div class="gameOnly">
-        <div class="gameHUD"><div id="gameRecentFace" class="recent-accuracy-face gameFace"><img id="gameRecentFaceImage" alt=""></div><span id="gameLives" class="life">♥ ♥ ♥</span><span id="gameScore">0 točk</span><span class="gameWordsProgress" id="gameWordsProgress">0 / 0 besed</span></div>
+        <div class="gameHUD"><div class="faceStack gameFaceStack"><div id="gameHardestLetter" class="hardest-letter-indicator" aria-live="polite" aria-atomic="true"></div><div class="gameFaceRow"><div id="gameRecentFace" class="recent-accuracy-face gameFace"><img id="gameRecentFaceImage" alt=""></div><span id="gameWordPbm" class="gameWordPbm" aria-live="polite" aria-label="Hitrost zadnje besede"></span></div></div><span id="gameLives" class="life">♥ ♥ ♥</span><span id="gameScore">0 točk</span><span class="gameWordsProgress" id="gameWordsProgress">0 / 0 besed</span></div>
         <div id="gameBoard" class="gameBoard"><div id="gameHint" class="gameHint" hidden></div><div class="gameGround"></div><div class="laserTurret" id="laserTurret">🚀</div><div id="shotLayer" class="shotLayer"></div></div>
         <input id="gameInput" class="sr-input" aria-label="Tipkanje padajočih besed" autocomplete="off" spellcheck="false" autocapitalize="off" />
         <div class="gameActions"><button class="btn primary" id="gameStart" type="button">▶ Začni igro</button><button class="btn secondary" id="gamePause" type="button" disabled>⏸ Premor</button><button class="btn secondary" id="gameRestart" type="button">↻ Nova igra</button></div>
         <div class="gameResult" id="gameResult" aria-live="polite"></div>
+      </div>
+      <div class="raceOnly" aria-label="Dirka s tipkanjem">
+        <div class="raceTopBar">
+          <strong>🏁 Dirka s tipkanjem</strong>
+          <label class="raceDifficulty">Hitrost računalnika
+            <input id="raceDifficulty" type="number" inputmode="decimal" min="0.1" step="any" value="18" aria-label="Hitrost računalnika v PBM">
+            <span class="raceSpeedUnit">PBM</span>
+          </label>
+        </div>
+        <div class="raceTextSettings" aria-label="Besedilo za dirko">
+          <label class="field" for="raceTextSource">BESEDILO ZA DIRKO
+            <select id="raceTextSource"><option value="exercise">Izbrana vaja</option><option value="custom">Lastno besedilo</option></select>
+          </label>
+          <div id="raceCustomWrap" hidden>
+            <label class="field" for="raceCustomText">VPIŠI ALI PRILEPI SVOJE BESEDILO</label>
+            <textarea id="raceCustomText" rows="5" placeholder="Tukaj lahko pišeš ali prilepiš besedilo za dirko …" spellcheck="false" aria-label="Lastno besedilo za dirko"></textarea>
+          </div>
+        </div>
+        <div class="raceTrack" id="raceTrack" aria-label="Dirkalna steza">
+          <div class="raceFinishLine" aria-hidden="true">🏁</div>
+          <div class="raceLane"><span class="raceLaneName">TI</span><span class="raceCar" id="racePlayerCar" aria-hidden="true">🚗</span></div>
+          <div class="raceLane raceEnemy"><span class="raceLaneName">RAČUNALNIK</span><span class="raceCar" id="raceComputerCar" aria-hidden="true">🏎️</span></div>
+        </div>
+        <div class="raceStatus"><span id="racePlayerProgress">Ti: 0 %</span><span id="raceComputerProgress">Računalnik: 0 %</span></div>
+        <p class="raceInstruction">Tipkaj prikazano besedilo. Vsaka pravilna črka premakne tvoj avto naprej, napačna ga zadrži. Preslednice so del besedila.</p>
+        <div id="raceText" class="raceText" tabindex="0" role="textbox" aria-label="Besedilo za dirko"></div>
+        <input id="raceInput" class="sr-input" autocomplete="off" spellcheck="false" aria-label="Tipkanje med dirko">
+        <div class="raceActions">
+          <button id="raceStart" class="btn primary" type="button">▶ Začni dirko</button>
+          <button id="racePause" class="btn secondary" type="button" disabled>⏸ Premor</button>
+          <button id="raceRestart" class="btn secondary" type="button">↻ Nova dirka</button>
+        </div>
+        <div id="raceResult" class="gameResult" aria-live="polite"></div>
       </div>
       <section class="card handsCard">
         <span id="nextFinger" hidden></span>
@@ -946,7 +1127,7 @@ body, button, select, input, textarea { font-family:"Montserrat",Arial,sans-seri
       <section class="resultsGroup" aria-label="Rezultati">
         <div class="settingsTitle">Rezultati</div>
         <div class="statsCol">
-        <div class="stat"><div class="label">Hitrost</div><div class="value" id="wpm">0</div><div class="label">WPM</div></div>
+        <div class="stat"><div class="label">Hitrost</div><div class="value" id="wpm">0</div><div class="label">PBM</div></div>
         <div class="stat"><div class="label">Natančnost</div><div class="value" id="accuracy">100 %</div></div>
         <div class="stat small"><div class="label">Aktivni čas</div><div class="value" id="time">0,0 s</div></div>
         <div class="stat small"><div class="label">Vsi pritiski tipk</div><div class="value" id="keystrokes">0</div></div>
@@ -976,7 +1157,7 @@ body, button, select, input, textarea { font-family:"Montserrat",Arial,sans-seri
 </main>
 
 <script>
-const levels = [{"number": 1, "title": "AFJČ", "originalTitle": "1.Nivo AFJČ - vse prve vrstice pridejo na koncu", "exercises": [{"name": "1.1", "text": "fjfj ačča jjff ččaa fččf ajja jaj jaj faja faja čafa čafa fača fača čaj čaj jafa jafa fajfa čaja jajčf ajaj fajča jača jajč fajfa jafa jačaj čaja afaja fajfa jača fajač čaja ajafa fjač ajafa fajčaj čajaf jafača afaja čajafa affa čjjč faaf jččj ffaa jjčč"}, {"name": "1.2", "text": "jjjf čaač fjfj ačča čffč jaaj aja aja jača jača ačaj ačaj faja faja jač jač čafa čafa jačaj jafa fjača afaj fjača čaja fjač jačaj jafa fajfa čaja fajač fajfa čaja afaja jača fajač fjča fajač ačajaj jafaj jajafa čajaj čafaja jččj ffaa jčjč faaf jjčč affa"}, {"name": "1.3", "text": "jjff jfff fjfj čaač jaaj čffč čaj čaj faja faja jaja jaja čafa čafa aja aja jača jača fajfa jafa afaja čajf fajač čaja jača jačaj fajč fajfa jafa afaja jafaj jača fajfa čaja fajač ačaj čajaf čajfaj fajač ajafaj čajaj fajčaj faaf jččj fafa jčjč affa jjčč"}, {"name": "1.4", "text": "aaa ččč ačač ačač aaa ččč ača ača čaja čaja faja faja jafa jafa fač fač čač čač fajač čaja fajfa jajč čajaf fjča jafa jajča čajf jafač ajfaj čajaj fajfa jača fajač faja ajafa jafa fajčaj ajafaj jafaj jajafa fajfa fajačaj fff jjj fjfj fjfj jjj fff"}]}, {"number": 2, "title": "DK", "originalTitle": "2. Nivo AFJČ(DK)", "exercises": [{"name": "2.1", "text": "dfd dfd dfd djd djd djd kjk kjk kjk kfk kfk kfk dča dča dča čda čda čda ada ada kaja kaja daj daj kad kad daja daja kaj kaj daka ajda kača čaka fača kdaj ajda ajčka kdaj čakaj kada fada fajka čaka jačaj fada kajak ajka kakaj čačkaj fajka jajčka fajfa kajaka fajfa čaka jaka kdaj ajda čaka jaka kdaj fajfa čaka"}, {"name": "2.2", "text": "adf čkj adf čkj adf čkj fda jkč fda fda jkč fda dča dča dča čda čda čda kaj kaj čaka čaka jad jad kad kad dafa dafa ada ada ajda čaka kdaj dafa ajka kada kača čakaj kaja fajka kafa kdaj fajka kdaj ajčka čaka fajfa kača dajka jajčka kakaj čadkaj kajak čajčkaj kdaj ajda čaka čaj fajfa čaka jaka ajda čakaj jaka"}, {"name": "2.3", "text": "adf adf adf čkj čkj čkj fda fda fda jkč jkč jkč dča dča dča čda čda čda čad čad ajda ajda kad kad daj daj ajka ajka jak jak kdaj čaja kača čada kaja dada daja jadaj čaka fajfa daka ajka kajfa kdaj ajčka jada dajaj ajda čakaj jajčkaj kajak fajkaj čajka dajkaj ajda čakaj kajak kača čaka jaka fajfa čaka jaka"}, {"name": "2.4", "text": "fad fad fad jčk jčk jčk kdf kdf kdf dkj dkj dkj dča dča dča čda čda čda čak čak dada dada ajd ajd kad kad jaka jaka kaj kaj dada kača adad čada kada daja kaja ajda daja jačaj jada kaka kajak faja fajfa čaja ajčka jaja ajka kajaka dajka jajčka dajaj fajkaj da kajak čaka fajfa jaka ajčka dajaj jajčka ajda"}]}, {"number": 3, "title": "SL", "originalTitle": "3. NIVO ADFJKČ(SL)", "exercises": [{"name": "3.1", "text": "fdss jkll fdss jkll fdss jkll dsds dsds klkl klkl dsds dsds saj saj slad slad čas čas lak lak klas klas las las slad dala fajfa časa sklad kasa jasa sklad dala klada fasa skala fasada dlaka safalada ladja skala ladja čakala skakljaj fasada skakala sladkal safalada ada dala sladak ladja čakala čas čaj jaka čakal sladak čaj"}, {"name": "3.2", "text": "ssa ssa ssa llč llč llč slls slls slls llls llls slsl fač fač klas klas las las sad sad slad slad laj laj fala čaka sklad fasa dlaka laska lasa kajla časa skala kača klasa sklada čakaj sladak fajfa slaka čaja skakljaj asljaj fasada sladkala čakala skladaj jaka jajčka čakal laska ada čakala čas"}, {"name": "3.3", "text": "asd asd člk člk asd asd sdsd sdsd lklk lklk sdsd sdsd lak lak skala skala kas kas dal dal slad slad čas čas klal slaka fajfa dala klada laka sklad lakaj jasa čakal fasa skala safalada dlaka sklada laska čakaj fajla čakala fasada čajčkala skakljala sladkaj safalada čakala ada jajčka jaka dal sladak čaj"}, {"name": "3.4", "text": "sdsd klkl sdsd klkl sdsd klkl adad čkčk adad čkčk adad čkčk sl sl klas klas čas čas kal kal dala dala laj laj kača časa klasa fajl kajla slad laks fajfa lasa dlaka faks fajsa fasal kasač skladaj čakal faksa laska sladkal čakala jajčka sladkala fajfala laskaj ajda skladala jajčka jaka čaka faks"}]}, {"number": 4, "title": "GH", "originalTitle": "4. NIVO ASDFJKLČ(GH)", "exercises": [{"name": "4.1", "text": "jh fg jh fg jh fg fgfg jhjh fgfg jhjh fgfg jhjh ag ag ag čh čh čh fgfg jhjh fgfg jhjh fgfg jhjh ha ha gaj gaj dag dag kg kg lah lah hl hl saga čaga gada jaha kača hlad glas skala hlad hajka alga lahka jahač saga lagal slak čakal safalada gladka sladka jahača laskal hahljala lagala saj lah gada čaka gaj da hlad"}, {"name": "4.2", "text": "jhj fgf jhj fgf jhj fgf fgfg jhjh fgfg jhjh fgfg jhjh aga aga aga čhč čhč čhč fg jh fg jh fg jh hl hl sad sad gaj gaj dag dag lah lah haj haj gada čaka slak čaga hlad alga glas jahač fagl lagal glad sklad halja gača lahka slak sklad sladkaj hajkač lagala hahlja gladka hajkala safalada lahka halja jaka čaka gladka skala ga čaka"}, {"name": "4.3", "text": "hjhj hjhj gfgf gfgf jhjh jhjh fg fg jh jhjh fg fg ga ga ga hč hč hč hjhj gfgf hjhj gfgf hjhj gfgf gas gas saj saj dah dah dag dag lah lah aga aga lajf glas hlač saga čaja alah čaga sklad gala hlača fala lagal jahač hlad gadja fals halja lagala čakala jahala safalada hajkal gladka skakljala hajkala gada ajda jaka hlad čaka"}, {"name": "4.4", "text": "ghh ghh ghh hgg hgg hgg gf gf gf jk jk jk dgg dgg dgg khh khh khh čhč čgč čhč aga aha aga ga ga gal gal aga aga hl hl has has gas gas jaga glad kdaj saga alga hada laha hajka fajl sklad alah fajfa lagal hlad gadja glas halja jahača fasada faflja gladka jahaj čakaj hajkala jaka čaka gladka klada gaj da glad"}]}, {"number": 5, "title": "RU", "originalTitle": "5. NIVO ASDFGHJKLČ(RU)", "exercises": [{"name": "5.1", "text": "frfr juju frfr juju frfr juju grgr grgr huhu huhu grgr huhu gu gu raj raj ufa ufa čar čar fuga fuga gruda gruda draga srka kafra kruh farsa črka ragu sraga juha sadra čula ključ guraj rafal slučaj rahla gluha jahač luksus dragulj ljudska sadjarju hujska jaguar ključ daj sadjarju gladka fasada gruča čaka halja ugaja kuharju"}, {"name": "5.2", "text": "rfrf ujuj rfrf ujuj rfrf ujuj rgrg uhuh rgrg uhuh rgrg uhuh čar čar jr jr čuk čuk srf srf ragu ragu farsa farsa gruča sluh ključ gaja srfaj ruda suha druga gura lučka juha čukaj furaj kafra halja čudak luska rjuha kljuka urarju kurjaču skuhaj rudarja kragulj suha klada garaču daj dragulj kuharju ugaja drug sladak sad"}, {"name": "5.3", "text": "drsr drsr drsr kulu kulu kulu arsr arsr arsr čulu čulu čulu lah lah krf krf fuj fuj čuj čuj kras kras srfar srfar sraga gluh slučaj gaju lučka čaru ruda draga fura čudak suha luska čukaj kuhar skuha garač furaj halja gusarju jadraj kuskus skuhaj garača kuharju urarju dar ugaja gaja čaka gusarja kurjaču skuhaj čaj suha klada"}, {"name": "5.4", "text": "rdrs rdrs rdrs ukul ukul ukul rars rars rars učul učul učul fu fu rad rad suh suh rus rus fura fura sadra sadra sraka drug halja urad urad fuga luka gluha gura gruča juha farsa rafal frača lučka laska furaj gusar kuskus slučaj kragulj hujska kurjaču gusarju kurjač ga rad srka lahka halja sluga čaka kurjača druga črka"}]}, {"number": 6, "title": "EI", "originalTitle": "6. NIVO ASDFGHJKLRU(EI)", "exercises": [{"name": "6.1", "text": "dede kiki dede kiki dede kiki keke didi keke didi keke didi fhi fhe fhi fhe fhi fhe uči uči gre gre sir sir jed jed frči frči račke račke sled ahil gleda igre kafra čuje figa griči jedi hrček fila likaj dihur kurir hladi figura hrčku hlače huduje kulisa skuhaj regulira lirika dirkaču sardela se rada skrije julija rada gleda serije figur"}, {"name": "6.2", "text": "fefe jiji fefe jiji fefe jiji dede kiki dede kiki dede kiki sese lili čiči lili sese aeae del del čir čir les les fis fis srči srči sreča sreča kjer duri sreda frik kihaj reka flek hladi leča dihal sila lahki udari jurja drugi hajduk ahila fugira drugače uhajala regulira huduje galeja grahki serija slik ji je ugajala dijak je rad gledal figure"}, {"name": "6.3", "text": "sese lili sese lili sese lili dede kiki dede kiki dede kiki hehe gigi he he gi gi his his fer fer čir čir kes kes krči krči resje resje kres diha sadje igle leska leča frak sredi učil frači figa kefir jurij grudi gruča furija duhaj grahek regulira kulisa refleks sirček ugajala ljudje dečku je ugajala serija figur rada je čečkala slike"}, {"name": "6.4", "text": "rere uiui rere uiui rere uiui dede kiki dede kiki dede kiki fefe jiji fefe gege hihi hihi sel sel dir dir led led lik lik grič grič hrček hrček gres resa griča frik kreda lika luki greda ilka flika reka dihaj frači drugi hlače figura hladi galerija sekira uhajala serija čelada huduje ugajale ugajala ji je sladka figura dijak se res rad uči"}]}, {"number": 7, "title": "VM", "originalTitle": "7. NIVO ASDFGHJKLČRUEI(VM)", "exercises": [{"name": "7.1", "text": "ffvv jjmm fvf jmj fvvf jmmj frfv frfv jujm jujm frv jum vrč vrč dam dam med med mah mah mlad mlad valj valj meča vrag guma maha sama dvig gada rujev mega vleče hram ličar kivi kmalu viva vreča mečka mijav halva jamar mejač gramski veruj arhivu kuharjev samska grajski smučaj veriga graver v vsakem mraku je marsikaj mladi dami vrača suha drva"}, {"name": "7.2", "text": "rfv rfv ujm ujm vgvg mjmj vgvg mjmj gvgv jmjm fvfv jmjm ime ime luč luč sev sev več več lava lava miha miha vama hlev vafel film maga vlah gram valja vsak mladi favl klima gavda mlada gamsi farmski kihaj grmada flik vikaj javka maha kavka daruj kuhajva smučar rjaveč grimasa klavir hlevski vsaka mlada dama rada srka rum v mraku deček čaka vlak"}, {"name": "7.3", "text": "fvfv jmjm fvf jmj fvfv jmjm frfv frfv jujm jujm frv jum vsi vsi mak mak več več seč seč lava lava mega mega dvig grem drag mlad guma ruva mumu meka dečva vlaga migaj lička vaga milka hvar lahka muha vihar sveča hmelj kamra grafik mahaj havajski klavirski ugajam veriga medved vreča freska v mraku sva čakala vihar dedka ima rada vsaka dečva"}, {"name": "7.4", "text": "dvdv kmkm dvdv kmkm dvdv kmkm fvfv jmjm fvf jmj fvv jmm ima ima rum rum vse vse več več mula leva mula čača flam favl muhi halva hmelj film vmes gliva gama večer vlah kučma jagam melje veruj gramski jager mahajva ujel mehak varva mrva vrvi greva kihajva grmeča krhelj magari damska graverski dama je v viharju srkala rum vsak deček ima rad smehljaj dame"}]}, {"number": 8, "title": "C,", "originalTitle": "8. NIVO - ASDFGHJKLČRUEIVM(C,)", "exercises": [{"name": "8.1", "text": "dcdc k,k, dcdc k,k, dcdc k,k, fcfc j,j, fcfc j,j, fcfc j,j, ceh, ceh, klif, klif, cif, cif, hec hec seči seči mica mica huda, ulica, grah, duhec, čaga, ujec, uhaja klic sulec mehu ugaja cedi vače, frača, gluh, marica, meči, igralec, vama gredica regulira vislice sladica veriga gredica feliks fascikl veverica reakcija mačica deček ima rad večje darilce feliksu ugaja vesela rekreacija druga velika markacija"}, {"name": "8.2", "text": "cdcd k,k cdcd k,k cdcd k,k fcf fcf j,j j,j cdc k,k dec, dec, cev, cev, muc, muc, cis cis gada gada frca frca ujec, ficek, greh, suhec, huda,cifra, kriči graf mucek juha hecaj čuda hlad, drugi, muha, mleček, meha, markacija, vislice cekarček resavec gradič celega jadralec igralec, cvilim, skačeva, mesarica, grlica, suličar vesel deklič se smeje mihcu v cirkusu je skakal deklič velika evakuacija skakalcev"}, {"name": "8.3", "text": "ccd ccd ccd kk, kk, kk, gcgc h,h, gcgc h,h, gcgc h,h, dec, dec, ček, ček, hec, hec, cug cug flek flek cufa cufa slad, mleček, meci, cvili, muca, merci, arhiv kača vleci jajce sulec čeri sara, mucka, lice, sahara, čuva, sulica, feliks vilice gradec delavec fajfica kuharica reakcija dragica cedilce kljukec haljica sladica dijak ima rad vesele diskusije deklič kriči a mamica ima rada mir gledalcem ugaja velika fikcija"}, {"name": "8.4", "text": "scsc scsc scsc l,l, l,l, l,l, cs, cs, cs, kj, kj, kj, cif, cif, meh, meh, car, car, vic vic cule cule cehu cehu klic, mucek, čehi, ječar, cilj, frajer, cekar faca cifra čemu micka guma čigav, vleci, frca, ciljaj, ačih, cigara, glivica klavec hladilec grahec lucija krvavica glamur vafelj carigrad skakalci mekeče čukec deklica rada gleda skakalce jadralec feliks rad jadra med drevesi velika sladica je res sladka dedek rad kadi cigare"}]}, {"number": 9, "title": "OP", "originalTitle": "9. NIVO: ASDFGHJKLČRUEIVMC,(OP)", "exercises": [{"name": "9.1", "text": "lolo lolo čpčp čpčp lolo čpčp juju čpčp kiki lolo juju čpčp pel pel pik pik rep rep log log repa repa dolg dolg hecaj, folk, fer, sefu, cesar, faca, hlod dolga kipa opera lepa hopla putr kopje, duma, sklep, fila, mulec, hehe, dolg lopar kapa polila sipa odplačilo hmelj, cepivo, folklora, cukr, formula, figa, heroj čepim hura cerkvica fuga hlapec sprehod, cepimo, vprega, oporoka, hmeljev, policaj, cukrček profesor pokrivalo podpis psiholog čohljaj voda je poplavila mojo vas okvaro so kmalu odpravili prejeli smo sporočilo, da so prispeli muca ima rada velik cekar ajda si rada ogleda vse reklame"}, {"name": "9.2", "text": "olol pčpč olol pčpč olol pčpč ujuj ikik lolo lolo čpčp čpčp opa opa lep lep jao jao pod pod hupa hupa pav pav lumpi, lepa, cokla, fifa, pojem, pesa, prsi uspeh opis lapor čaka fosil firma, čudo, pesem, hodi, čohaj, frka, faks kopec hlev lepilo koča jaguar črevo, hihi, paprika, muca, odojek, cika, cilj frača ujec cirkus megi hodulje flika papirus kopija grafika poroka gospod figovec priloga mamica sufler cepivo pogorje oče je v sredo spekel čevapčiče prodajalec čaka, da deček plača deklica rada kupi mega kapo dedek je imel dolg pogovor miha je sosedi prodal veliko soli"}]}, {"number": 10, "title": "BN", "originalTitle": "10. NIVO: ASDFGHJKLČRUEIVMC,OP(BN)", "exercises": [{"name": "10.1", "text": "fvfb fvfb jmjn jmjn fvfb jmjn frfb frfb frfb jujn jujn jujn fbf fbf fbf jnj jnj jnj sab sab bus bus pin pin cin cin bič bič anja anja dobra hupa, dober sneg, lenoba lena, nora borba, fina banka, črna fajfa, čudna faca čuvaj brod huda grba drag bencin nova flika njen fikus mehka goba, dolga nega, prava hiba, nova godba moja hloda hodi bacek naporno cviljenje barvna predloga visoka harmonika obnova bolnice počasna menjava slovenj gradec bolna mamica je včeraj poslala lepo naročilo profesor nam je dal res dober predlog hudo dobri računalniki so lahko res dragi danes so si obiskovalci ogledali nov brod bolnik je danes pojedel veliko dobre juhe"}, {"name": "10.2", "text": "fvfg fvfg jnjh jnjh fvfg jnjh fbf fbf fbf jnj jnj jnj gbgb hnhn gbfb hnhn gbgb hnhn nag nag bik bik nos nos bol bol anja anja giba giba slaba noga, mirna biba, mihov vnuk, nora babica, leni bober, bova krofa, majhen člen dober način njen grob nova ukana njun bager fini nakup močne prsi, super klub, cenim ceno, ubog bebček lena mamba dolg bicikel velika bikoborba, super coprnica, mojčina bucika,dober bikoborec, poslano naročilo, dobro napreduje, bor je bil danes pomočnik profesorice jasno kakor beli dan je, da me nima rad učenka je podala sklepne besede bič je močno počil in bik je poskočil na blagajni plačamo visok račun"}]}, {"number": 11, "title": "TZ", "originalTitle": "11. NIVO: ASDFGHJKLČRUEIVMOPBN(TZ)", "exercises": [{"name": "11.1", "text": "frfr ftft frft juju jzjz jujz ftft jzjz ftft jzjz frft jujz tri tri pot pot zet zet jez jez most most ciza ciza oblast faza izhod vlak strel last pazi bazen bref groza takt copat hrust post načrt post nafta tlak čist zobje trud delegat jeza mahniti fejst fazi zadruga grah fazani figa mica zajec uhat razpis halo tipkovnica zasluga zahodni pozabim pozvat mozart glista bibavica drozgu bagerist kamnit meduzast vozelček potlačen holcar začarajva brzovlak mozgati čezcelinski izrazito trd konec hokejske tekme zmagali so najbolj vztrajni tečajniki pojdita občudovat tisti sončni zahod v parketnih tleh je opaziti zarezo začetno zaporedje je zelo monotono"}, {"name": "11.2", "text": "frft frft jujz jujz ftju ftju jzz ftt jzz ftt ftfr jzju hrz hrz teh teh zob zob rit rit ciza ciza tofu tofu vatka freza nazaj zrno tlesk poti poza blizu znak berta ptič oprta brezno vtič trači zmaj tjale vzor fotr gazda gumb bejzbol teci gazdina stroka vrzi zgibati vtri zgrabi zdaj hrti zlato zeha softver krut razvid četrtletje zjutraj gazim proizvod buhtelj razglas razdalja strojnica izmeriti frutabela zbadljivec stopicati zlomim tsunami hrtek tkalec poznanstvo firbcati kanu se na brzicah tudi zlomi zadnjikrat sem zate zgazil pot pozabil sem na zaprto pot dirkač je izmeril hitrost hitro zgrabi buhtelj in steci k mizi"}]}, {"number": 12, "title": "Š.", "originalTitle": "12. NIVO:ASDFGHJKLČRUEIVMOPBNTZ(Š.)", "exercises": [{"name": "12.1", "text": "jčjš jčjš jčjš jšjp jšjp jšjp još jojš jpjš jpjš jpjš jpjš piš, piš, uši, uši, miš, miš. niš, niš, pliš, pliš, kopa, kopa. soški šola šujica ščit škoda šota. šara šubic črke flaška fliš vaški. briše sašo šofer tešč gošča daša. šoht lošinj šoba šolski šica plesišče. šolni plac pešec šefa šolanje ploh. hiša štiri brizg goščava šuhi pošiljam. arašid bojišče številka skupščina šolanje graščinski. odmašen pošiljka grešnik gledališče maščevanje zavetišče. šoferski izpit šahovski šolarčki čistimo gumnišče. hišni ljubljenček je šel na špancir. v košaro je skočila hitra miška. šolanje v mestni šoli ni nič boljše. namrščila se je in našobila usta. v četrtek obiščem zobozdravnika."}, {"name": "12.2", "text": "jšjč jšjč jšjč jpš jpš jpš jojš jojš jpjš jpjš jčš jčš šla šla šlo šlo šik šik. krč krč mišo mišo poti poti. staša, šica, gejša, šiht, miška, šiba. zofa gošča hiša flaša maša šolar. jašek ščit baška šala cokla fina. šiba duška groš študij hudo zašito. hujša špas kašica fuša vozišče miša. naša mešan niša pršec špon reševalec. drsališče dvorišče pošiljka počivališče zatočišče skupščina. šahist mokrišče prgišče poškodba pogorišče zaščita. vojaška šola šoferski izpit ribiška oprema. daša je naredila šoferski izpit. mucek je prišepal na dvorišče. v pošiljki je fina ribiška oprema. v četrtek je drsališče odprto. pobral sem prgišče pšenice."}]}, {"number": 13, "title": "Ž in velike začetnice", "originalTitle": "13. Ž_VSE_ČRKE in velika začetnica", "exercises": [{"name": "13.1", "text": "fafa jčjž fafa jčjž fafa jčjž fjfč fjfž fjfč fjfž fjfč fjfč laž laž gož gož nož nož mož mož žulj žulj žica žica plaža drož špica koža kača roža mrož čudež joža čista polž pešaj pušča žica šipek žepa fižol paša veža preča anže kožuhar mreži broška žanjec goba spužva hiša briše maša fuša pleša liže gašper žima broška težišče druženje flaširanje mreženje poležuh životarjenje šabesa jezikač janež pižama župnija zažgan izvijač seženj fižol draženje križanje zajček Družina je v življenju najpomembnejša. Žužkocvetke so rastline, ki jih oprašujejo žuželke, npr. čebele. Filip je prinesel živahnega zajčka. Gašper je učencem opisal svoje življenje. Z družino rad preživim veliko časa."}, {"name": "13.2", "text": "fjfž jkjž fjfž jkjž fjfž jkjž jčjž jčjž jljž jljž jčjž jčjž žur žur laž laž pica pica čop čop boža boža loža loža preža žima flaša župa vaška čaša polž šopek žaga želod luža dečva žitno žaba žajfa noža šipek šapa sapa kožuh maža taščica žima žvižg zažig hiša boštjan goža fotič drož kača pozeba šipa bližina veža požeruh orožje žverca ježevec tramvaj hopla flaša žanjice fižolovka reševanje bežanje županja faširan žigosanje bizgec mreženje žerjavica šahist žoganje Pektin se uporablja v prehrambeni industriji kot sredstvo za želiranje in zgoščevanje. Železniški promet ni tako razvejen kot avtobusni. "}, {"name": "13.3", "text": "Na levi in desni strani tipkovnice je tipka shift. Pritiskaš jo z mezincema vsake roke. Z njo si pomagaš pri pisanju velikih začetnic. Pazi, če je črka pritisnjena z desno roko, moraš shift stisniti z levo roko in obratno. Npr. za veliko tiskano črko A najprej stisneš shift levim mezincem, ga držiš in medtem pritisneš A."}, {"name": "13.4", "text": "Sedaj znaš z desetimi prsti slepo tipkati preslednico, vse črke slovenske abecede, vejico, piko in tipko shift."}, {"name": "13.5", "text": "Ta aplikacija je bila pripravljena za namene doktorske študije z naslovom Proceduralno učenje začetnega desetprstnega slepega tipkanja pri učencih z disleksijo in njihovih vrstnikih brez disleksije. Doktorska kandidatka, mag. Janja Košir Mentorica, doc. dr. Milena Košak Baduder, Pedagoška fakulteta Univerze v Ljubljani Somentorica, izr. prof. dr. Anja Podlesek Oddelek za psihologijo Filozofska fakulteta Univerze v Ljubljani V sodelovanju s prof. dr. Andrej Košir Laboratorij za uporabniku prilagojene komunikacije in ambientno inteligenco Fakultete za elektrotehniko Univerze v Ljubljani Računalniško programiranje, Pavle Gartner"}]}];
+const levels = [{"number": 1, "title": "AFJČ", "originalTitle": "1.Nivo AFJČ - vse prve vrstice pridejo na koncu", "exercises": [{"name": "1.1", "text": "fjfj ačča jjff ččaa fččf ajja jaj jaj faja faja čafa čafa fača fača čaj čaj jafa jafa fajfa čaja jajčf ajaj fajča jača jajč fajfa jafa jačaj čaja afaja fajfa jača fajač čaja ajafa fjač ajafa fajčaj čajaf jafača afaja čajafa affa čjjč faaf jččj ffaa jjčč"}, {"name": "1.2", "text": "jjjf čaač fjfj ačča čffč jaaj aja aja jača jača ačaj ačaj faja faja jač jač čafa čafa jačaj jafa fjača afaj fjača čaja fjač jačaj jafa fajfa čaja fajač fajfa čaja afaja jača fajač fjča fajač ačajaj jafaj jajafa čajaj čafaja jččj ffaa jčjč faaf jjčč affa"}, {"name": "1.3", "text": "jjff jfff fjfj čaač jaaj čffč čaj čaj faja faja jaja jaja čafa čafa aja aja jača jača fajfa jafa afaja čajf fajač čaja jača jačaj fajč fajfa jafa afaja jafaj jača fajfa čaja fajač ačaj čajaf čajfaj fajač ajafaj čajaj fajčaj faaf jččj fafa jčjč affa jjčč"}, {"name": "1.4", "text": "aaa ččč ačač ačač aaa ččč ača ača čaja čaja faja faja jafa jafa fač fač čač čač fajač čaja fajfa jajč čajaf fjča jafa jajča čajf jafač ajfaj čajaj fajfa jača fajač faja ajafa jafa fajčaj ajafaj jafaj jajafa fajfa fajačaj fff jjj fjfj fjfj jjj fff"}]}, {"number": 2, "title": "DK", "originalTitle": "2. Nivo AFJČ(DK)", "exercises": [{"name": "2.1", "text": "dfd dfd dfd djd djd djd kjk kjk kjk kfk kfk kfk dča dča dča čda čda čda ada ada kaja kaja daj daj kad kad daja daja kaj kaj daka ajda kača čaka fača kdaj ajda ajčka kdaj čakaj kada fada fajka čaka jačaj fada kajak ajka kakaj čačkaj fajka jajčka fajfa kajaka fajfa čaka jaka kdaj ajda čaka jaka kdaj fajfa čaka"}, {"name": "2.2", "text": "adf čkj adf čkj adf čkj fda jkč fda fda jkč fda dča dča dča čda čda čda kaj kaj čaka čaka jad jad kad kad dafa dafa ada ada ajda čaka kdaj dafa ajka kada kača čakaj kaja fajka kafa kdaj fajka kdaj ajčka čaka fajfa kača dajka jajčka kakaj čadkaj kajak čajčkaj kdaj ajda čaka čaj fajfa čaka jaka ajda čakaj jaka"}, {"name": "2.3", "text": "adf adf adf čkj čkj čkj fda fda fda jkč jkč jkč dča dča dča čda čda čda čad čad ajda ajda kad kad daj daj ajka ajka jak jak kdaj čaja kača čada kaja dada daja jadaj čaka fajfa daka ajka kajfa kdaj ajčka jada dajaj ajda čakaj jajčkaj kajak fajkaj čajka dajkaj ajda čakaj kajak kača čaka jaka fajfa čaka jaka"}, {"name": "2.4", "text": "fad fad fad jčk jčk jčk kdf kdf kdf dkj dkj dkj dča dča dča čda čda čda čak čak dada dada ajd ajd kad kad jaka jaka kaj kaj dada kača adad čada kada daja kaja ajda daja jačaj jada kaka kajak faja fajfa čaja ajčka jaja ajka kajaka dajka jajčka dajaj fajkaj da kajak čaka fajfa jaka ajčka dajaj jajčka ajda"}]}, {"number": 3, "title": "SL", "originalTitle": "3. NIVO ADFJKČ(SL)", "exercises": [{"name": "3.1", "text": "fdss jkll fdss jkll fdss jkll dsds dsds klkl klkl dsds dsds saj saj slad slad čas čas lak lak klas klas las las slad dala fajfa časa sklad kasa jasa sklad dala klada fasa skala fasada dlaka safalada ladja skala ladja čakala skakljaj fasada skakala sladkal safalada ada dala sladak ladja čakala čas čaj jaka čakal sladak čaj"}, {"name": "3.2", "text": "ssa ssa ssa llč llč llč slls slls slls llls llls slsl fač fač klas klas las las sad sad slad slad laj laj fala čaka sklad fasa dlaka laska lasa kajla časa skala kača klasa sklada čakaj sladak fajfa slaka čaja skakljaj asljaj fasada sladkala čakala skladaj jaka jajčka čakal laska ada čakala čas"}, {"name": "3.3", "text": "asd asd člk člk asd asd sdsd sdsd lklk lklk sdsd sdsd lak lak skala skala kas kas dal dal slad slad čas čas klal slaka fajfa dala klada laka sklad lakaj jasa čakal fasa skala safalada dlaka sklada laska čakaj fajla čakala fasada čajčkala skakljala sladkaj safalada čakala ada jajčka jaka dal sladak čaj"}, {"name": "3.4", "text": "sdsd klkl sdsd klkl sdsd klkl adad čkčk adad čkčk adad čkčk sl sl klas klas čas čas kal kal dala dala laj laj kača časa klasa fajl kajla slad laks fajfa lasa dlaka faks fajsa fasal kasač skladaj čakal faksa laska sladkal čakala jajčka sladkala fajfala laskaj ajda skladala jajčka jaka čaka faks"}]}, {"number": 4, "title": "GH", "originalTitle": "4. NIVO ASDFJKLČ(GH)", "exercises": [{"name": "4.1", "text": "jh fg jh fg jh fg fgfg jhjh fgfg jhjh fgfg jhjh ag ag ag čh čh čh fgfg jhjh fgfg jhjh fgfg jhjh ha ha gaj gaj dag dag kg kg lah lah hl hl saga čaga gada jaha kača hlad glas skala hlad hajka alga lahka jahač saga lagal slak čakal safalada gladka sladka jahača laskal hahljala lagala saj lah gada čaka gaj da hlad"}, {"name": "4.2", "text": "jhj fgf jhj fgf jhj fgf fgfg jhjh fgfg jhjh fgfg jhjh aga aga aga čhč čhč čhč fg jh fg jh fg jh hl hl sad sad gaj gaj dag dag lah lah haj haj gada čaka slak čaga hlad alga glas jahač fagl lagal glad sklad halja gača lahka slak sklad sladkaj hajkač lagala hahlja gladka hajkala safalada lahka halja jaka čaka gladka skala ga čaka"}, {"name": "4.3", "text": "hjhj hjhj gfgf gfgf jhjh jhjh fg fg jh jhjh fg fg ga ga ga hč hč hč hjhj gfgf hjhj gfgf hjhj gfgf gas gas saj saj dah dah dag dag lah lah aga aga lajf glas hlač saga čaja alah čaga sklad gala hlača fala lagal jahač hlad gadja fals halja lagala čakala jahala safalada hajkal gladka skakljala hajkala gada ajda jaka hlad čaka"}, {"name": "4.4", "text": "ghh ghh ghh hgg hgg hgg gf gf gf jk jk jk dgg dgg dgg khh khh khh čhč čgč čhč aga aha aga ga ga gal gal aga aga hl hl has has gas gas jaga glad kdaj saga alga hada laha hajka fajl sklad alah fajfa lagal hlad gadja glas halja jahača fasada faflja gladka jahaj čakaj hajkala jaka čaka gladka klada gaj da glad"}]}, {"number": 5, "title": "RU", "originalTitle": "5. NIVO ASDFGHJKLČ(RU)", "exercises": [{"name": "5.1", "text": "frfr juju frfr juju frfr juju grgr grgr huhu huhu grgr huhu gu gu raj raj ufa ufa čar čar fuga fuga gruda gruda draga srka kafra kruh farsa črka ragu sraga juha sadra čula ključ guraj rafal slučaj rahla gluha jahač luksus dragulj ljudska sadjarju hujska jaguar ključ daj sadjarju gladka fasada gruča čaka halja ugaja kuharju"}, {"name": "5.2", "text": "rfrf ujuj rfrf ujuj rfrf ujuj rgrg uhuh rgrg uhuh rgrg uhuh čar čar jr jr čuk čuk srf srf ragu ragu farsa farsa gruča sluh ključ gaja srfaj ruda suha druga gura lučka juha čukaj furaj kafra halja čudak luska rjuha kljuka urarju kurjaču skuhaj rudarja kragulj suha klada garaču daj dragulj kuharju ugaja drug sladak sad"}, {"name": "5.3", "text": "drsr drsr drsr kulu kulu kulu arsr arsr arsr čulu čulu čulu lah lah krf krf fuj fuj čuj čuj kras kras srfar srfar sraga gluh slučaj gaju lučka čaru ruda draga fura čudak suha luska čukaj kuhar skuha garač furaj halja gusarju jadraj kuskus skuhaj garača kuharju urarju dar ugaja gaja čaka gusarja kurjaču skuhaj čaj suha klada"}, {"name": "5.4", "text": "rdrs rdrs rdrs ukul ukul ukul rars rars rars učul učul učul fu fu rad rad suh suh rus rus fura fura sadra sadra sraka drug halja urad urad fuga luka gluha gura gruča juha farsa rafal frača lučka laska furaj gusar kuskus slučaj kragulj hujska kurjaču gusarju kurjač ga rad srka lahka halja sluga čaka kurjača druga črka"}]}, {"number": 6, "title": "EI", "originalTitle": "6. NIVO ASDFGHJKLRU(EI)", "exercises": [{"name": "6.1", "text": "dede kiki dede kiki dede kiki keke didi keke didi keke didi fhi fhe fhi fhe fhi fhe uči uči gre gre sir sir jed jed frči frči račke račke sled ahil gleda igre kafra čuje figa griči jedi hrček fila likaj dihur kurir hladi figura hrčku hlače huduje kulisa skuhaj regulira lirika dirkaču sardela se rada skrije julija rada gleda serije figur"}, {"name": "6.2", "text": "fefe jiji fefe jiji fefe jiji dede kiki dede kiki dede kiki sese lili čiči lili sese aeae del del čir čir les les fis fis srči srči sreča sreča kjer duri sreda frik kihaj reka flek hladi leča dihal sila lahki udari jurja drugi hajduk ahila fugira drugače uhajala regulira huduje galeja grahki serija slik ji je ugajala dijak je rad gledal figure"}, {"name": "6.3", "text": "sese lili sese lili sese lili dede kiki dede kiki dede kiki hehe gigi he he gi gi his his fer fer čir čir kes kes krči krči resje resje kres diha sadje igle leska leča frak sredi učil frači figa kefir jurij grudi gruča furija duhaj grahek regulira kulisa refleks sirček ugajala ljudje dečku je ugajala serija figur rada je čečkala slike"}, {"name": "6.4", "text": "rere uiui rere uiui rere uiui dede kiki dede kiki dede kiki fefe jiji fefe gege hihi hihi sel sel dir dir led led lik lik grič grič hrček hrček gres resa griča frik kreda lika luki greda ilka flika reka dihaj frači drugi hlače figura hladi galerija sekira uhajala serija čelada huduje ugajale ugajala ji je sladka figura dijak se res rad uči"}]}, {"number": 7, "title": "VM", "originalTitle": "7. NIVO ASDFGHJKLČRUEI(VM)", "exercises": [{"name": "7.1", "text": "ffvv jjmm fvf jmj fvvf jmmj frfv frfv jujm jujm frv jum vrč vrč dam dam med med mah mah mlad mlad valj valj meča vrag guma maha sama dvig gada rujev mega vleče hram ličar kivi kmalu viva vreča mečka mijav halva jamar mejač gramski veruj arhivu kuharjev samska grajski smučaj veriga graver v vsakem mraku je marsikaj mladi dami vrača suha drva"}, {"name": "7.2", "text": "rfv rfv ujm ujm vgvg mjmj vgvg mjmj gvgv jmjm fvfv jmjm ime ime luč luč sev sev več več lava lava miha miha vama hlev vafel film maga vlah gram valja vsak mladi favl klima gavda mlada gamsi farmski kihaj grmada flik vikaj javka maha kavka daruj kuhajva smučar rjaveč grimasa klavir hlevski vsaka mlada dama rada srka rum v mraku deček čaka vlak"}, {"name": "7.3", "text": "fvfv jmjm fvf jmj fvfv jmjm frfv frfv jujm jujm frv jum vsi vsi mak mak več več seč seč lava lava mega mega dvig grem drag mlad guma ruva mumu meka dečva vlaga migaj lička vaga milka hvar lahka muha vihar sveča hmelj kamra grafik mahaj havajski klavirski ugajam veriga medved vreča freska v mraku sva čakala vihar dedka ima rada vsaka dečva"}, {"name": "7.4", "text": "dvdv kmkm dvdv kmkm dvdv kmkm fvfv jmjm fvf jmj fvv jmm ima ima rum rum vse vse več več mula leva mula čača flam favl muhi halva hmelj film vmes gliva gama večer vlah kučma jagam melje veruj gramski jager mahajva ujel mehak varva mrva vrvi greva kihajva grmeča krhelj magari damska graverski dama je v viharju srkala rum vsak deček ima rad smehljaj dame"}]}, {"number": 8, "title": "C,", "originalTitle": "8. NIVO - ASDFGHJKLČRUEIVM(C,)", "exercises": [{"name": "8.1", "text": "dcdc k,k, dcdc k,k, dcdc k,k, fcfc j,j, fcfc j,j, fcfc j,j, ceh, ceh, klif, klif, cif, cif, hec hec seči seči mica mica huda, ulica, grah, duhec, čaga, ujec, uhaja klic sulec mehu ugaja cedi vače, frača, gluh, marica, meči, igralec, vama gredica regulira vislice sladica veriga gredica feliks fascikl veverica reakcija mačica deček ima rad večje darilce feliksu ugaja vesela rekreacija druga velika markacija"}, {"name": "8.2", "text": "cdcd k,k cdcd k,k cdcd k,k fcf fcf j,j j,j cdc k,k dec, dec, cev, cev, muc, muc, cis cis gada gada frca frca ujec, ficek, greh, suhec, huda,cifra, kriči graf mucek juha hecaj čuda hlad, drugi, muha, mleček, meha, markacija, vislice cekarček resavec gradič celega jadralec igralec, cvilim, skačeva, mesarica, grlica, suličar vesel deklič se smeje mihcu v cirkusu je skakal deklič velika evakuacija skakalcev"}, {"name": "8.3", "text": "ccd ccd ccd kk, kk, kk, gcgc h,h, gcgc h,h, gcgc h,h, dec, dec, ček, ček, hec, hec, cug cug flek flek cufa cufa slad, mleček, meci, cvili, muca, merci, arhiv kača vleci jajce sulec čeri sara, mucka, lice, sahara, čuva, sulica, feliks vilice gradec delavec fajfica kuharica reakcija dragica cedilce kljukec haljica sladica dijak ima rad vesele diskusije deklič kriči a mamica ima rada mir gledalcem ugaja velika fikcija"}, {"name": "8.4", "text": "scsc scsc scsc l,l, l,l, l,l, cs, cs, cs, kj, kj, kj, cif, cif, meh, meh, car, car, vic vic cule cule cehu cehu klic, mucek, čehi, ječar, cilj, frajer, cekar faca cifra čemu micka guma čigav, vleci, frca, ciljaj, ačih, cigara, glivica klavec hladilec grahec lucija krvavica glamur vafelj carigrad skakalci mekeče čukec deklica rada gleda skakalce jadralec feliks rad jadra med drevesi velika sladica je res sladka dedek rad kadi cigare"}]}, {"number": 9, "title": "OP", "originalTitle": "9. NIVO: ASDFGHJKLČRUEIVMC,(OP)", "exercises": [{"name": "9.1", "text": "lolo lolo čpčp čpčp lolo čpčp juju čpčp kiki lolo juju čpčp pel pel pik pik rep rep log log repa repa dolg dolg hecaj, folk, fer, sefu, cesar, faca, hlod dolga kipa opera lepa hopla putr kopje, duma, sklep, fila, mulec, hehe, dolg lopar kapa polila sipa odplačilo hmelj, cepivo, folklora, cukr, formula, figa, heroj čepim hura cerkvica fuga hlapec sprehod, cepimo, vprega, oporoka, hmeljev, policaj, cukrček profesor pokrivalo podpis psiholog čohljaj voda je poplavila mojo vas okvaro so kmalu odpravili prejeli smo sporočilo, da so prispeli muca ima rada velik cekar ajda si rada ogleda vse reklame"}, {"name": "9.2", "text": "olol pčpč olol pčpč olol pčpč ujuj ikik lolo lolo čpčp čpčp opa opa lep lep jao jao pod pod hupa hupa pav pav lumpi, lepa, cokla, fifa, pojem, pesa, prsi uspeh opis lapor čaka fosil firma, čudo, pesem, hodi, čohaj, frka, faks kopec hlev lepilo koča jaguar črevo, hihi, paprika, muca, odojek, cika, cilj frača ujec cirkus megi hodulje flika papirus kopija grafika poroka gospod figovec priloga mamica sufler cepivo pogorje oče je v sredo spekel čevapčiče prodajalec čaka, da deček plača deklica rada kupi mega kapo dedek je imel dolg pogovor miha je sosedi prodal veliko soli"}]}, {"number": 10, "title": "BN", "originalTitle": "10. NIVO: ASDFGHJKLČRUEIVMC,OP(BN)", "exercises": [{"name": "10.1", "text": "fvfb fvfb jmjn jmjn fvfb jmjn frfb frfb frfb jujn jujn jujn fbf fbf fbf jnj jnj jnj sab sab bus bus pin pin cin cin bič bič anja anja dobra hupa, dober sneg, lenoba lena, nora borba, fina banka, črna fajfa, čudna faca čuvaj brod huda grba drag bencin nova flika njen fikus mehka goba, dolga nega, prava hiba, nova godba moja hloda hodi bacek naporno cviljenje barvna predloga visoka harmonika obnova bolnice počasna menjava slovenj gradec bolna mamica je včeraj poslala lepo naročilo profesor nam je dal res dober predlog hudo dobri računalniki so lahko res dragi danes so si obiskovalci ogledali nov brod bolnik je danes pojedel veliko dobre juhe"}, {"name": "10.2", "text": "fvfg fvfg jnjh jnjh fvfg jnjh fbf fbf fbf jnj jnj jnj gbgb hnhn gbfb hnhn gbgb hnhn nag nag bik bik nos nos bol bol anja anja giba giba slaba noga, mirna biba, mihov vnuk, nora babica, leni bober, bova krofa, majhen člen dober način njen grob nova ukana njun bager fini nakup močne prsi, super klub, cenim ceno, ubog bebček lena mamba dolg bicikel velika bikoborba, super coprnica, mojčina bucika,dober bikoborec, poslano naročilo, dobro napreduje, bor je bil danes pomočnik profesorice jasno kakor beli dan je, da me nima rad učenka je podala sklepne besede bič je močno počil in bik je poskočil na blagajni plačamo visok račun"}]}, {"number": 11, "title": "TZ", "originalTitle": "11. NIVO: ASDFGHJKLČRUEIVMOPBN(TZ)", "exercises": [{"name": "11.1", "text": "frfr ftft frft juju jzjz jujz ftft jzjz ftft jzjz frft jujz tri tri pot pot zet zet jez jez most most ciza ciza oblast faza izhod vlak strel last pazi bazen bref groza takt copat hrust post načrt post nafta tlak čist zobje trud delegat jeza mahniti fejst fazi zadruga grah fazani figa mica zajec uhat razpis halo tipkovnica zasluga zahodni pozabim pozvat mozart glista bibavica drozgu bagerist kamnit meduzast vozelček potlačen holcar začarajva brzovlak mozgati čezcelinski izrazito trd konec hokejske tekme zmagali so najbolj vztrajni tečajniki pojdita občudovat tisti sončni zahod v parketnih tleh je opaziti zarezo začetno zaporedje je zelo monotono"}, {"name": "11.2", "text": "frft frft jujz jujz ftju ftju jzz ftt jzz ftt ftfr jzju hrz hrz teh teh zob zob rit rit ciza ciza tofu tofu vatka freza nazaj zrno tlesk poti poza blizu znak berta ptič oprta brezno vtič trači zmaj tjale vzor fotr gazda gumb bejzbol teci gazdina stroka vrzi zgibati vtri zgrabi zdaj hrti zlato zeha softver krut razvid četrtletje zjutraj gazim proizvod buhtelj razglas razdalja strojnica izmeriti frutabela zbadljivec stopicati zlomim tsunami hrtek tkalec poznanstvo firbcati kanu se na brzicah tudi zlomi zadnjikrat sem zate zgazil pot pozabil sem na zaprto pot dirkač je izmeril hitrost hitro zgrabi buhtelj in steci k mizi"}]}, {"number": 12, "title": "Š.", "originalTitle": "12. NIVO:ASDFGHJKLČRUEIVMOPBNTZ(Š.)", "exercises": [{"name": "12.1", "text": "jčjš jčjš jčjš jšjp jšjp jšjp još jojš jpjš jpjš jpjš jpjš piš, piš, uši, uši, miš, miš. niš, niš, pliš, pliš, kopa, kopa. soški šola šujica ščit škoda šota. šara šubic črke flaška fliš vaški. briše sašo šofer tešč gošča daša. šoht lošinj šoba šolski šica plesišče. šolni plac pešec šefa šolanje ploh. hiša štiri brizg goščava šuhi pošiljam. arašid bojišče številka skupščina šolanje graščinski. odmašen pošiljka grešnik gledališče maščevanje zavetišče. šoferski izpit šahovski šolarčki čistimo gumnišče. hišni ljubljenček je šel na špancir. v košaro je skočila hitra miška. šolanje v mestni šoli ni nič boljše. namrščila se je in našobila usta. v četrtek obiščem zobozdravnika."}, {"name": "12.2", "text": "jšjč jšjč jšjč jpš jpš jpš jojš jojš jpjš jpjš jčš jčš šla šla šlo šlo šik šik. krč krč mišo mišo poti poti. staša, šica, gejša, šiht, miška, šiba. zofa gošča hiša flaša maša šolar. jašek ščit baška šala cokla fina. šiba duška groš študij hudo zašito. hujša špas kašica fuša vozišče miša. naša mešan niša pršec špon reševalec. drsališče dvorišče pošiljka počivališče zatočišče skupščina. šahist mokrišče prgišče poškodba pogorišče zaščita. vojaška šola šoferski izpit ribiška oprema. daša je naredila šoferski izpit. mucek je prišepal na dvorišče. v pošiljki je fina ribiška oprema. v četrtek je drsališče odprto. pobral sem prgišče pšenice."}]}, {"number": 13, "title": "Ž in velike začetnice", "originalTitle": "13. Ž_VSE_ČRKE in velika začetnica", "exercises": [{"name": "13.1", "text": "fafa jčjž fafa jčjž fafa jčjž fjfč fjfž fjfč fjfž fjfč fjfč laž laž gož gož nož nož mož mož žulj žulj žica žica plaža drož špica koža kača roža mrož čudež joža čista polž pešaj pušča žica šipek žepa fižol paša veža preča anže kožuhar mreži broška žanjec goba spužva hiša briše maša fuša pleša liže gašper žima broška težišče druženje flaširanje mreženje poležuh životarjenje šabesa jezikač janež pižama župnija zažgan izvijač seženj fižol draženje križanje zajček Družina je v življenju najpomembnejša. Žužkocvetke so rastline, ki jih oprašujejo žuželke, npr. čebele. Filip je prinesel živahnega zajčka. Gašper je učencem opisal svoje življenje. Z družino rad preživim veliko časa."}, {"name": "13.2", "text": "fjfž jkjž fjfž jkjž fjfž jkjž jčjž jčjž jljž jljž jčjž jčjž žur žur laž laž pica pica čop čop boža boža loža loža preža žima flaša župa vaška čaša polž šopek žaga želod luža dečva žitno žaba žajfa noža šipek šapa sapa kožuh maža taščica žima žvižg zažig hiša boštjan goža fotič drož kača pozeba šipa bližina veža požeruh orožje žverca ježevec tramvaj hopla flaša žanjice fižolovka reševanje bežanje županja faširan žigosanje bizgec mreženje žerjavica šahist žoganje Pektin se uporablja v prehrambeni industriji kot sredstvo za želiranje in zgoščevanje. Železniški promet ni tako razvejen kot avtobusni. "}, {"name": "13.3", "text": "Na levi in desni strani tipkovnice je tipka shift. Pritiskaš jo z mezincema vsake roke. Z njo si pomagaš pri pisanju velikih začetnic. Pazi, če je črka pritisnjena z desno roko, moraš shift stisniti z levo roko in obratno. Npr. za veliko tiskano črko A najprej stisneš shift levim mezincem, ga držiš in medtem pritisneš A."}, {"name": "13.4", "text": "Sedaj znaš z desetimi prsti slepo tipkati preslednico, vse črke slovenske abecede, vejico, piko in tipko shift."}, {"name": "13.5", "text": "Ta aplikacija je bila pripravljena za namene doktorske študije z naslovom Proceduralno učenje začetnega desetprstnega slepega tipkanja pri učencih z disleksijo in njihovih vrstnikih brez disleksije. Doktorska kandidatka, mag. Janja Košir Mentorica, doc. dr. Milena Košak Baduder, Pedagoška fakulteta Univerze v Ljubljani Somentorica, izr. prof. dr. Anja Podlesek Oddelek za psihologijo Filozofska fakulteta Univerze v Ljubljani V sodelovanju s prof. dr. Andrej Košir Laboratorij za uporabniku prilagojene komunikacije in ambientno inteligenco Fakultete za elektrotehniko Univerze v Ljubljani Računalniško programiranje, Pavle Gartner"}]}, {"number": 14, "title": "Angleščina", "originalTitle": "14. nivo – angleške črke", "exercises": [{"name": "14.1", "text": "The quick brown fox jumps over the lazy dog. We type with both hands and keep our eyes on the screen. Jack and Mary write a short English text. Six happy kids enjoy the quiz."}]}];
 const el = id => document.getElementById(id);
 const levelSelect = el('level');
 const lessonSelect = el('lesson');
@@ -986,21 +1167,67 @@ const fingerNames = {
   'right-pinky':'desni mezinec','right-ring':'desni prstanec','right-middle':'desni sredinec','right-index':'desni kazalec','right-thumb':'desni palec'
 };
 const rawFingerChars = {
-  'left-pinky':'q1a',
+  'left-pinky':'q1ay',
   'left-ring':'w2sx',
   'left-middle':'e3dc',
   'left-index':'r4ft5gvb',
   'right-index':'z6uh7jnm',
   'right-middle':'i8k,',
   'right-ring':'o9l.',
-  'right-pinky':'p0šščžy-+=;:!?',
+  'right-pinky':'p0šščž-+=;:!?',
   'left-thumb':' ',
   'right-thumb':' '
 };
 
 // Ločeni števci za vajo in igro. Šteje se prst, ki bi moral pritisniti pričakovano tipko.
 const fingerOrder=['left-pinky','left-ring','left-middle','left-index','left-thumb','right-thumb','right-index','right-middle','right-ring','right-pinky'];
-const fingerErrors={practice:Object.fromEntries(fingerOrder.map(x=>[x,0])),game:Object.fromEntries(fingerOrder.map(x=>[x,0]))};
+const fingerErrors={practice:Object.fromEntries(fingerOrder.map(x=>[x,0])),game:Object.fromEntries(fingerOrder.map(x=>[x,0])),race:Object.fromEntries(fingerOrder.map(x=>[x,0]))};
+const troubleLetters={practice:Object.create(null),game:Object.create(null),race:Object.create(null)};
+function troubleLetterKey(ch){
+  if(typeof ch!=='string') return '';
+  const normalized=ch.normalize('NFC');
+  if(!normalized || /\s/.test(normalized)) return '';
+  return normalized.toLocaleLowerCase('sl');
+}
+function troubleLetterDisplay(ch){
+  return ch ? ch.toLocaleUpperCase('sl') : '';
+}
+function resetTroubleLetters(which){
+  troubleLetters[which]=Object.create(null);
+  renderTroubleLetter(which);
+}
+function addTroubleLetter(expectedChar,which){
+  const key=troubleLetterKey(expectedChar);
+  if(!key) return;
+  const bag=troubleLetters[which] || (troubleLetters[which]=Object.create(null));
+  bag[key]=(bag[key]||0)+1;
+  renderTroubleLetter(which);
+}
+function hardestTroubleLetter(which){
+  const entries=Object.entries(troubleLetters[which]||{}).filter(([,count])=>count>0);
+  if(!entries.length) return null;
+  entries.sort((a,b)=>b[1]-a[1] || a[0].localeCompare(b[0],'sl'));
+  const [letter,count]=entries[0];
+  return {letter,count};
+}
+function renderTroubleLetter(which){
+  const node=el(which==='game'?'gameHardestLetter':'recentHardestLetter');
+  if(!node) return;
+  const hardest=hardestTroubleLetter(which);
+  if(!hardest){
+    node.textContent='';
+    node.classList.remove('visible');
+    node.removeAttribute('title');
+    node.removeAttribute('aria-label');
+    return;
+  }
+  const display=troubleLetterDisplay(hardest.letter);
+  node.textContent=display;
+  node.classList.add('visible');
+  const label=`Največ težav: ${display} (${hardest.count})`;
+  node.title=label;
+  node.setAttribute('aria-label',label);
+}
 function resetFingerErrors(which){ for(const f of fingerOrder)fingerErrors[which][f]=0; renderFingerErrors(); }
 function addFingerError(expectedChar,which){
   if(!expectedChar)return;
@@ -1057,15 +1284,24 @@ let expected = '';
 let incorrectAt = -1; // Nazadnje napačno vpisana črka, dokler ni popravljena
 let entries = []; // {ch, ok, pos, t}
 let index = 0, keys = 0, typedChars = 0, correctKeys = 0, activeMs = 0, lastKeyAt = null, finished = false;
+let measuredIntervals = 0, typingBursts = 0;
 let layout = null;
 let statsTimer = null;
 
 function now() { return performance.now(); }
 function recordActivity() {
   const t = now();
-  if (lastKeyAt !== null) {
+  if (lastKeyAt === null) {
+    typingBursts = 1;
+  } else {
     const gap = t - lastKeyAt;
-    if (gap <= 3000) activeMs += gap;
+    if (gap <= 3000) {
+      activeMs += gap;
+      measuredIntervals++;
+    } else {
+      // Celoten premor nad tremi sekundami ni del aktivnega časa.
+      typingBursts++;
+    }
   }
   lastKeyAt = t;
 }
@@ -1073,6 +1309,13 @@ function activeTime() {
   if (lastKeyAt === null) return activeMs;
   const gap = now() - lastKeyAt;
   return activeMs + (gap <= 3000 ? gap : 0);
+}
+function pbmTime() {
+  // Ob prvem pritisku je minilo 0 izmerjenih sekund, znak pa že šteje.
+  // Za začetni znak vsakega aktivnega niza uporabimo povprečni izmerjeni
+  // interval med pritiski. Tako 1 znak/s od začetka pomeni 12 PBM.
+  if (!measuredIntervals) return 0; // iz enega pritiska hitrosti ni mogoče oceniti
+  return activeTime() + (activeMs / measuredIntervals) * typingBursts;
 }
 function buildLayout(text, maxLen=40) {
   const words = text.split(' ');
@@ -1109,18 +1352,32 @@ function buildLayout(text, maxLen=40) {
 function escapeHtml(s) { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function getWordEntries(word) { return entries.filter(e => e.pos >= word.start && e.pos < word.end); }
 function calcWordWpm(word) {
-  // Prikaz samo ob zaključeni besedi. Za preprečitev pretiranih skokov
-  // uporabimo drseče okno do zadnjih 25 natipkanih znakov.
+  // Lokalni PBM temelji na času celotne besede: tudi prvi znak zahteva čas.
+  // Pri naslednjih besedah izmerimo prehod s preslednice do prve črke.
+  // Aktivni čas izloča vse premore, daljše od treh sekund.
   if (index < word.end || !word.text.length) return null;
-  const last=entries[word.end-1];
-  if (!last || !last.ok || entries.slice(word.start,word.end).some(e=>!e || !e.ok)) return null;
-  const end=word.end, start=Math.max(0,end-25);
-  if (end-start<10) return null; // še premalo podatkov za stabilno oceno
-  const startT = start ? entries[start-1].t : 0;
-  const durationMs=last.t-startT;
-  if (durationMs<1500) return null; // začetne meritve so lahko zelo nestabilne
-  const correct=entries.slice(start,end).filter(e=>e.ok).length;
-  return Math.round((correct/5)/(durationMs/60000));
+  const typed=entries.slice(word.start,word.end);
+  if (typed.length!==word.text.length || typed.some(e=>!e || !e.ok)) return null;
+  const intervals=[];
+  for (let i=1;i<typed.length;i++) {
+    const gap=typed[i].t-typed[i-1].t;
+    if (gap>0) intervals.push(gap);
+  }
+  const previous=word.start>0 ? entries[word.start-1] : null;
+  // Če je prejšnji znak preslednica, izmerimo tudi začetek besede.
+  // Ob daljšem premoru (3 s+) uporabimo običajen ritem te besede.
+  if (previous && previous.ch===' ' && previous.ok && typed[0].t>=previous.t) {
+    const firstGap=typed[0].t-previous.t;
+    if (firstGap>0) intervals.unshift(firstGap);
+  } else if (intervals.length) {
+    // Prva beseda nima predhodne preslednice: prvi znak ocenimo s
+    // povprečnim intervalom ostalih znakov, namesto da bi ga šteli za 0 ms.
+    intervals.unshift(intervals.reduce((sum,gap)=>sum+gap,0)/intervals.length);
+  }
+  if (!intervals.length) return null;
+  const duration=intervals.reduce((sum,gap)=>sum+gap,0);
+  if (duration<=0) return null;
+  return Math.round((typed.length/5)/(duration/60000));
 }
 function charClassForPos(pos) {
   // Edini vir resnice so pritiski, shranjeni po položajih.
@@ -1160,7 +1417,7 @@ function renderPrompt() {
     const node = speedNodes[i];
     if (!node) return;
     const speed = calcWordWpm(word);
-    node.textContent = speed ? `${speed} WPM` : '\u00a0';
+    node.textContent = speed ? `${speed} PBM` : '\u00a0';
     node.classList.toggle('empty', !speed);
   });
   const currentLineIndex = index >= expected.length
@@ -1181,7 +1438,7 @@ function renderLine(line) {
   let html = `<div class="line">`;
   for (const word of line.words) {
     const speed = calcWordWpm(word);
-    const speedLabel = speed ? `${speed} WPM` : '&nbsp;';
+    const speedLabel = speed ? `${speed} PBM` : '&nbsp;';
     html += `<span class="word"><span class="wordSpeed ${speed ? '' : 'empty'}">${speedLabel}</span><span class="letters">`;
     for (let p=word.start; p<word.end; p++) {
       const cls = charClassForPos(p);
@@ -1201,14 +1458,15 @@ function renderLine(line) {
 function formatPercent(v) { return `${Math.round(v)} %`; }
 function statsValues() {
   const secs = activeTime() / 1000;
-  const wpm = secs > 0 ? Math.round((typedChars/5) / (secs/60)) : 0;
+  const pbmSecs = pbmTime() / 1000;
+  const wpm = pbmSecs > 0 ? Math.round((typedChars/5) / (pbmSecs/60)) : 0;
   const accuracy = keys ? Math.round((correctKeys / keys) * 100) : 100;
   let currentWordSpeed = '—';
   if (index < expected.length) {
     const wi = layout.charWord[Math.min(index, expected.length-1)];
     if (wi >= 0) {
       const sp = calcWordWpm(layout.wordsFlat[wi]);
-      if (sp) currentWordSpeed = `${sp} WPM`;
+      if (sp) currentWordSpeed = `${sp} PBM`;
     }
   }
   return {secs, wpm, accuracy, currentWordSpeed};
@@ -1222,7 +1480,7 @@ function updateRoad(percent) {
 }
 function renderHands() {
   document.querySelectorAll('.finger-shape').forEach(n => n.classList.remove('active','secondary'));
-  const ch = mode==='game' ? (game.activeWord ? game.activeWord.text[game.pos] || '' : '') : (expected[index] || '');
+  const ch = (mode==='race' ? (race.text[race.pos] || '') : (mode==='game' ? (game.activeWord ? game.activeWord.text[game.pos] || '' : '') : (expected[index] || '')));
   if (!ch) {
     el('nextFinger').textContent = mode==='game' ? 'Začni igro' : 'Vaja je zaključena!';
     el('fingerStat').textContent = '—';
@@ -1255,12 +1513,13 @@ function reset() {
   resetMetrics();
   resetRecentKeys('practice');
   resetFingerErrors('practice');
+  resetTroubleLetters('practice');
   stopGame();
   expected = selectedExercise().text;
-  layout = buildLayout(expected, Math.max(8, Math.floor((el('promptViewport').clientWidth - 12) / (window.innerWidth <= 750 ? 24 : 30))));
+  layout = buildLayout(expected, Math.max(8, Math.floor((el('promptViewport').clientWidth - 12) / (window.innerWidth <= 750 ? 30 : 37.5))));
   entries = [];
   incorrectAt = -1;
-  index = 0; keys = 0; typedChars = 0; correctKeys = 0; activeMs = 0; lastKeyAt = null; finished = false;
+  index = 0; keys = 0; typedChars = 0; correctKeys = 0; activeMs = 0; lastKeyAt = null; measuredIntervals = 0; typingBursts = 0; finished = false;
   typing.value = '';
   typing.disabled = false;
   el('done').classList.remove('visible');
@@ -1290,7 +1549,7 @@ function takeChar(ch) {
   recordActivity();
   keys++;
   recordRecentKey('practice',ok);
-  if (!ok) addFingerError(wanted,'practice');
+  if (!ok) {addFingerError(wanted,'practice'); addTroubleLetter(wanted,'practice');}
 
   // Vklopljeno popravljanje: napačen pritisk le obarva črko rdeče.
   // Naslednji pravilen pritisk popravi ISTO mesto, zato ni zamika.
@@ -1354,7 +1613,7 @@ function trackKeyDown(e){
   const t=performance.now();
   const physical=e.code || ('key:'+e.key);
   if(metricHeld.has(physical))return;
-  const wanted=mode==='practice' ? expected[index] : (game.activeWord ? game.activeWord.text[game.pos] : '');
+  const wanted=mode==='race' ? (race.text[race.pos] || '') : (mode==='practice' ? expected[index] : (game.activeWord ? game.activeWord.text[game.pos] : ''));
   const old=metricPrevious;
   const dt=old ? t-old.pressedAt : null;
   const heldOthers=[...metricHeld.values()];
@@ -1362,7 +1621,7 @@ function trackKeyDown(e){
   const record={
     seq:metricEvents.length+1,mode,level:levelSelect.value,exercise:lessonSelect.value,
     key:e.key,expected:wanted??'',correct:matchesExpectedKey(e.key,wanted),
-    position:mode==='practice'?index:game.pos,
+    position:(mode==='race'?race.pos:(mode==='practice'?index:game.pos)),
     pressedMs:Math.round(t*100)/100,
     elapsedMs:metricEvents.length?Math.round((t-metricEvents[0].pressedMs)*100)/100:0,
     intervalMs:dt!==null&&dt<=3000?Math.round(dt*100)/100:null,
@@ -1395,7 +1654,7 @@ function metricSnapshot(){
     averageHoldMs:metricAverage(rows.filter(r=>r.holdMs!==null).map(r=>r.holdMs)),
     rolloverCount:rows.filter(r=>r.rollover).length
   })).sort((a,b)=>a.character.localeCompare(b.character,'sl'));
-  const durationMs=activeTime();
+  const durationMs=(mode==='race'?raceTypingMs():activeTime());
   const minutes=durationMs/60000;
   return {
     generatedAt:new Date().toISOString(),sessionStartedAt:new Date(metricStartEpoch).toISOString(),
@@ -1459,7 +1718,7 @@ el('exportMetricsJson').addEventListener('click',()=>exportMetrics('json'));
 function keyboardInput(event) {
   if(event.defaultPrevented || event.ctrlKey || event.altKey || event.metaKey || event.isComposing) return;
   const target=event.target;
-  if(target instanceof Element && target.closest('select,textarea:not(#typing):not(#gameInput),input:not(#typing):not(#gameInput),[contenteditable=\"true\"]')) return;
+  if(target instanceof Element && target.closest('select,textarea:not(#typing):not(#gameInput),input:not(#typing):not(#gameInput):not(#raceInput),[contenteditable=\"true\"]')) return;
   if(event.key==='Tab') return;
   if(target instanceof Element && target.closest('button') && (event.key===' ' || event.key==='Enter')) return;
   if(mode==='practice') {
@@ -1470,6 +1729,9 @@ function keyboardInput(event) {
   } else if(mode==='game' && game.running && !game.paused) {
     if(event.key==='Backspace' || event.key==='Enter'){event.preventDefault();return;}
     if(event.key.length===1){event.preventDefault();if(!event.repeat){trackKeyDown(event);acceptGameChar(event.key);}}
+  } else if(mode==='race' && race.running && !race.paused) {
+    if(event.key==='Backspace'||event.key==='Enter'){event.preventDefault();return;}
+    if(event.key.length===1){event.preventDefault();if(!event.repeat){trackKeyDown(event);acceptRaceChar(event.key);}}
   }
 }
 document.addEventListener('keydown',keyboardInput,true);
@@ -1481,9 +1743,9 @@ el('promptViewport').addEventListener('pointerdown',()=>el('promptViewport').foc
 el('gameBoard').addEventListener('click',()=>el('gameInput').focus());
 typing.addEventListener('beforeinput',e=>e.preventDefault());
 typing.addEventListener('paste', e => e.preventDefault());
-document.addEventListener('click', (e) => { if (e.target.closest('select, button, input, textarea, label, [contenteditable]')) return; (mode==='game'?el('gameInput'):el('promptViewport')).focus(); });
-levelSelect.addEventListener('change', () => { fillLessons(); lessonSelect.value = '0'; reset(); resetGameState(); });
-lessonSelect.addEventListener('change', () => {reset(); resetGameState();});
+document.addEventListener('click', (e) => { if (e.target.closest('select, button, input, textarea, label, [contenteditable]')) return; (mode==='race'?el('raceText'):(mode==='game'?el('gameInput'):el('promptViewport'))).focus(); });
+levelSelect.addEventListener('change', () => { fillLessons(); lessonSelect.value = '0'; reset(); resetGameState(); if(mode==='race') resetRaceState(); });
+lessonSelect.addEventListener('change', () => {reset(); resetGameState(); if(mode==='race') resetRaceState();});
 el('restart').addEventListener('click', reset);
 el('restart2').addEventListener('click', reset);
 el('next').addEventListener('click', () => {
@@ -1537,7 +1799,69 @@ function updateRecentFace(which){
 // IGRIFIKACIJA: en padajoči cilj naenkrat, črke iz iste izbrane vaje.
 let mode = 'practice';
 let game = { running:false,paused:false,activeWord:null,pos:0,wordIndex:0,words:[],score:0,lives:3,
-  correct:0,wrong:0,keys:0,passed:0,combo:0,lastFrame:0,raf:0,speed:0,fallMs:0,lastMistake:false };
+  correct:0,completedChars:0,wrong:0,keys:0,passed:0,combo:0,lastFrame:0,raf:0,speed:0,fallMs:0,lastMistake:false,elapsedMs:0,resumedAt:null,lastStatsAt:0,lastWordPbm:null,pbmActiveMs:0,pbmLastKeyAt:null,pbmIntervals:0,pbmBursts:0 };
+// Čas trajanja igre je ločen od časa tipkanja za izračun PBM.
+// Ob pritisku na Premor se ustavita oba časovnika.
+function gameElapsedMs() {
+  return game.elapsedMs + (game.running && !game.paused && game.resumedAt!==null
+    ? Math.max(0,now()-game.resumedAt) : 0);
+}
+// PBM uporablja enako merjenje tipkanja kot običajne vaje:
+// samo razmike med pritiski do 3 sekund in oceno začetnega intervala.
+// Napačni pritiski vplivajo na čas, med pravilne znake pa štejejo
+// samo znaki pravilno zaključenih besed.
+function recordGamePbmKey() {
+  const t=now();
+  if(game.pbmLastKeyAt===null){
+    game.pbmBursts++;
+  }else{
+    const gap=t-game.pbmLastKeyAt;
+    if(gap<=3000){
+      game.pbmActiveMs+=gap;
+      game.pbmIntervals++;
+    }else{
+      game.pbmBursts++;
+    }
+  }
+  game.pbmLastKeyAt=t;
+}
+function recordGameWordKey() {
+  const t=now();
+  if (game.wordLastKeyAt!==null) {
+    const gap=t-game.wordLastKeyAt;
+    if (gap<=3000) {
+      game.wordActiveMs+=gap;
+      game.wordIntervals++;
+    }
+  }
+  game.wordLastKeyAt=t;
+}
+function showCompletedWordPbm(wordLength) {
+  // Prva tipka potrebuje svoj čas: ocena je povprečen razmik
+  // med pritiski v trenutni besedi.
+  if (game.wordIntervals===0) return;
+  const interval=game.wordActiveMs/game.wordIntervals;
+  const duration=game.wordActiveMs+interval;
+  if(duration<=0) return;
+  const pbm=Math.round((wordLength/5)/(duration/60000));
+  el('gameWordPbm').textContent=pbm+' PBM';
+}
+function gamePbmTime() {
+  if(!game.pbmIntervals) return 0;
+  return game.pbmActiveMs+(game.pbmActiveMs/game.pbmIntervals)*game.pbmBursts;
+}
+function updateGameSpeed(updatePbm=false) {
+  const secs=gameElapsedMs()/1000;
+  // Prikaz PBM se spremeni samo po pravilno zaključeni besedi.
+  if (updatePbm && game.completedChars>0) {
+    const activeMinutes=gamePbmTime()/60000;
+    if(activeMinutes>0){
+      game.lastWordPbm=Math.round((game.completedChars/5)/activeMinutes);
+      el('wpm').textContent=game.lastWordPbm;
+    }
+  }
+  el('time').textContent=secs.toFixed(1).replace('.',',')+' s';
+}
 function gameWords() {
   const text=el('gameTextSource').value==='custom' ? el('gameCustomText').value : selectedExercise().text;
   return text.trim().split(/\s+/).filter(Boolean);
@@ -1546,10 +1870,11 @@ function resetGameState() {
   resetMetrics();
   resetRecentKeys('game');
   resetFingerErrors('game');
+  resetTroubleLetters('game');
   stopGame();
   activeMs=0;lastKeyAt=null;typedChars=0;
   game = {running:false,paused:false,activeWord:null,pos:0,wordIndex:0,words:gameWords(),score:0,lives:3,
-    correct:0,wrong:0,keys:0,passed:0,combo:0,lastFrame:0,raf:0,speed:0,fallMs:0,lastMistake:false};
+    correct:0,completedChars:0,wrong:0,keys:0,passed:0,combo:0,lastFrame:0,raf:0,speed:0,fallMs:0,lastMistake:false,elapsedMs:0,resumedAt:null,lastStatsAt:0,lastWordPbm:null,pbmActiveMs:0,pbmLastKeyAt:null,pbmIntervals:0,pbmBursts:0};
   const existing=el('falling'); if(existing)existing.remove();
   el('shotLayer').replaceChildren();
   el('gameHint').hidden=true;
@@ -1558,7 +1883,9 @@ function resetGameState() {
   el('gameStart').disabled=false;
   el('gamePause').disabled=true;
   el('gamePause').textContent='⏸ Premor';
+  el('gameWordPbm').textContent='';
   renderGameHud();
+  if(mode==='game') updateGameSpeed();
   if(mode==='game') renderHands();
 }
 function stopGame() {
@@ -1580,22 +1907,28 @@ function renderGameHud() {
 function changeMode(next) {
   if(mode===next)return;
   stopGame();
+  stopRace();
   mode=next;
-  renderFingerErrors();
   document.body.classList.toggle('gameOn',mode==='game');
+  document.body.classList.toggle('raceOn',mode==='race');
   el('practiceMode').setAttribute('aria-selected',String(mode==='practice'));
   el('gameMode').setAttribute('aria-selected',String(mode==='game'));
-  el('timeNote').textContent=mode==='game'?'':'Premori daljši od 3 sekund se izločijo iz aktivnega časa.';
+  el('raceMode').setAttribute('aria-selected',String(mode==='race'));
+  el('timeNote').textContent=mode==='game'?'':mode==='race'?'Med premorom se čas dirke ustavi.':'Premori daljši od 3 sekund se izločijo iz aktivnega časa.';
   if(mode==='practice') {
     reset();
-  }else {
+  }else if(mode==='game') {
     resetGameState();
     typing.disabled=false;
     typing.value='';
     el('gameInput').value='';
     el('wpm').textContent='0';el('time').textContent='0,0 s';
+  }else if(mode==='race'){
+    resetRaceState();
   }
-  (mode==='game'?el('gameInput'):el('promptViewport')).focus();
+  renderFingerErrors();
+  renderHands();
+  (mode==='race'?el('raceText'):(mode==='game'?el('gameInput'):el('promptViewport'))).focus();
 }
 function turretBase(){
   const board=el('gameBoard');
@@ -1622,6 +1955,9 @@ function addFallingWord() {
   if(game.wordIndex>=game.words.length) {finishGame(true);return;}
   game.activeWord={text:game.words[game.wordIndex],y:0,x:0,el:null};
   game.pos=0;
+  game.wordActiveMs=0;
+  game.wordIntervals=0;
+  game.wordLastKeyAt=null;
   game.lastMistake=false;
   game.lastKeyWrong=false;
   const board=el('gameBoard');
@@ -1652,6 +1988,7 @@ function gameTick(t) {
   if(!game.running || game.paused)return;
   const dt=Math.min((t-game.lastFrame)/1000,.07);
   game.lastFrame=t;
+  if(t-game.lastStatsAt>=200){game.lastStatsAt=t;updateGameSpeed();}
   const word=game.activeWord;
   if(word) {
     word.y+=game.speed*dt;
@@ -1666,7 +2003,7 @@ function startGame() {
     el('gameCustomText').focus();return;
   }
   resetGameState();
-  game.running=true; game.lastFrame=performance.now();
+  game.running=true; game.lastFrame=performance.now(); game.resumedAt=game.lastFrame;
   el('gameStart').disabled=true;el('gamePause').disabled=false;
   el('gameHint').hidden=true;
   el('wpm').textContent='0';el('time').textContent='0,0 s';
@@ -1715,11 +2052,13 @@ function explodeWord(item) {
 }
 function acceptGameChar(ch) {
   if(!game.running || game.paused || !game.activeWord)return;
-  recordActivity();
-  game.keys++; typedChars++;
+  game.keys++;
+  recordGamePbmKey();
+  recordGameWordKey();
   const target=game.activeWord.text[game.pos];
   recordRecentKey('game',matchesExpectedKey(ch,target));
   if(matchesExpectedKey(ch,target)) {
+    typedChars++;
     game.lastKeyWrong=false;
     game.correct++;game.pos++;game.score+=10;shootEffect(true);
     updateTurretAim();
@@ -1727,13 +2066,17 @@ function acceptGameChar(ch) {
       game.score+=100;
       game.combo++;
       explodeWord(game.activeWord);
+      game.completedChars+=game.activeWord.text.length;
+      showCompletedWordPbm(game.activeWord.text.length);
       game.activeWord.el.remove();game.activeWord=null;
       game.passed++;game.wordIndex++;
+      // Hitrost posodobimo šele ob dokončani besedi (skupno povprečje).
+      updateGameSpeed(true);
       if(game.wordIndex>=game.words.length)finishGame(true);
       else addFallingWord();
     }else { paintWord(); updateTurretAim(); }
   }else {
-    game.wrong++;game.combo=0;game.lastMistake=true;game.lastKeyWrong=true;addFingerError(target,'game');shootEffect(false);
+    game.wrong++;game.combo=0;game.lastMistake=true;game.lastKeyWrong=true;addFingerError(target,'game');addTroubleLetter(target,'game');shootEffect(false);
     paintWord();
     game.score=Math.max(0,game.score-10);
     updateTurretAim();
@@ -1742,9 +2085,6 @@ function acceptGameChar(ch) {
     setTimeout(()=>{if(node.isConnected){node.style.borderColor='';node.classList.remove('badFlash');}},150);
   }
   renderGameHud();renderHands();
-  const secs=activeTime()/1000;
-  el('wpm').textContent=secs>0?Math.round((typedChars/5)/(secs/60)):0;
-  el('time').textContent=secs.toFixed(1).replace('.',',')+' s';
 }
 function handleGameKey(e) {
   if(e.ctrlKey||e.metaKey||e.altKey)return;
@@ -1754,7 +2094,12 @@ function handleGameKey(e) {
   if(e.key==='Enter')e.preventDefault();
 }
 function finishGame(completed,detail='') {
+  if(game.running && !game.paused && game.resumedAt!==null){
+    game.elapsedMs+=Math.max(0,now()-game.resumedAt);
+  }
+  game.resumedAt=null;
   game.running=false;game.paused=false;
+  updateGameSpeed(true);
   if(game.raf)cancelAnimationFrame(game.raf);
   game.raf=0;
   if(game.activeWord) {game.activeWord.el.remove();game.activeWord=null;}
@@ -1770,13 +2115,25 @@ function finishGame(completed,detail='') {
 }
 function pauseGame() {
   if(!game.running)return;
+  if(!game.paused && game.resumedAt!==null){
+    game.elapsedMs+=Math.max(0,now()-game.resumedAt);
+    game.resumedAt=null;
+    // Čas premora se ne prišteje tudi pri merjenju PBM.
+    game.pbmLastKeyAt=null;
+  }
   game.paused=!game.paused;
+  if(!game.paused) {
+    game.resumedAt=now();
+    game.wordLastKeyAt=null;
+  }
+  updateGameSpeed();
   el('gamePause').textContent=game.paused?'▶ Nadaljuj':'⏸ Premor';
   if(game.paused){if(game.raf)cancelAnimationFrame(game.raf);game.raf=0;}
   else {game.lastFrame=performance.now();game.raf=requestAnimationFrame(gameTick);el('gameInput').focus();}
 }
 el('practiceMode').addEventListener('click',()=>changeMode('practice'));
 el('gameMode').addEventListener('click',()=>changeMode('game'));
+el('raceMode').addEventListener('click',()=>changeMode('race'));
 // Vse tipke prestreza skupni poslušalec zgoraj.
 el('gameInput').addEventListener('beforeinput',e=>e.preventDefault());
 el('gameInput').addEventListener('paste',e=>e.preventDefault());
@@ -1797,12 +2154,174 @@ el('fallSpeed').addEventListener('input',()=>{
   el('fallSpeedValue').textContent=speedLabels(speed);
   if(game.activeWord)game.speed=speed;
 });
-document.addEventListener('visibilitychange',()=>{if(document.hidden && game.running && !game.paused)pauseGame();});
+document.addEventListener('visibilitychange',()=>{if(document.hidden && game.running && !game.paused)pauseGame();if(document.hidden && race.running && !race.paused)pauseRace();});
+
+
+// DIRKA: samostojna igra, brez spreminjanja vaj ali padajočih besed.
+let race={running:false,paused:false,finished:false,text:'',pos:0,correct:0,keys:0,wrong:0,
+  elapsedMs:0,resumedAt:null,raf:0,lastAt:null,activeMs:0,intervals:0,bursts:0,opponentPbm:18};
+function raceTimeMs(){
+  return race.elapsedMs+(race.running&&!race.paused&&race.resumedAt!==null?Math.max(0,now()-race.resumedAt):0);
+}
+function raceTypingMs(){
+  return race.intervals?race.activeMs+(race.activeMs/race.intervals)*race.bursts:0;
+}
+function racePlayerPercent(){return race.text.length?100*race.pos/race.text.length:0;}
+function raceOpponentPercent(){
+  const chars=raceTimeMs()/60000*race.opponentPbm*5;
+  return race.text.length?Math.min(100,100*chars/race.text.length):0;
+}
+function paintRaceText(wrong=false){
+  const node=el('raceText');
+  // Okno s tekočim delom besedila, ki se med tipkanjem premika po celih znakih.
+  const from=Math.max(0,race.pos-18),to=Math.min(race.text.length,race.pos+100);
+  const prefix=race.text.slice(from,race.pos),current=race.text[race.pos]||'',rest=race.text.slice(race.pos+1,to);
+  node.innerHTML='<span class="raceTyped">'+escapeHtml(prefix)+'</span>'+
+    (current?'<span class="'+(wrong?'raceWrong':'raceCurrent')+'">'+escapeHtml(current)+'</span>':'')+
+    '<span class="racePending">'+escapeHtml(rest)+'</span>';
+}
+function paintRace(){
+  const p=racePlayerPercent(),c=raceOpponentPercent();
+  // 0..100 % poteka, pri čemer ostane avtomobil pred ciljno črto.
+  el('racePlayerCar').style.left=(p*0.88)+'%';
+  el('raceComputerCar').style.left=(c*0.88)+'%';
+  el('racePlayerProgress').textContent='Ti: '+Math.round(p)+' %';
+  el('raceComputerProgress').textContent='Računalnik: '+Math.round(c)+' %';
+  if(mode==='race'){
+    const secs=raceTimeMs()/1000;
+    el('time').textContent=secs.toFixed(1).replace('.',',')+' s';
+    el('keystrokes').textContent=String(race.keys);
+    el('accuracy').textContent=(race.keys?Math.round(100*race.correct/race.keys):100)+' %';
+    const minutes=raceTypingMs()/60000;
+    el('wpm').textContent=minutes>0?Math.round((race.correct/5)/minutes):'0';
+  }
+}
+function stopRace(){
+  if(race.raf)cancelAnimationFrame(race.raf);
+  race.raf=0;
+  if(race.running&&!race.paused&&race.resumedAt!==null)race.elapsedMs+=Math.max(0,now()-race.resumedAt);
+  race.resumedAt=null;
+  race.running=false;
+}
+function readRaceOpponentPbm(){
+  const input=el('raceDifficulty');
+  const speed=Number(input.value);
+  if(!Number.isFinite(speed) || speed<=0){
+    input.value=String(race.opponentPbm>0?race.opponentPbm:18);
+    return Number(input.value);
+  }
+  return speed;
+}
+function raceSelectedText(){
+  return el('raceTextSource').value==='custom'
+    ? el('raceCustomText').value.trim().replace(/\s+/g,' ')
+    : selectedExercise().text;
+}
+function resetRaceState(){
+  stopRace();
+  resetMetrics();
+  resetFingerErrors('race');
+  resetTroubleLetters('race');
+  race={running:false,paused:false,finished:false,text:raceSelectedText(),pos:0,correct:0,keys:0,wrong:0,
+    elapsedMs:0,resumedAt:null,raf:0,lastAt:null,activeMs:0,intervals:0,bursts:0,
+    opponentPbm:readRaceOpponentPbm()};
+  el('raceResult').classList.remove('visible');
+  el('raceResult').textContent='';
+  el('raceStart').disabled=false;
+  el('racePause').disabled=true;
+  el('racePause').textContent='⏸ Premor';
+  el('raceInput').value='';
+  el('wpm').textContent='0';el('time').textContent='0,0 s';
+  paintRaceText();paintRace();
+  if(mode==='race')renderHands();
+}
+function finishRace(winner){
+  if(!race.running)return;
+  stopRace();
+  race.finished=true;
+  paintRace();
+  el('racePause').disabled=true;
+  el('raceStart').disabled=false;
+  const result=el('raceResult');
+  result.textContent=winner==='player'?'🏆 Zmagal/a si! S pravilnim tipkanjem si prvi/a pripeljal/a do cilja.':'🏁 Računalnik je prvi prečkal cilj. Poskusi znova ali izberi počasnejšega tekmeca.';
+  result.classList.add('visible');
+  renderHands();
+}
+function raceFrame(){
+  if(!race.running||race.paused)return;
+  paintRace();
+  if(raceOpponentPercent()>=100){finishRace('computer');return;}
+  race.raf=requestAnimationFrame(raceFrame);
+}
+function startRace(){
+  if(!raceSelectedText()){
+    el('raceCustomText').focus();
+    return;
+  }
+  resetRaceState();
+  race.running=true;
+  race.resumedAt=now();
+  el('raceStart').disabled=true;
+  el('racePause').disabled=false;
+  el('raceText').focus();
+  race.raf=requestAnimationFrame(raceFrame);
+}
+function pauseRace(){
+  if(!race.running||race.finished)return;
+  if(!race.paused){
+    if(race.resumedAt!==null)race.elapsedMs+=Math.max(0,now()-race.resumedAt);
+    race.resumedAt=null;
+    race.paused=true;
+    if(race.raf)cancelAnimationFrame(race.raf);
+    race.raf=0;
+    el('racePause').textContent='▶ Nadaljuj';
+  }else{
+    race.paused=false;
+    race.resumedAt=now();
+    race.lastAt=null;
+    el('racePause').textContent='⏸ Premor';
+    el('raceText').focus();
+    race.raf=requestAnimationFrame(raceFrame);
+  }
+  paintRace();
+}
+function acceptRaceChar(ch){
+  if(!race.running||race.paused||race.finished||race.pos>=race.text.length)return;
+  const t=now(),wanted=race.text[race.pos];
+  if(race.lastAt===null){race.bursts++;}
+  else{
+    const gap=t-race.lastAt;
+    if(gap<=3000){race.activeMs+=gap;race.intervals++;}else{race.bursts++;}
+  }
+  race.lastAt=t;
+  race.keys++;
+  const ok=matchesExpectedKey(ch,wanted);
+  if(ok){race.correct++;race.pos++;}
+  else{race.wrong++;addFingerError(wanted,'race');addTroubleLetter(wanted,'race');}
+  paintRaceText(!ok);paintRace();renderHands();
+  if(race.pos>=race.text.length)finishRace('player');
+}
+el('raceTextSource').addEventListener('change',()=>{
+  el('raceCustomWrap').hidden=el('raceTextSource').value!=='custom';
+  if(mode==='race')resetRaceState();
+  if(el('raceTextSource').value==='custom')el('raceCustomText').focus();
+});
+el('raceCustomText').addEventListener('input',()=>{
+  if(mode==='race' && !race.running)resetRaceState();
+});
+el('raceStart').addEventListener('click',startRace);
+el('raceRestart').addEventListener('click',startRace);
+el('racePause').addEventListener('click',pauseRace);
+el('raceDifficulty').addEventListener('change',()=>{readRaceOpponentPbm();if(mode==='race')resetRaceState();});
+el('raceText').addEventListener('pointerdown',()=>el('raceText').focus());
+el('raceInput').addEventListener('beforeinput',e=>e.preventDefault());
+el('raceInput').addEventListener('paste',e=>e.preventDefault());
+
 
 fillLessons();
 lessonSelect.value = '0';
 reset();
-setInterval(() => { if (!finished && document.hasFocus()) { const st=statsValues(); el('wpm').textContent=st.wpm; el('time').textContent=st.secs.toFixed(1).replace('.',',')+' s'; } }, 200);
+setInterval(() => { if (mode==='practice' && !finished && document.hasFocus()) { const st=statsValues(); el('wpm').textContent=st.wpm; el('time').textContent=st.secs.toFixed(1).replace('.',',')+' s'; } }, 200);
 </script>
 </body>
 </html>
