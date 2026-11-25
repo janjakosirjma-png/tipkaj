@@ -1049,6 +1049,10 @@ body.tipkajContrast :is(.brand,.brand span,.tag,.intro p,.footerNote,.help,.labe
 body.tipkajContrast :is(button,select,textarea,input:not([type=checkbox]):not([type=range]),summary){background:#000!important;color:#fff!important;border:1px solid #fff!important}body.tipkajContrast :is(button[aria-selected=true],button[aria-pressed=true]){background:#ffeb00!important;color:#000!important}body.tipkajContrast :is(button,select,input,textarea,summary,[tabindex]):focus-visible{outline:3px solid #ffeb00!important;outline-offset:2px!important}body.tipkajContrast input[type=checkbox],body.tipkajContrast input[type=range]{accent-color:#ffeb00}body.tipkajContrast .switchline input{border:2px solid #fff;background:#333!important}body.tipkajContrast .switchline input:checked{background:#d4a900!important}
 body.tipkajContrast #promptViewport :is(.char,.spaceChar){color:#fff!important;background:#000!important;font-weight:600!important}body.tipkajContrast #promptViewport :is(.char,.spaceChar).correct,body.tipkajContrast .raceText .raceTyped,body.tipkajContrast #gameBoard .fallingWord .hit{background:#79ff9a!important;color:#000!important}body.tipkajContrast #promptViewport :is(.char,.spaceChar).wrong,body.tipkajContrast .raceText .raceWrong,body.tipkajContrast #gameBoard .fallingWord .remaining.wrongTarget{background:#ff9494!important;color:#000!important;text-decoration:line-through!important}body.tipkajContrast #promptViewport :is(.char,.spaceChar).current,body.tipkajContrast .raceText .raceCurrent{background:#ffeb00!important;color:#000!important;box-shadow:inset 0 -4px #fff!important}body.tipkajContrast .raceText .racePending,body.tipkajContrast #gameBoard .fallingWord .remaining{color:#fff!important}body.tipkajContrast #gameBoard .fallingWord{background:#000!important;color:#fff!important;border-color:#fff!important}body.tipkajContrast #promptViewport :is(.wordSpeed,.wordDuration){color:#fff!important;background:#000!important}body.tipkajContrast .suppliedHands{background:#fff;border-radius:12px;margin:0 auto!important}body.tipkajContrast .suppliedHands .finger-count{background:#000!important;color:#fff!important;border-color:#fff!important}body.tipkajContrast .suppliedHands .finger-count.error-hot,body.tipkajContrast .suppliedHands .finger-count.error-mid{background:#a00000!important;color:#fff!important}body.tipkajContrast .suppliedHands .finger-marker.active{background:#ffeb00!important;border-color:#000!important;box-shadow:0 0 0 3px #000!important}body.tipkajContrast .suppliedHands .finger-marker.secondary{background:#00bfff!important;border-color:#000!important}body.tipkajContrast .roadFill{background:#666!important}body.tipkajContrast .road::before{background:repeating-linear-gradient(90deg,#fff 0 24px,transparent 24px 44px)!important}
 </style>
+<style id="tipkajInfoStyle">
+#tipkajInfoButton{display:inline-flex;align-items:center;gap:7px;border:1px solid #d5d8e6;border-radius:999px;background:#fffdf2;color:#354b80;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap}#tipkajInfoButton:focus-visible,#tipkajInfoClose:focus-visible{outline:3px solid #5478d5;outline-offset:3px}
+#tipkajInfoDialog{width:min(720px,calc(100% - 28px));max-height:85vh;overflow:auto;border:1px solid #e2d8ae;border-radius:20px;background:#fffdf0;color:#26344d;padding:24px;box-shadow:0 18px 70px #0004;font-size:15px;line-height:1.6}#tipkajInfoDialog::backdrop{background:#18233d88}#tipkajInfoDialog h2{margin:0;font-size:23px;color:#354b80}#tipkajInfoDialog h3{font-size:17px;margin:20px 0 6px}#tipkajInfoDialog p{margin:8px 0;overflow-wrap:anywhere}#tipkajInfoDialog a{color:#304fa5;text-decoration:underline}#tipkajInfoDialog .infoHeading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}#tipkajInfoClose{border:1px solid #ddd5bc;border-radius:9px;background:#fff;color:#354b80;font:inherit;padding:5px 10px;cursor:pointer}#tipkajInfoDialog .infoLicense{border-top:1px solid #e5dcb9;margin-top:18px;padding-top:12px}body.tipkajContrast #tipkajInfoDialog{background:#fff;color:#000}body.tipkajContrast #tipkajInfoDialog :is(h2,h3,a){color:#000}body.tipkajContrast #tipkajInfoButton{background:#fff;color:#000}
+</style>
 </head>
 <body>
 <main class="wrap">
@@ -1056,6 +1060,7 @@ body.tipkajContrast #promptViewport :is(.char,.spaceChar){color:#fff!important;b
     <div class="brand">Tipkaj<span>!</span></div>
 
   <div class="accessTools" role="group" aria-label="Dostopnost prikaza"><button type="button" id="accessContrast" aria-pressed="false">◐ Visok kontrast</button><button type="button" id="accessMinus" aria-label="Zmanjšaj povečavo">A−</button><output id="accessZoomValue" aria-live="polite">100 %</output><button type="button" id="accessPlus" aria-label="Povečaj prikaz">A+</button><button type="button" id="accessReset" aria-label="Ponastavi povečavo in kontrast">Ponastavi prikaz</button></div>
+<button type="button" id="tipkajInfoButton" aria-haspopup="dialog" aria-controls="tipkajInfoDialog"><span aria-hidden="true">ⓘ</span> Info</button>
 </header>
   <div class="layout">
     <section class="card mainCard">
@@ -2568,5 +2573,22 @@ const update=()=>{const v=value.textContent.trim();const spoken=id==='wpm'?v+' b
 card.removeAttribute('aria-labelledby');update();new MutationObserver(update).observe(value,{childList:true,characterData:true,subtree:true});card.addEventListener('focus',update);}
 })();
 </script>
+<dialog id="tipkajInfoDialog" aria-labelledby="tipkajInfoTitle">
+<div class="infoHeading"><h2 id="tipkajInfoTitle">O gradivu Tipkaj!</h2><form method="dialog"><button id="tipkajInfoClose" aria-label="Zapri informacije" autofocus>Zapri ×</button></form></div>
+<h3>Zasnova vaj, avtorstvo in licenca</h3>
+<p>Vaje za desetprstno slepo tipkanje so zasnovane po načelih postopnega in kumulativnega učenja, ob upoštevanju berljivosti in smiselnosti besed v slovenskem jeziku ter kombinatoričnih možnosti obravnavanih znakov. Na vsaki novi stopnji se poleg novih znakov sistematično vključujejo in utrjujejo vsi predhodno usvojeni znaki.</p>
+<p>Pri pripravi vaj je bil kot eno izmed metodičnih in vsebinskih izhodišč uporabljen učbenik <em>Strojepisje 1</em> (Degen, 1997). Vaje so na novo strukturirane, vsebinsko dopolnjene in prilagojene didaktičnim ciljem interaktivnega digitalnega učnega okolja.</p>
+<p><strong>Avtorica prilagoditev, vsebinskih dopolnitev in digitalnega učnega okolja:</strong> Janja Košir (2026).</p>
+<h3>Ob uporabi ali nadaljnji predelavi gradiva navedite oba vira (APA 7)</h3>
+<p>Degen, B. (1997). <em>Strojepisje 1</em> (12. izd.). DZS.</p>
+<p>Košir, J. (2026). <em>Tipkaj! – interaktivne vaje za desetprstno slepo tipkanje</em> [Spletno učno gradivo]. <a href="https://janjakosirjma-png.github.io/tipkaj/" target="_blank" rel="noopener">https://janjakosirjma-png.github.io/tipkaj/</a></p>
+<h3>Drugi viri in prispevki</h3>
+<p><strong>Pisava:</strong> Montserrat, avtorji projekta Julieta Ulanovsky, Sol Matas, Juan Pablo del Peral in Jacques Le Bailly. Vir: <a href="https://fonts.google.com/specimen/Montserrat" target="_blank" rel="noopener">Google Fonts – Montserrat</a>. Prosta in odprtokodna pisava, licencirana pod <a href="https://github.com/google/fonts/blob/main/ofl/montserrat/OFL.txt" target="_blank" rel="noopener">SIL Open Font License 1.1</a>.</p>
+<p><strong>Slikovno gradivo:</strong> ustvarjeno s pomočjo umetne inteligence ChatGPT (OpenAI).</p>
+<p><strong>Govorni bralec:</strong> Microsoft Lado (sintetični slovenski glas; razpoložljivost je odvisna od brskalnika in sistema).</p>
+<p><strong>Zvočni posnetki črkovanja:</strong> Janja Košir.</p>
+<div class="infoLicense"><p><strong>© 2026 Janja Košir. Lastne avtorske vsebine in prispevki: <a href="https://creativecommons.org/licenses/by/4.0/deed.sl" target="_blank" rel="noopener">CC BY 4.0 – Priznanje avtorstva 4.0 Mednarodna</a></strong></p></div>
+</dialog>
+<script>(function(){const b=document.getElementById('tipkajInfoButton'),d=document.getElementById('tipkajInfoDialog');b.addEventListener('click',()=>d.showModal());d.addEventListener('close',()=>b.focus());d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}});})();</script>
 </body>
 </html>
